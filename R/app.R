@@ -718,7 +718,7 @@ $(window).resize(function(e) {
     output$results <- renderUI({
       page_fillable(
         layout_columns(
-          col_widths = c(12, 5, 7, 12),
+          col_widths = c(12, 4, 4, 4, 12),
 
           navset_tab(
             nav_panel(i18n$t("Female population"),
@@ -733,6 +733,13 @@ $(window).resize(function(e) {
             card_header(i18n$t("Glossary")),
             includeMarkdown(file.path(inst_dir, "app_text",
                                        paste0("glossary_", input$selected_language, ".md"))),
+            height = "150px"
+          ),
+          card(
+            full_screen = TRUE,
+            card_header(i18n$t("Frequently asked questions")),
+            includeMarkdown(file.path(inst_dir, "app_text",
+                                      paste0("faq_", input$selected_language, ".md"))),
             height = "150px"
           ),
           plotOutput("r_m_plot", fill = FALSE,
