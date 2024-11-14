@@ -4,9 +4,9 @@
 \name{CaribouDemographyBasicApp-package}
 \alias{CaribouDemographyBasicApp}
 \alias{CaribouDemographyBasicApp-package}
-\title{CaribouDemographyBasicApp: What the Package Does (Title Case)}
+\title{CaribouDemographyBasicApp: What the Package Does (One Line, Title Case)}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+What the package does (one paragraph).
 }
 \seealso{
 Useful links:
@@ -14,6 +14,10 @@ Useful links:
   \item \url{https://github.com/LandSciTech/CaribouDemographyBasicApp}
   \item Report bugs at \url{https://github.com/LandSciTech/CaribouDemographyBasicApp/issues}
 }
+
+}
+\author{
+\strong{Maintainer}: Sarah Endicott \email{sarah.endicott@canada.ca} (\href{https://orcid.org/0000-0001-9644-5343}{ORCID})
 
 }
 \keyword{internal}
