@@ -4,7 +4,7 @@
 #'
 #' @return numeric
 #'
-#' @noRd
+#' @export
 inv.logit <-function(x){
   exp(x)/(1+exp(x))
 }
