@@ -1,14 +1,13 @@
 Package: CaribouDemographyBasicApp
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Sarah", "Endicott", , "sarah.endicott@canada.ca", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9644-5343"))
+Description: What the package does (one paragraph).
+License: TBD
 Encoding: UTF-8
-LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
     bboudata,
@@ -29,3 +28,5 @@ Depends:
     waiter
 Remotes: 
     LandSciTech/bboutoolsMultiPop
+URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
+BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues

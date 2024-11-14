@@ -1,7 +1,34 @@
+#' Inverse logit
+#'
+#' @param x numeric
+#'
+#' @return numeric
+#'
+#' @noRd
 inv.logit <-function(x){
   exp(x)/(1+exp(x))
 }
 
+#' Do multiple caribouPopGrowth runs
+#'
+#' @param numSteps
+#' @param numPops
+#' @param N0
+#' @param R_bar
+#' @param S_bar
+#' @param R_sd
+#' @param S_sd
+#' @param R_iv_cv
+#' @param S_iv_cv
+#' @param R_iv_sd
+#' @param S_iv_sd
+#' @param scn_nm
+#' @param type
+#' @param addl_params a list of additional parameters for `caribouPopGrowth`
+#'
+#' @return numeric
+#'
+#' @noRd
 doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_cv, S_iv_cv,R_iv_sd,S_iv_sd,
                   scn_nm, type="logistic", addl_params){
   #type="logistic"
