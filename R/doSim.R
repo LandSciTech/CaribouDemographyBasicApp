@@ -11,19 +11,7 @@ inv.logit <-function(x){
 
 #' Do multiple caribouPopGrowth runs
 #'
-#' @param numSteps
-#' @param numPops
-#' @param N0
-#' @param R_bar
-#' @param S_bar
-#' @param R_sd
-#' @param S_sd
-#' @param R_iv_cv
-#' @param S_iv_cv
-#' @param R_iv_sd
-#' @param S_iv_sd
-#' @param scn_nm
-#' @param type
+#' @inheritParams caribouMetrics::caribouPopGrowth
 #' @param addl_params a list of additional parameters for `caribouPopGrowth`
 #'
 #' @return numeric

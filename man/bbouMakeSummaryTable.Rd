@@ -19,11 +19,21 @@ bbouMakeSummaryTable(
 
 \item{recruit_data}{dataframe. Recruitment data in bboudata format}
 
-\item{N0}{dataframe. Initial population estimates, required columns are PopulationName and N0}
+\item{N0}{dataframe. Initial population estimates, required columns are
+PopulationName and N0}
 
-\item{return_mcmc}{boolean. If TRUE return fitted survival and recruitment models. Default FALSE.}
+\item{shiny_progress}{logical. Should shiny progress bar be updated. Only set
+to TRUE if using in an app.}
 
-\item{...}{}
+\item{return_mcmc}{boolean. If TRUE return fitted survival and recruitment
+models. Default FALSE.}
+
+\item{...}{Other parameters passed on to \code{bboutools::bb_fit_survival} and
+\code{bboutools::bb_fit_recruitment}.}
+}
+\value{
+If \code{return_mcmc} is TRUE then a list with results and fitted models,
+if FALSE just the results table is returned.
 }
 \description{
 Create summary table of demographic rates from survival and recruitment surveys

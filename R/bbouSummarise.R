@@ -2,12 +2,17 @@
 #'
 #' @param surv_data dataframe. Survival data in bboudata format
 #' @param recruit_data dataframe. Recruitment data in bboudata format
-#' @param N0 dataframe. Initial population estimates, required columns are PopulationName and N0
-#' @param shiny_progress
-#' @param return_mcmc boolean. If TRUE return fitted survival and recruitment models. Default FALSE.
-#' @param ...
+#' @param N0 dataframe. Initial population estimates, required columns are
+#'   PopulationName and N0
+#' @param shiny_progress logical. Should shiny progress bar be updated. Only set
+#'   to TRUE if using in an app.
+#' @param return_mcmc boolean. If TRUE return fitted survival and recruitment
+#'   models. Default FALSE.
+#' @param ... Other parameters passed on to `bboutools::bb_fit_survival` and
+#'   `bboutools::bb_fit_recruitment`.
 #'
-#' @return
+#' @return If `return_mcmc` is TRUE then a list with results and fitted models,
+#'   if FALSE just the results table is returned.
 #' @export
 #'
 #' @examples
@@ -139,6 +144,19 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, shiny_progress = FA
 
 }
 
+#' Make figures based on fitted survival and recruitment models
+#'
+#'
+#' @param surv_fit result of `bboutools::bb_fit_survival`
+#' @param recruit_fit result of `bboutools::bb_fit_recruitment`
+#' @param fig_dir file path. Directory where figures should be saved
+#' @param i18n shiny.i18n object. Used of translation in Shiny app.
+#' @param ht numeric. Height in pixels
+#' @param wt numeric. Width in pixels
+#'
+#' @return Nothing. Figures are saved to `fig_dir`.
+#' @export
+#'
 bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 400, wt = 600){
   # make figures
   if(is.null(i18n)){
