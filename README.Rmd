@@ -1,0 +1,48 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# CaribouDemographyBasicApp
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+```{r, echo=FALSE}
+inst_dir <- system.file(package = "CaribouDemographyBasicApp")
+htmltools::includeMarkdown(file.path(inst_dir, "app_text", "intro_en.md"))
+```
+
+
+## Installation
+
+To run the app you will need to install R and we recommend RStudio as well.
+Follow the instructions [here](https://posit.co/download/rstudio-desktop/) to
+install both.
+
+You can install the CaribouDemographyBasicApp R package by running the following
+in the R console:
+
+``` r
+install.packages("remotes")
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
+```
+
+## Launching the Shiny app
+
+To launch the app in your default browser run the following lines:
+
+``` r
+library(CaribouDemographyBasicApp)
+run_caribou_demog_app()
+```
