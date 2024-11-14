@@ -10,8 +10,22 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
-Imports: 
+Depends: 
+    bboudata,
     bboutools (>= 0.1.0),
-    ggplot2
-Remotes:  
+    bslib,
+    caribouMetrics,
+    ggplot2,
+    googlesheets4,
+    here,
+    mcmcr,
+    purrr,
+    scales,
+    shiny,
+    shiny.i18n,
+    shinyjs,
+    stringr,
+    tidyverse,
+    waiter
+Remotes: 
     LandSciTech/bboutoolsMultiPop

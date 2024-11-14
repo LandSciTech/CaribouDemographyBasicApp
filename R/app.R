@@ -18,7 +18,7 @@ run_caribou_demog_app <- function(private = FALSE){
             plot.caption = element_text(hjust = 0))
   )
   # File with translations
-  i18n <- Translator$new(translation_csvs_path = here::here("data/translations"))
+  i18n <- Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
   i18n$set_translation_language("en") # default translation to display
 
   # add JavaScript to add an id to the <section> tag
@@ -59,7 +59,7 @@ $(window).resize(function(e) {
 
 
 
-  pop_file <- read.csv(here::here("data/temp_pop_file_local.csv"))
+  pop_file <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
 
   # UI #-------------------------------------------------------------------------
   {
@@ -656,7 +656,7 @@ $(window).resize(function(e) {
     # Body UI #-------------------------------------------------------------------
     output$welcome <- renderUI({
       page_fillable(
-        includeMarkdown(here::here("CaribouDemographyBasicApp",
+        includeMarkdown(file.path(inst_dir, "app_text",
                                    paste0("intro_", input$selected_language, ".md"))),
         # this hidden input allows us to wait for this UI to render before adding to it
         div(style = "display:none", textInput(inputId = "hidden", label = "", value = "1"))
@@ -682,15 +682,13 @@ $(window).resize(function(e) {
             title = h3(i18n$t("Survey data summary")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = here::here("CaribouDemographyBasicApp/www",
-                                           "survivalSummary.png"),
+              card_image(file = file.path(inst_dir, "www", "survivalSummary.png"),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = here::here("CaribouDemographyBasicApp/www",
-                                           "recruitmentSummary.png"),
+              card_image(file = file.path(inst_dir, "www", "recruitmentSummary.png"),
                          fill = FALSE, width = 600),
               height = 400
             )),
@@ -698,15 +696,13 @@ $(window).resize(function(e) {
             title = h3(i18n$t("Demographic rates")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = here::here("CaribouDemographyBasicApp/www",
-                                           "survBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www", "survBbouMulti.png"),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = here::here("CaribouDemographyBasicApp/www",
-                                           "recBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www", "recBbouMulti.png"),
                          fill = FALSE, width = 600),
               height = 400
             )
@@ -735,7 +731,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             card_header(i18n$t("Glossary")),
-            includeMarkdown(here::here("CaribouDemographyBasicApp",
+            includeMarkdown(file.path(inst_dir, "app_text",
                                        paste0("glossary_", input$selected_language, ".md"))),
             height = "150px"
           ),
@@ -752,11 +748,6 @@ $(window).resize(function(e) {
         )
       )
     })
-
-    # output$survivalSummary <- renderImage({
-    #   pop_file()
-    #   list(src = here::here("CaribouDemographyBasicApp/www", "survivalSummary.png"))
-    # }, deleteFile = FALSE)
 
     output$data_summary <- renderTable({
       pop_mod()
@@ -887,7 +878,7 @@ $(window).resize(function(e) {
           pop_file_in <- subset(pop_file_in, is.element(pop_name,pops_run))
 
           bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
-                          fig_dir = here::here("CaribouDemographyBasicApp/www"),
+                          fig_dir = file.path(inst_dir, "www"),
                           i18n = i18n)
 
           # Add description
@@ -906,7 +897,7 @@ $(window).resize(function(e) {
         })
 
         # save the file locally so only re-run when asked
-        write.csv(pop_file_in, here::here("data/temp_pop_file_local.csv"), row.names = FALSE)
+        write.csv(pop_file_in, file.path(inst_dir, "extdata", "temp_pop_file_local.csv"), row.names = FALSE)
 
         # update the reactive value
         pop_file(pop_file_in)
