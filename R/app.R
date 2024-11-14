@@ -328,7 +328,6 @@ $(window).resize(function(e) {
 
     observeEvent({
       input$add_alt
-      input$selected_language
     }, {
       req(input$add_alt)
       counter$n <- counter$n + 1
@@ -393,6 +392,8 @@ $(window).resize(function(e) {
 
       removeUI(selector = paste0("div[id*='alt_menu", to_remove, "']"))
 
+      removeUI(selector = paste0("div[id*='addl_params", to_remove, "']"))
+
       in_to_remove <- str_subset(names(input), paste0("^alt_.*", to_remove))
 
       # Note this sets the input to NULL but it still exists and has a name in
@@ -400,7 +401,6 @@ $(window).resize(function(e) {
       walk(in_to_remove, \(x){
         shinyjs::runjs(paste0('Shiny.onInputChange("',x,'", null)'))
       })
-
     })
 
     #
