@@ -1,5 +1,5 @@
 "pop_name","R_bar","R_sd","R_iv_cv","R_iv_sd","S_bar","S_sd","S_iv_cv","S_iv_sd","Year","N0","nCollarYears","nSurvYears","nCowsAllYears","nRecruitYears","description"
-"A",0.188664585295662,0.0843797332022188,0.313843699276182,0.201667190384535,0.88401518045251,0.249630312365525,0.482233780115809,0.26965868428652,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
+"A",0.189651657513791,0.0812754137831183,0.309731461850141,0.20315720427387,0.882309909749658,0.242464210879446,0.481238327005019,0.272619865878072,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
 
 #### Sources
 
@@ -8,4 +8,4 @@ Markdown formating can be used to **bold** or *italicize* text. Or create lists:
   - Item 2
 
 See [here](https://www.markdownguide.org/cheat-sheet/) for more details about markdown"
-"B",0.202868607214761,0.105740776645775,0.313843699276182,0.201667190384535,0.907998000473043,0.289747126561152,0.482233780115809,0.26965868428652,2021,1000,519,18,2001,15,NA
+"B",0.20331032167373,0.104409844166984,0.309731461850141,0.20315720427387,0.907928305818889,0.296130567620243,0.481238327005019,0.272619865878072,2021,1000,519,18,2001,15,NA
