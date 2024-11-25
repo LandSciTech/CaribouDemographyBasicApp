@@ -78,19 +78,23 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, shiny_progress = FA
     S_samp_long <- S_samp[, i]
     R_bar <- inv.logit(mean(logit(R_samp_long)))
     R_sd <- sd(logit(R_samp_long))
+    R_qt <- quantile(R_samp_long, probs=c(0.025, 0.975))
+
     S_bar <- inv.logit(mean(logit(S_samp_long)))
     S_sd <- sd(logit(S_samp_long))
+    S_qt <- quantile(S_samp_long, probs=c(0.025, 0.975))
+
     if (i == 1) {
       parTab <- data.frame(
         pop_name = p,
-        R_bar = R_bar, R_sd = R_sd, R_iv_cv = R_Annual, R_iv_sd = R_Annual_sd,
-        S_bar = S_bar, S_sd = S_sd, S_iv_cv = S_Annual, S_iv_sd = S_Annual_sd
+        R_bar = R_bar, R_sd = R_sd, R_iv_cv = R_Annual, R_iv_sd = R_Annual_sd, R_bar_lower = R_qt[1], R_bar_upper = R_qt[2],
+        S_bar = S_bar, S_sd = S_sd, S_iv_cv = S_Annual, S_iv_sd = S_Annual_sd, S_bar_lower = S_qt[1], S_bar_upper = S_qt[2]
       )
     } else {
       parTab <- rbind(parTab, data.frame(
         pop_name = p,
-        R_bar = R_bar, R_sd = R_sd, R_iv_cv = R_Annual, R_iv_sd = R_Annual_sd,
-        S_bar = S_bar, S_sd = S_sd, S_iv_cv = S_Annual, S_iv_sd = S_Annual_sd
+        R_bar = R_bar, R_sd = R_sd, R_iv_cv = R_Annual, R_iv_sd = R_Annual_sd, R_bar_lower = R_qt[1], R_bar_upper = R_qt[2],
+        S_bar = S_bar, S_sd = S_sd, S_iv_cv = S_Annual, S_iv_sd = S_Annual_sd, S_bar_lower = S_qt[1], S_bar_upper = S_qt[2]
       ))
     }
   }

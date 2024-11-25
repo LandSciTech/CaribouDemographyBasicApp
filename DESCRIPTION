@@ -30,3 +30,6 @@ Remotes:
     LandSciTech/bboutoolsMultiPop
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

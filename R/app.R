@@ -242,7 +242,6 @@ $(window).resize(function(e) {
       req(input$pop_name)
       pop_default <- pop_file() %>% filter(pop_name == input$pop_name) %>%
         select(-pop_name, -contains("iv"))
-      browser()
 
       iv_default <- pop_file() %>% filter(pop_name == input$pop_name) %>%
         select(contains("iv")) %>%
@@ -546,11 +545,21 @@ $(window).resize(function(e) {
 
     # Population stats table #---------------------------------------------------
     pop_table <- eventReactive(input$run_model,{
+      bar_bounds <- pop_file() %>% filter(pop_name == input$pop_name) %>%
+        select(matches("upper|lower")) %>%
+        mutate(across(everything(), \(x){round(x * 100)}))
+
       cur_tab <- tibble(Scenario = "Current",
                         R_t_mean = input$R_bar,
-                        `Calves per 100 cows` = round(input$R_bar, 0) %>% as.character(),
+                        `Calves per 100 cows` = paste0(
+                          round(input$R_bar, 0), " CI: ",
+                          bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper
+                        ),
                         S_t_mean = input$S_bar,
-                        `% Female survival` = round(input$S_bar, 0) %>% as.character())
+                        `% Female survival` = paste0(
+                          round(input$S_bar, 0), " CI: ",
+                          bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper
+                        ))
 
       pct_change <- function(old, new, digits = 0){
         out <- round((new - old)/old *100, digits)
@@ -911,8 +920,6 @@ $(window).resize(function(e) {
 
         # update the reactive value
         pop_file(pop_file_in)
-
-
 
         shiny::removeModal()
       }
