@@ -696,7 +696,7 @@ $(window).resize(function(e) {
               height = 400
             )),
           navset_card_tab(
-            title = h4(i18n$t("Demographic rates")),
+            title = h4(i18n$t("Demographic rate estimates")),
             nav_panel(
               i18n$t("Survival"),
               card_image(file = file.path(inst_dir, "www", "survBbouMulti.png"),

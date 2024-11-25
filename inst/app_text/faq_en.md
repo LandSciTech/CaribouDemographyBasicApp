@@ -1,6 +1,2 @@
-**Why is only the female population reported?**  
-The models used to make these projections do not incorporate changes to the male
-population. Typically, only females are collared and therefore we only have
-information on the survival rate for females. The assumption is that there are
-enough males present in the population for all females to find a mate. We also
-assume that half the calves will be female. 
+**Why don't we project changes in the population of males?**  
+It is common for caribou population viability projection models to include only calves of both sexes and adult females (i.e. cows), not bulls. The assumption is that there are enough bulls to allow cows to find mates. Often, only cows are collared so we lack information on the survival rate of bulls. We assume that half of calves are male.
