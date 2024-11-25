@@ -1,4 +1,6 @@
 #### Purpose {#intro-purpose}
+
+<img align="right" src="test_caribou.jpg">
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. Projections include uncertainty about the
 current state of boreal caribou populations, and how those populations will
