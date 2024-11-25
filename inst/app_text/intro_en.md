@@ -1,4 +1,4 @@
-## Purpose {#intro-purpose}
+#### Purpose {#intro-purpose}
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. Projections include uncertainty about the
 current state of boreal caribou populations, and how those populations will
@@ -22,12 +22,12 @@ The app allows users to add and analyze data for their populations of interest.
 Users can then explore how changing survival and recruitment rates would change 
 expected outcomes for caribou.
 
-## Authors
+#### Authors
 This app was created by Sarah Endicott and Josie Hughes (Wildlife and Landscape
 Science Division, Environment and Climate Change Canada), and Danielle Cantin
 (Canadian Wildlife Service, Environment and Climate Change Canada).
 
-## Acknowlegments
+#### Acknowlegments
 Guy Larocque (Canadian Forest Service, Natural Resources Canada) and Rebecca
 Viejou (affiliation?) participated in conceptualizing the app and compiling
 available data.

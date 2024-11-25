@@ -65,12 +65,12 @@ $(window).resize(function(e) {
   {
     ui <-  page_sidebar(
       window_title = "app",
-      title = i18n$t("Boreal Caribou Demographic Projection Explorer"),
+      title = span(i18n$t("Boreal Caribou Demographic Projection Explorer"), style = "font-size: 30px; font-weight: bold"),
       padding = 1,
-      theme = bs_theme(bootswatch = "bootstrap", success = "#4a6741") %>%
+      theme = bs_theme(bootswatch = "bootstrap", success = "#E8BA59") %>%
         bs_add_rules(
           list(
-            "body { --bslib-page-sidebar-title-bg: #3f5a36; }"
+            "body { --bslib-page-sidebar-title-bg: #E8BA59; }"
           )
         ),
 
@@ -86,7 +86,7 @@ $(window).resize(function(e) {
         numericInput("numSteps",
                      label = i18n$t("Number of years"),
                      value = 20
-        ),
+        ) %>% tagAppendAttributes(style = 'font-size:20px'),
         # Alternative Scenarios #-------------------------------------------------
 
         h4(i18n$t("Run model"), id = "run-section"),
@@ -155,12 +155,14 @@ $(window).resize(function(e) {
         selectInput('selected_language',
                     i18n$t("Change language"),
                     choices = lang_choice,
-                    selected = input$selected_language)
+                    selected = input$selected_language) %>%
+          tagAppendAttributes(style = 'font-size:20px')
       }else {
         selectInput('selected_language',
                     i18n$t("Change language"),
                     choices = lang_choice,
-                    selected = i18n$get_key_translation())
+                    selected = i18n$get_key_translation()) %>%
+          tagAppendAttributes(style = 'font-size:20px')
       }
 
     })
@@ -201,7 +203,7 @@ $(window).resize(function(e) {
           id = "from_file",
           selectInput("pop_name", label = i18n$t("Population name"),
                       choices = pops_use
-          )
+          ) %>% tagAppendAttributes(style = 'font-size:20px')
         )
       )
     })
@@ -240,6 +242,7 @@ $(window).resize(function(e) {
       req(input$pop_name)
       pop_default <- pop_file() %>% filter(pop_name == input$pop_name) %>%
         select(-pop_name, -contains("iv"))
+      browser()
 
       iv_default <- pop_file() %>% filter(pop_name == input$pop_name) %>%
         select(contains("iv")) %>%
@@ -669,7 +672,7 @@ $(window).resize(function(e) {
           width = "600px",
           heights_equal = "row",
           card(
-            h3(i18n$t("Data description"), id = "intro-data-descrip"),
+            h4(i18n$t("Data description"), id = "intro-data-descrip"),
             markdown(pop_file()$description[1]),
             max_height = 300
           ),
@@ -679,7 +682,7 @@ $(window).resize(function(e) {
             max_height = 300
           ),
           navset_card_tab(
-            title = h3(i18n$t("Survey data summary")),
+            title = h4(i18n$t("Survey data summary")),
             nav_panel(
               i18n$t("Survival"),
               card_image(file = file.path(inst_dir, "www", "survivalSummary.png"),
@@ -693,7 +696,7 @@ $(window).resize(function(e) {
               height = 400
             )),
           navset_card_tab(
-            title = h3(i18n$t("Demographic rates")),
+            title = h4(i18n$t("Demographic rates")),
             nav_panel(
               i18n$t("Survival"),
               card_image(file = file.path(inst_dir, "www", "survBbouMulti.png"),
@@ -708,7 +711,7 @@ $(window).resize(function(e) {
             )
           ),
           card(
-            h3(i18n$t("Data summary"), id = "intro-data-summary"),
+            h4(i18n$t("Data summary"), id = "intro-data-summary"),
             tableOutput("data_summary"),
             p(em(i18n$t("Note that results will not be shown for populations with only one year of recruitment or survival data because one year of data is insufficient for making reliable predictions.")))
           )
