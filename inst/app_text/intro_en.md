@@ -1,14 +1,14 @@
 #### Purpose {#intro-purpose}
 
-<img align="right" src="test_caribou.jpg">
+<img align="right" src="Female_caribou_and_calves.jpg" width="500">
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. Projections include uncertainty about the
 current state of boreal caribou populations, and how those populations will
 change in the future. Caribou demographic model parameters, and uncertainty
 about those parameter values, are estimated from available data on the survival
 of collared caribou and the numbers of calves observed per cow in aerial surveys
-using a modified version of the
-[bboutools](https://poissonconsulting.github.io/bboutools/) R package. These
+using a modified version of the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a>
+R package. These
 parameter estimates are used to project the likely changes in the population
 over time if there are no future changes in average survival and recruitment. We
 project a mean value for the population over time and a number of plausible
@@ -31,7 +31,7 @@ Science Division, Environment and Climate Change Canada), and Danielle Cantin
 
 #### Acknowlegments
 Guy Larocque (Canadian Forest Service, Natural Resources Canada) and Rebecca
-Viejou (affiliation?) participated in conceptualizing the app and compiling
+Viejou (Canadian Forest Service, Natural Resources Canada) participated in conceptualizing the app and compiling
 available data.
 
 

@@ -30,12 +30,22 @@ To run the app you will need to install R and we recommend RStudio as well.
 Follow the instructions [here](https://posit.co/download/rstudio-desktop/) to
 install both.
 
+In addition you will need to install the Rtools application. You can do this by selecting the version corresponding to your version of R [here](https://cran.r-project.org/bin/windows/Rtools/). Or you can run the following code in the R console which should prompt Rtools to be installed. 
+
+```r
+install.packages("pkgbuild")
+pkgbuild::check_build_tools()
+
+```
+Wait for the tool to download and install, following in instructions that pop-up. When installation is complete close R or RStudio and open it again in a fresh session for the changes to take effect. 
+
 You can install the CaribouDemographyBasicApp R package by running the following
 in the R console:
 
 ``` r
 install.packages("remotes")
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
+
 ```
 
 ## Launching the Shiny app
@@ -45,4 +55,5 @@ To launch the app in your default browser run the following lines:
 ``` r
 library(CaribouDemographyBasicApp)
 run_caribou_demog_app()
+
 ```

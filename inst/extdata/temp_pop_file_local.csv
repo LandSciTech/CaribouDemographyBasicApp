@@ -1,11 +1,45 @@
 "pop_name","R_bar","R_sd","R_iv_cv","R_iv_sd","R_bar_lower","R_bar_upper","S_bar","S_sd","S_iv_cv","S_iv_sd","S_bar_lower","S_bar_upper","Year","N0","nCollarYears","nSurvYears","nCowsAllYears","nRecruitYears","description"
-"A",0.189446071092232,0.0798491802938016,0.31013193331016,0.208085112390936,0.166082798553725,0.214226577303604,0.880521428904456,0.239507525941409,0.453605308815965,0.397120982520939,0.82290075883173,0.923382342745318,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
+"Basse-Côte-Nord",0.266868809595458,0.165912187448129,0.105185126905091,0.966032984980398,0.202114378713338,0.332006003137567,0.84803132306661,0.63165056037809,0.333785438118254,0.93258845370977,0.655775244418956,0.957075435509673,2019,558,51,2,360,4,"Data was compiled from published sources by Rebecca Viejou.
 
-#### Sources
+**Sources**  
+Basse-Côte-Nord:   
+Heppell, S., A. Massé, A. St-Louis et I. Thibault (2013). Projet d’acquisition de connaissances sur le
+caribou forestier dans l’aire d’entrainement militaire CYA 733 : rapport final – travaux 2012 –
+2013, Ministère du Développement durable, de l’Environnement, de la Faune et des Parcs, 36 p.
+https://mffp.gouv.qc.ca/wp-content/uploads/CoteNord_2013.pdf
 
-Markdown formating can be used to **bold** or *italicize* text. Or create lists:
-  - Item 1
-  - Item 2
+Heppell, S. (2019). Inventaire aérien du caribou forestier (*Rangifer tarandus caribou*) au cours de l’hiver
+2019 dans le secteur de la Basse-Côte-Nord, Ministère des Forêts, de la Faune et des Parcs,
+Direction de la gestion de la faune de la Côte-Nord, 24 p.  
+https://mffp.gouv.qc.ca/wp-content/uploads/CoteNord_2019a.pdf
 
-See [here](https://www.markdownguide.org/cheat-sheet/) for more details about markdown"
-"B",0.203573039981072,0.105074199693781,0.31013193331016,0.208085112390936,0.170003414888936,0.2371616166326,0.907943805829668,0.28281451290782,0.453605308815965,0.397120982520939,0.851373869510432,0.946577444054931,2021,1000,519,18,2001,15,NA
+Heppell, S. (2020). Inventaire aérien de caribous forestiers (*Rangifer tarandus caribou*) dans les secteurs
+sud de Manicouagan et de la Moyenne-Côte-Nord à l’hiver 2020, Ministère des Forêts, de la
+Faune et des Parcs, Direction de la gestion de la faune de la Côte-Nord, Québec, 31 p. 
+https://mffp.gouv.qc.ca/wp-content/uploads/RA_Inventaire_caribou_cote-nord_2020.pdf
+
+Manicouagan:   
+Heppell, S. et L. Boissonneault (2021). Inventaire aérien de la population de caribous forestiers (*Rangifer
+tarandus caribou*) Manicouagan à l’hiver 2021. Ministère des Forêts, de la Faune et des Parcs, Direction
+de la gestion de la faune de la Côte-Nord, Québec, 21 p. et annexes 
+https://mffp.gouv.qc.ca/wp-content/uploads/RA_Inventaire_caribou_Manicouagan_2021_MFFP.pdf
+
+Outardes:   
+Brodeur, A., S. Heppell et L. Boissonneault (2022). Inventaire aérien de la population de caribous
+forestiers (*Rangifer tarandus caribou*) Outardes et du secteur sud-ouest de la population
+Caniapiscau à l’hiver 2022. Québec : ministère de l’Environnement, de la Lutte contre les
+changements climatiques, de la Faune et des Parcs, Direction de la gestion de la faune de la
+Côte-Nord, 23 p. + annexes. 
+https://mffp.gouv.qc.ca/wp-content/uploads/RA_inventaire_caribou_Outardes_hiver2022_MELCCFP.pdf
+
+Pipmuacan:  
+Dussault, C. (2013). Inventaire du caribou forestier à l’hiver 2012 au Saguenay–Lac-Saint-Jean, Société
+de la Faune et des Parcs du Québec, Direction de l’aménagement de la faune du Saguenay–
+Lac-Saint-Jean, 20 p. 
+https://mffp.gouv.qc.ca/wp-content/uploads/SLSJ_2012.pdf
+
+Plourde, J., A. Landry et S. Gravel (2020). Inventaire aérien de caribous forestiers (*Rangifer
+tarandus caribou*) du secteur Pipmuacan à l’hiver 2020, ministère des Forêts, de la Faune et des Parcs,
+Direction de la gestion de la faune du Saguenay–Lac-Saint-Jean, Québec, 17 p. 
+https://mffp.gouv.qc.ca/wp-content/uploads/RA_inventaire_caribou_Pipmuacan_SLSJ_2020.pdf"
+"Manicouagan",0.248475619438627,0.201826460699198,0.105185126905091,0.966032984980398,0.180063326740652,0.330987608354313,0.738910977796774,0.427467665661448,0.333785438118254,0.93258845370977,0.548204228010615,0.868977473997107,2021,930,71,3,277,2,NA

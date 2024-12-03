@@ -180,12 +180,13 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   png(paste0(fig_dir, "/survivalSummary.png"),
       height = ht, width = wt, units = "px"
   )
-  base <- ggplot(surv_long, aes(x = Year, y = NumAnimals, group = Category,
+  base <- ggplot(surv_long, aes(x = as.integer(Year), y = NumAnimals, group = Category,
                                 shape = Category, colour = Category)) +
     geom_point() +
     facet_wrap(~PopulationName) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.05)))+
     scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
+                       breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
                        guide = guide_axis(minor.ticks = TRUE))+
     labs(x = i18n$t("Year"), y = i18n$t("Number of animals"), colour = i18n$t("Category"),
          shape = i18n$t("Category")) +
@@ -204,12 +205,13 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   # included so they are added to translate file
   c(i18n$t('Cows'), i18n$t('CowsBulls'), i18n$t('UnknownAdults'), i18n$t('Calves'))
 
-  base <- ggplot(rec_long, aes(x = Year, y = NumAnimals, group = Category,
+  base <- ggplot(rec_long, aes(x = as.integer(Year), y = NumAnimals, group = Category,
                                fill = Category, colour = Category)) +
     geom_bar(position = "stack", stat = "identity") +
     facet_wrap(~PopulationName) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.05)))+
     scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
+                       breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
                        guide = guide_axis(minor.ticks = TRUE))+
     scale_fill_discrete(labels = i18n$t, aesthetic = c("fill", "colour"))+
     ylab("Number of animals") +
@@ -221,7 +223,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
 
   png(paste0(fig_dir,"/survBbouMulti.png"), height = ht, width = wt, units = "px")
   plt <- bb_plot_year_survival(surv_fit)+
-    labs(x = i18n$t("Year"), y = i18n$t("Annual Survival (%)"))
+    labs(x = i18n$t("Year"), y = i18n$t("Annual Survival (%)"))+
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   print(plt)
   dev.off()
 
@@ -231,7 +234,9 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
       "hundred", transform = function(x){x*100}, inverse = function(x){x/100},
       format = scales::label_number(scale = 100)
     ))+
-    labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 cows"))
+    scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
+    labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 cows"))+
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   print(plt)
   dev.off()
 

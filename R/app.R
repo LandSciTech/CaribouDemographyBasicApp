@@ -14,7 +14,7 @@ run_caribou_demog_app <- function(private = FALSE){
 
   theme_set(
     theme_classic()+
-      theme(text = element_text(size = 16),
+      theme(text = element_text(size = 20),
             plot.caption = element_text(hjust = 0))
   )
   # File with translations
@@ -43,21 +43,6 @@ $(window).resize(function(e) {
 "
 
   mod_defaults <- caribouPopGrowth %>% formals() %>% eval()
-
-  if(!private){
-    # this lets it work for a public sheet without authentication
-    googlesheets4::gs4_deauth()
-    # # note it must be saved as a google sheet. Saving as excel in Google does not work
-    def_survey_url <- "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing"
-
-  } else {
-    googlesheets4::gs4_auth(email = "*@canada.ca|*@ec.gc.ca")
-    # Quebec survey url
-    def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"
-
-  }
-
-
 
   pop_file <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
 
@@ -436,7 +421,7 @@ $(window).resize(function(e) {
 
         scn_res <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
                             \(x, y, z, nm){
-                              doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
+                              suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
@@ -445,7 +430,7 @@ $(window).resize(function(e) {
                                     scn_nm = ifelse(z == "", nm, z),
                                     type = input$ivType,
                                     addl_params = get_addl_params(str_remove(nm, "alt_name_"),
-                                                                  input))
+                                                                  input)))
                             })
       }else {
         scn_res <- NULL
@@ -495,7 +480,7 @@ $(window).resize(function(e) {
              x = i18n$t("Years in the future"),
              alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"),
              caption = i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.") %>%
-               str_wrap(max(pop_cont_w(), 700)/6 - 10))+
+               str_wrap(max(pop_cont_w(), 700)/7.5 - 10))+
         guides(linewidth = guide_legend(override.aes = list(alpha = c(0.2, 1))),
                colour = guide_legend(override.aes = list(linewidth = c(2))))
 
@@ -552,12 +537,12 @@ $(window).resize(function(e) {
       cur_tab <- tibble(Scenario = "Current",
                         R_t_mean = input$R_bar,
                         `Calves per 100 cows` = paste0(
-                          round(input$R_bar, 0), " CI: ",
+                          round(input$R_bar, 0), "<br>Range: ",
                           bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper
                         ),
                         S_t_mean = input$S_bar,
                         `% Female survival` = paste0(
-                          round(input$S_bar, 0), " CI: ",
+                          round(input$S_bar, 0), "<br>Range: ",
                           bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper
                         ))
 
@@ -615,7 +600,8 @@ $(window).resize(function(e) {
         mutate(Scenario = ifelse(Scenario == "Current", i18n$t("Current"), Scenario)) %>%
         set_names(c(i18n$t("Scenario"), i18n$t("Calves per 100 cows"), i18n$t("% Female survival"),
                     i18n$t("Years to < 10 females")))
-    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0)
+    }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0,
+    sanitize.text.function = identity)
 
     # Recruitment and mortality plot #---------------------------------------------------
     # Only on button click so don't rerun simulations on resize window
@@ -755,7 +741,7 @@ $(window).resize(function(e) {
             height = "150px"
           ),
           plotOutput("r_m_plot", fill = FALSE,
-                     width = min(100+(300*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w())))
+                     width = min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w())))
         )
       )
     })
@@ -789,42 +775,59 @@ $(window).resize(function(e) {
     # Update data #---------------------------------------------------------------
     observeEvent(
       input$update_data,
-      showModal(modalDialog(
-        fluidPage(
-          h3(i18n$t("Update survey data")),
-          p(i18n$t("Provide a URL linking to a Google Drive spreadsheet")),
-          textInput("survey_url",
-                    i18n$t("Google Drive spreadsheet URL:"),
-                    value = def_survey_url),
-          accordion(
-            accordion_panel(
-              title = i18n$t("Instructions to create a new data sheet"),
-              p(i18n$t("You can supply a URL for your own Google Sheet to use your own data in the app.")),
-              tags$ul(
-                tags$li(i18n$t("In your Google Drive account click 'New' and select 'Google Sheets'")),
-                tags$li(i18n$t("Fill the spreadsheet with your data. It must have the same sheets, and column names as the")," ",
-                        a(i18n$t("example sheet."), href = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", target="_blank"), " ",
-                        i18n$t("See the")," ",
-                        a(i18n$t("bboutools website"), href = "https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data", target="_blank"), " ",
-                        i18n$t("for more information on how to format the data.")),
-                tags$li(i18n$t("Note: The data must be in a Google Sheet not an Excel file stored on Google Drive. To use an uploaded Excel file click 'File', then 'Save as Google Sheets'.")),
-                tags$li(i18n$t("If access to the Google Sheet is restricted it will be necessary to grant access to the app.")),
-                tags$li(i18n$t("The simpler option is to click 'Share' and under General Access select 'Anyone with the link` and choose the role 'Viewer'.")),
-                tags$li(i18n$t("Then click 'Copy link'. Paste the link into the text box above and click `Update`"))
+      {
+        #Authenticate Google Sheets
+        if(!private){
+          # this lets it work for a public sheet without authentication
+          googlesheets4::gs4_deauth()
+          # # note it must be saved as a google sheet. Saving as excel in Google does not work
+          def_survey_url <- "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing"
+
+        } else {
+          googlesheets4::gs4_auth(email = "*@canada.ca|*@ec.gc.ca")
+          # Quebec survey url
+          def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"
+
+        }
+
+        showModal(modalDialog(
+          fluidPage(
+            h3(i18n$t("Update survey data")),
+            p(i18n$t("Provide a URL linking to a Google Drive spreadsheet")),
+            textInput("survey_url",
+                      i18n$t("Google Drive spreadsheet URL:"),
+                      value = def_survey_url),
+            accordion(
+              accordion_panel(
+                title = i18n$t("Instructions to create a new data sheet"),
+                p(i18n$t("You can supply a URL for your own Google Sheet to use your own data in the app.")),
+                tags$ul(
+                  tags$li(i18n$t("In your Google Drive account click 'New' and select 'Google Sheets'")),
+                  tags$li(i18n$t("Fill the spreadsheet with your data. It must have the same sheets, and column names as the")," ",
+                          a(i18n$t("example sheet."), href = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", target="_blank"), " ",
+                          i18n$t("See the")," ",
+                          a(i18n$t("bboutools website"), href = "https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data", target="_blank"), " ",
+                          i18n$t("for more information on how to format the data.")),
+                  tags$li(i18n$t("Note: The data must be in a Google Sheet not an Excel file stored on Google Drive. To use an uploaded Excel file click 'File', then 'Save as Google Sheets'.")),
+                  tags$li(i18n$t("If access to the Google Sheet is restricted it will be necessary to grant access to the app.")),
+                  tags$li(i18n$t("The simpler option is to click 'Share' and under General Access select 'Anyone with the link` and choose the role 'Viewer'.")),
+                  tags$li(i18n$t("Then click 'Copy link'. Paste the link into the text box above and click `Update`"))
+                )
               )
             )
-          )
-        ),
-        footer = tagList(
-          modalButton(i18n$t("Cancel")),
-          actionButton("update_data_submit", i18n$t("Update"))
-        ),
-        size = "l"
-      ))
+          ),
+          footer = tagList(
+            modalButton(i18n$t("Cancel")),
+            actionButton("update_data_submit", i18n$t("Update"))
+          ),
+          size = "l"
+        ))
+      }
     )
 
     observeEvent(
       input$update_data_submit, {
+
         start <- Sys.time()
         withProgress({
           sh_name <- googlesheets4::gs4_get(input$survey_url)$name

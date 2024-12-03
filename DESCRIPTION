@@ -27,8 +27,8 @@ Depends:
     tidyverse,
     waiter
 Remotes: 
-    LandSciTech/bboutoolsMultiPop,
     LandSciTech/bboudata,
+    LandSciTech/bboutoolsMultiPop,
     LandSciTech/caribouMetrics
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
