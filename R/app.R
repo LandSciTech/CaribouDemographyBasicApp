@@ -12,6 +12,18 @@ run_caribou_demog_app <- function(private = FALSE){
 
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 
+  #Authenticate Google Sheets
+  if(!private){
+    # # note it must be saved as a google sheet. Saving as excel in Google does not work
+    def_survey_url <- "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing"
+
+  } else {
+    # Quebec survey url
+    def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"
+
+  }
+
+
   theme_set(
     theme_classic()+
       theme(text = element_text(size = 20),
@@ -335,10 +347,10 @@ $(window).resize(function(e) {
                           label = i18n$t("Alternative scenario name")),
                 sliderInput(inputId = paste0("alt_S_bar_", n),
                             label = i18n$t("Average % female survival"),
-                            value = input$S_bar, min = 0, max = 99, step = 0.1),
+                            value = input$S_bar, min = 0, max = 99, step = 1),
                 sliderInput(inputId = paste0("alt_R_bar_", n),
                             label = i18n$t("Average calves per 100 cows"),
-                            value = input$R_bar, min = 0, max = 100, step = 0.1),
+                            value = input$R_bar, min = 0, max = 100, step = 1),
                 actionButton(paste0("alt_remove_", n),
                              i18n$t("Remove scenario"), icon("remove", lib = "glyphicon"),
                              style = "color: #fff; background-color: #800000; border-color: #800000")
@@ -548,7 +560,7 @@ $(window).resize(function(e) {
 
       pct_change <- function(old, new, digits = 0){
         out <- round((new - old)/old *100, digits)
-        paste0(ifelse(out > 0, "+", ""), out, "%")
+        paste0(ifelse(out > 0, "+", ""), out)
       }
 
       if(any(do_alt_scns())){
@@ -561,11 +573,10 @@ $(window).resize(function(e) {
                               Scenario = ifelse(z == "", nm, z),
                               R_t_mean = x,
                               `Calves per 100 cows` = paste0(
-                                round(x, 0),  " (", pct_change(input$R_bar, x), ")"),
+                                round(x, 0),  "<br>% Change: ", pct_change(input$R_bar, x)),
                               S_t_mean = y,
                               `% Female survival` = paste0(
-                                round(y, 0), " (", pct_change(input$S_bar, y), ")"
-                              )
+                                round(y, 0), "<br>% Change: ", pct_change(input$S_bar, y))
                             ))
       } else {
         alt_tab <- NULL
@@ -648,7 +659,7 @@ $(window).resize(function(e) {
         scale_fill_brewer(palette = "Dark2")+
         labs(x = NULL, y = NULL, fill = i18n$t("Scenario"),
              caption = i18n$t("The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.") %>%
-               str_wrap(min(100+(300*(n_distinct(pop_mod()$scn))), r_m_cont_w())/6 - 10))
+               str_wrap(min(100+(250*(n_distinct(pop_mod()$scn))), r_m_cont_w())/6 - 10))
     })
 
     # Body UI #-------------------------------------------------------------------
@@ -673,7 +684,7 @@ $(window).resize(function(e) {
           ),
           card(
             h4(i18n$t("Disclaimer"), id = "intro-survey-data"),
-            p(i18n$t('Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Use the "Update data" method to modify the data or data description.')),
+            p(i18n$t('Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.')),
             max_height = 300
           ),
           navset_card_tab(
@@ -716,7 +727,7 @@ $(window).resize(function(e) {
     output$results <- renderUI({
       page_fillable(
         layout_columns(
-          col_widths = c(12, 4, 4, 4, 12),
+          col_widths = c(12, 6, 3, 3, 12),
 
           navset_tab(
             nav_panel(i18n$t("Female population"),
@@ -776,20 +787,6 @@ $(window).resize(function(e) {
     observeEvent(
       input$update_data,
       {
-        #Authenticate Google Sheets
-        if(!private){
-          # this lets it work for a public sheet without authentication
-          googlesheets4::gs4_deauth()
-          # # note it must be saved as a google sheet. Saving as excel in Google does not work
-          def_survey_url <- "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing"
-
-        } else {
-          googlesheets4::gs4_auth(email = "*@canada.ca|*@ec.gc.ca")
-          # Quebec survey url
-          def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"
-
-        }
-
         showModal(modalDialog(
           fluidPage(
             h3(i18n$t("Update survey data")),
@@ -825,8 +822,47 @@ $(window).resize(function(e) {
       }
     )
 
+    do_update <- reactiveVal(FALSE)
+
     observeEvent(
       input$update_data_submit, {
+        # this lets Google sheets work for a public sheet without authentication
+        googlesheets4::gs4_deauth()
+
+        sh_name <- tryCatch(
+          googlesheets4::gs4_get(input$survey_url)$name,
+          error = function(e) e
+        )
+
+        if(!inherits(sh_name, "error")){
+          do_update(TRUE)
+        } else if(sh_name$message == "Client error: (403) PERMISSION_DENIED"){
+          showModal(modalDialog(
+            i18n$t("The url provided is for a protected Google sheet."),
+            i18n$t("Click the Authenticate button below and follow the instructions to give this app permission to access files in your Google drive."),
+            i18n$t('Alternatively, change the settings on the Google sheet so "Anyone with the link can view"'),
+            footer = tagList(
+              modalButton(i18n$t("Cancel")),
+              actionButton("auth_gs", i18n$t("Authenticate"))
+            ),
+            size = "l"))
+        } else {
+          stop("Unrecognized error accessing spreadsheet")
+        }
+
+
+      }
+    )
+
+    observeEvent(input$auth_gs, {
+      #Authenticate Google Sheets
+      googlesheets4::gs4_auth(email = TRUE)
+      do_update(TRUE)
+    })
+
+    observeEvent(
+      do_update(), {
+        req(do_update())
 
         start <- Sys.time()
         withProgress({

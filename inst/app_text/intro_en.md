@@ -30,8 +30,7 @@ Science Division, Environment and Climate Change Canada), and Danielle Cantin
 (Canadian Wildlife Service, Environment and Climate Change Canada).
 
 #### Acknowlegments
-Guy Larocque (Canadian Forest Service, Natural Resources Canada) and Rebecca
-Viejou (Canadian Forest Service, Natural Resources Canada) participated in conceptualizing the app and compiling
-available data.
+Guy Larocque and Rebecca Viejou (Canadian Forest Service, Natural Resources Canada)  
+participated in conceptualizing the app and compiling available data.
 
 
