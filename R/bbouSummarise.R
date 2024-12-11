@@ -204,27 +204,30 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     mutate(Bulls = CowsBulls - Cows, .after = Cows) %>%
     select(-CowsBulls) %>%
     pivot_longer(Cows:Calves, names_to = "Category", values_to = "NumAnimals") %>%
-    mutate(Category = factor(Category, levels = rev(c("Cows", "Bulls", "UnknownAdults", "Calves"))))
+    mutate(Category = factor(Category, levels = rev(c("Cows", "Calves", "Bulls", "UnknownAdults"))))
 
   png(paste0(fig_dir, "/recruitmentSummary.png"),
       height = ht, width = wt, units = "px", res = 300
   )
 
-  base <- ggplot(rec_long, aes(x = as.integer(Year), y = NumAnimals, group = Category,
+  base <- ggplot(rec_long, aes(x = as.factor(Year), y = NumAnimals, group = Category,
                                fill = Category, colour = Category)) +
     geom_bar(position = "stack", stat = "identity") +
-    facet_wrap(~PopulationName) +
+    geom_text(aes(label = after_stat(y), group = as.integer(Year)),
+              stat = 'summary', fun = sum, vjust = -0.5, show.legend = FALSE)+
+    ggforce::facet_row(vars(PopulationName), scale = "free_x", space = "free", strip.position = "left") +
     scale_y_continuous(expand = expansion(mult = c(0, 0.05)))+
-    scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
-                       breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
-                       guide = guide_axis(minor.ticks = TRUE))+
+    # scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
+    #                    breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
+    #                    guide = guide_axis(minor.ticks = TRUE))+
     scale_fill_brewer(palette = "Set2",
-                      labels = rev(c(i18n$t('Adult females'), i18n$t('Adult males'),
-                                       i18n$t('Adults unknown sex'), i18n$t('Calves'))),
+                      labels = rev(c(i18n$t('Adult\nfemales'), i18n$t('Calves'), i18n$t('Adult\nmales'),
+                                       i18n$t('Adults\nunknown sex'))),
                         aesthetic = c("fill", "colour"))+
     labs(x = i18n$t("Year"), y = i18n$t("Number of animals counted"),
          fill = i18n$t("Category"), colour = i18n$t("Category")) +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+          legend.position = "top")
   print(base)
   dev.off()
 

@@ -26,13 +26,13 @@ Estimated demographic parameters,Paramètres démographiques estimés
 Type of interannual variation,Type de variation interannuelle
 Initial number of adult females,Nombre initial de femelles adultes
 Average % female survival,Pourcentage moyen de survie des femmes
-Average calves per 100 cows,Nombre moyen de veaux pour 100 vaches
+Average calves per 100 females,Nombre moyen de veaux pour 100 femelles
 Standard deviation of survival rate,Écart type du taux de survie
-Standard deviation of calf:cow ratio,Écart type du ratio veau:vache
+Standard deviation of calves per 100 females,Écart type des veaux pour 100 femelles
 Interannual variation of survival rate,Variation interannuelle du taux de survie
-Interannual variation of calf:cow ratio,Variation interannuelle du ratio veau:vache
+Interannual variation of calves per 100 females,Variation interannuelle du nombre de veaux pour 100 femelles
 Uncertainty about interannual variation of survival rate,Incertitude sur la variation interannuelle du taux de survie
-Uncertainty about interannual variation of calf:cow ratio,Incertitude sur la variation interannuelle du ratio veau:vache
+Uncertainty about interannual variation of calves per 100 females,Incertitude sur la variation interannuelle du nombre de veaux pour 100 femelles
 Current,Actuel
 Alternative scenario,Scénario alternatif
 Alternative scenario name,Nom du scénario alternatif
@@ -47,15 +47,15 @@ Projected adult female population size over time. The darker line shows the outc
 Deaths,Décès
 Recruits,Recrues
 Number of females,Nombre de femmes
-Calves per 100 cows,Veaux pour 100 vaches
-% Female survival,% de survie des femmes
+Calves per 100 females,Veaux pour 100 femelles
+Female survival,Survie des femmes
 Years to < 10 females,Années à < 10 femmes
 Female replacement rate,Taux de remplacement de la population féminine
 % Female mortality,% Mortalité féminine
 The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.,Le taux moyen de mortalité féminine en % et le taux de remplacement des femmes dans chaque scénario. Les barres d'erreur indiquent les valeurs minimales et maximales attendues compte tenu de l'incertitude des paramètres de population. Une population est stable ou en augmentation lorsque le taux de remplacement des femmes est égal ou supérieur au % de mortalité féminine.
 Data description,Description des données
 Disclaimer,Clause de non-responsabilité
-"Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Use the ""Update data"" method to modify the data or data description.",Veuillez noter que les données résumées et décrites ici sont fournies par les utilisateurs de l'application et peuvent différer selon les projets. Les créateurs de l'application ne sont pas responsables de la qualité des données. Utilisez la méthode « Mettre à jour les données » pour modifier les données ou la description des données.
+"Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.",Veuillez noter que les données résumées et décrites ici sont fournies par les utilisateurs de l'application et peuvent différer selon les projets. Les créateurs de l'application ne sont pas responsables de la qualité des données. Cliquez sur le bouton « Mettre à jour les données » dans le menu de gauche et suivez les instructions pour modifier les données ou la description des données.
 Survey data summary,Résumé des données de l'enquête
 Survival,Survie
 Recruitment,Recrutement
@@ -68,9 +68,9 @@ Glossary,Glossaire
 Frequently asked questions,Questions fréquemment posées
 Initial population,Population initiale
 Initial population year,Année de population initiale
-Number of collar years,Nombre d'années de collier
+Total number of collars by year,Nombre total de colliers par an
 Years of survival data,Années de données de survie
-Total number of cows in aerial surveys,Nombre total de vaches dans les relevés aériens
+Total number of females in aerial surveys,Nombre total de femelles dans les relevés aériens
 Years of recruitment data,Années de données de recrutement
 Update survey data,Mettre à jour les données de l'enquête
 Provide a URL linking to a Google Drive spreadsheet,Fournir une URL renvoyant vers une feuille de calcul Google Drive
@@ -89,6 +89,10 @@ The simpler option is to click 'Share' and under General Access select 'Anyone w
 Then click 'Copy link'. Paste the link into the text box above and click `Update`,Cliquez ensuite sur « Copier le lien ». Collez le lien dans la zone de texte ci-dessus et cliquez sur « Mettre à jour ».
 Cancel,Annuler
 Update,Mise à jour
+The url provided is for a protected Google sheet.,L'URL fournie est celle d'une feuille Google protégée.
+Click the Authenticate button below and follow the instructions to give this app permission to access files in your Google drive.,Cliquez sur le bouton Authentifier ci-dessous et suivez les instructions pour autoriser cette application à accéder aux fichiers de votre Google Drive.
+"Alternatively, change the settings on the Google sheet so ""Anyone with the link can view""",Vous pouvez également modifier les paramètres de la feuille Google pour que « Toute personne disposant du lien puisse voir »
+Authenticate,Authentifier
 Downloading data from,Téléchargement de données depuis
 Additional model parameters,Paramètres supplémentaires du modèle
 Maximum recruitment multiplier,Multiplicateur de recrutement maximal
@@ -102,14 +106,15 @@ Fitting survival,Survie adaptée
 Fitting recruitment,Recrutement adapté
 Predicting survival,Prédire la survie
 Predicting recruitment,Prédire le recrutement
-Mortalities,Mortalité
-CollarYrs,CollierAnnées
+Collared animals,Animaux avec collier
 Year,Année
-Number of animals,Nombre d'animaux
+Number of collared animals,Nombre d'animaux munis d'un collier
 Category,Catégorie
-Cows,Vaches
-CowsBulls,VachesTaureaux
-UnknownAdults,InconnuAdultes
+Adult\nfemales,Femelles adultes
 Calves,Veaux
+Adult\nmales,Mâles adultes
+Adults\nunknown sex,Adultes\sexe inconnu
+Number of animals counted,Nombre d'animaux comptés
 Annual Survival (%),Survie annuelle (%)
+Calves per 100 cows,Veaux pour 100 vaches
 Population growth (lambda),Croissance démographique (lambda)

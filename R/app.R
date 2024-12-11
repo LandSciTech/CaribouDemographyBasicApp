@@ -279,7 +279,7 @@ $(window).resize(function(e) {
                         value = pop_default$S_bar * 100, min = 0, max = 99, step = 0.1
             ),
             sliderInput("R_bar",
-                        label = i18n$t("Average calves per 100 cows"),
+                        label = i18n$t("Average calves per 100 females"),
                         value = pop_default$R_bar * 100, min = 0, max = 100, step = 0.1
             ),
             numericInput("S_sd",
@@ -287,7 +287,7 @@ $(window).resize(function(e) {
                          value = round(pop_default$S_sd, 3)
             ),
             numericInput("R_sd",
-                         label = i18n$t("Standard deviation of calf:cow ratio"),
+                         label = i18n$t("Standard deviation of calves per 100 females"),
                          value = round(pop_default$R_sd, 3)
             ),
             sliderInput("S_iv_cv",
@@ -295,7 +295,7 @@ $(window).resize(function(e) {
                         value = iv_default$S_CV, min = 0, max = 2, step = 0.01
             ),
             sliderInput("R_iv_cv",
-                        label = i18n$t("Interannual variation of calf:cow ratio"),
+                        label = i18n$t("Interannual variation of calves per 100 females"),
                         value = iv_default$R_CV, min = 0, max = 2, step = 0.01
             ),
             sliderInput("S_iv_sd",
@@ -303,7 +303,7 @@ $(window).resize(function(e) {
                         value = iv_default$S_SD, min = 0, max = 1.5,step=0.01
             ),
             sliderInput("R_iv_sd",
-                        label = i18n$t("Uncertainty about interannual variation of calf:cow ratio"),
+                        label = i18n$t("Uncertainty about interannual variation of calves per 100 females"),
                         value = iv_default$R_SD, min = 0, max = 1.5,step=0.01
             )
           )
@@ -349,7 +349,7 @@ $(window).resize(function(e) {
                             label = i18n$t("Average % female survival"),
                             value = input$S_bar, min = 0, max = 99, step = 1),
                 sliderInput(inputId = paste0("alt_R_bar_", n),
-                            label = i18n$t("Average calves per 100 cows"),
+                            label = i18n$t("Average calves per 100 females"),
                             value = input$R_bar, min = 0, max = 100, step = 1),
                 actionButton(paste0("alt_remove_", n),
                              i18n$t("Remove scenario"), icon("remove", lib = "glyphicon"),
@@ -548,14 +548,14 @@ $(window).resize(function(e) {
 
       cur_tab <- tibble(Scenario = "Current",
                         R_t_mean = input$R_bar,
-                        `Calves per 100 cows` = paste0(
+                        `Calves per 100 females` = paste0(
                           round(input$R_bar, 0), "<br>Range: ",
                           bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper
                         ),
                         S_t_mean = input$S_bar,
-                        `% Female survival` = paste0(
-                          round(input$S_bar, 0), "<br>Range: ",
-                          bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper
+                        `Female survival` = paste0(
+                          round(input$S_bar, 0), "%<br>Range: ",
+                          bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"
                         ))
 
       pct_change <- function(old, new, digits = 0){
@@ -572,11 +572,11 @@ $(window).resize(function(e) {
                             \(x, y, z, nm) tibble(
                               Scenario = ifelse(z == "", nm, z),
                               R_t_mean = x,
-                              `Calves per 100 cows` = paste0(
+                              `Calves per 100 females` = paste0(
                                 round(x, 0),  "<br>% Change: ", pct_change(input$R_bar, x)),
                               S_t_mean = y,
-                              `% Female survival` = paste0(
-                                round(y, 0), "<br>% Change: ", pct_change(input$S_bar, y))
+                              `Female survival` = paste0(
+                                round(y, 0), "%<br>% Change: ", pct_change(input$S_bar, y))
                             ))
       } else {
         alt_tab <- NULL
@@ -609,7 +609,7 @@ $(window).resize(function(e) {
         #                        ifelse(str_detect(x, "^R"), "recruitment", "survival"))},
         #             .cols = matches("._t_m"))%>%
         mutate(Scenario = ifelse(Scenario == "Current", i18n$t("Current"), Scenario)) %>%
-        set_names(c(i18n$t("Scenario"), i18n$t("Calves per 100 cows"), i18n$t("% Female survival"),
+        set_names(c(i18n$t("Scenario"), i18n$t("Calves per 100 females"), i18n$t("Female survival"),
                     i18n$t("Years to < 10 females")))
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0,
     sanitize.text.function = identity)
@@ -774,9 +774,9 @@ $(window).resize(function(e) {
         set_names(c(i18n$t("Population name"),
                     i18n$t("Initial population"),
                     i18n$t("Initial population year"),
-                    i18n$t("Number of collar years"),
+                    i18n$t("Total number of collars by year"),
                     i18n$t("Years of survival data"),
-                    i18n$t("Total number of cows in aerial surveys"),
+                    i18n$t("Total number of females in aerial surveys"),
                     i18n$t("Years of recruitment data")))
 
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0)
@@ -961,6 +961,7 @@ $(window).resize(function(e) {
         pop_file(pop_file_in)
 
         shiny::removeModal()
+        nav_select(id = "body", selected = "input_data_tab")
       }
     )
   }
