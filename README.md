@@ -81,5 +81,5 @@ If you want to see the latest changes made to the app you will need to
 re-install the package from GitHub. Run the code below in the R console:
 
 ``` r
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp", upgrade = FALSE)
 ```
