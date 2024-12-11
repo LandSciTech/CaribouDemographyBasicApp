@@ -732,8 +732,8 @@ $(window).resize(function(e) {
           navset_tab(
             nav_panel(i18n$t("Female population"),
                       plotOutput("pop_plot")),
-            nav_panel(i18n$t("Female population change"),
-                      plotOutput("pop_change"))
+            # nav_panel(i18n$t("Female population change"),
+            #           plotOutput("pop_change"))
           ),
 
           tableOutput("pop_table"),
