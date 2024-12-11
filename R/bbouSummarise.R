@@ -233,7 +233,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
 
   png(paste0(fig_dir,"/survBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_survival(surv_fit)+
-    labs(x = i18n$t("Year"), y = i18n$t("Annual Survival (%)"))+
+    labs(x = i18n$t("Year"), y = i18n$t("Annual female survival"))+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   print(plt)
   dev.off()
@@ -245,7 +245,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
       format = scales::label_number(scale = 100)
     ))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 cows"))+
+    labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 females"))+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   print(plt)
   dev.off()
