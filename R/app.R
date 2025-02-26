@@ -62,8 +62,8 @@ $(window).resize(function(e) {
   {
     ui <-  page_sidebar(
       window_title = "app",
-      title = span(i18n$t("Boreal Caribou Demographic Projection Explorer"), style = "font-size: 30px; font-weight: bold"),
       padding = 1,
+      span(i18n$t("Boreal Caribou Demographic Projection Explorer"), style = "font-size: 30px; font-weight: bold"),
       theme = bs_theme(bootswatch = "bootstrap", success = "#E8BA59") %>%
         bs_add_rules(
           list(
@@ -488,7 +488,7 @@ $(window).resize(function(e) {
         scale_alpha_discrete(range = c(0.2, 1), guide = NULL)+
         scale_color_brewer(palette = "Dark2")+
         # scale_colour_identity(guide = guide_legend(), labels = c()) +
-        labs(col = i18n$t("Scenario"), y = i18n$t("Female population size"),
+        labs(col = i18n$t("Scenario"), y = i18n$t("Female population size       "),
              x = i18n$t("Years in the future"),
              alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"),
              caption = i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.") %>%

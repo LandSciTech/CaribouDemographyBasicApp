@@ -1,12 +1,12 @@
 en,fr
-Boreal Caribou Demographic Projection Explorer,Explorateur de projections démographiques sur le caribou boréal
+Boreal Caribou Demographic Projection Explorer,Explorateur de projections démographiques du caribou boréal
 Define simulation inputs,Définir les entrées de simulation
 Number of years,Nombre d'années
 Run model,Exécuter le modèle
 Add alternative scenario,Ajouter un scénario alternatif
 Update data,Mettre à jour les données
 Welcome,Accueillir
-Survey data,Données d'enquête
+Survey data,Données d'inventaires
 Projections,Projections
 Documentation,Documentation
 English,Anglais
@@ -25,14 +25,14 @@ Number of example trajectories,Nombre d'exemples de trajectoires
 Estimated demographic parameters,Paramètres démographiques estimés
 Type of interannual variation,Type de variation interannuelle
 Initial number of adult females,Nombre initial de femelles adultes
-Average % female survival,Pourcentage moyen de survie des femmes
-Average calves per 100 females,Nombre moyen de veaux pour 100 femelles
+Average % female survival,Taux moyen de survie des femmelles
+Average calves per 100 females,Taux moyen de faons pour 100 femelles
 Standard deviation of survival rate,Écart type du taux de survie
-Standard deviation of calves per 100 females,Écart type des veaux pour 100 femelles
+Standard deviation of calves per 100 females,Écart type des faons pour 100 femelles
 Interannual variation of survival rate,Variation interannuelle du taux de survie
-Interannual variation of calves per 100 females,Variation interannuelle du nombre de veaux pour 100 femelles
+Interannual variation of calves per 100 females,Variation interannuelle du nombre de faons pour 100 femelles
 Uncertainty about interannual variation of survival rate,Incertitude sur la variation interannuelle du taux de survie
-Uncertainty about interannual variation of calves per 100 females,Incertitude sur la variation interannuelle du nombre de veaux pour 100 femelles
+Uncertainty about interannual variation of calves per 100 females,Incertitude sur la variation interannuelle du nombre de faons pour 100 femelles
 Current,Actuel
 Alternative scenario,Scénario alternatif
 Alternative scenario name,Nom du scénario alternatif
@@ -40,30 +40,30 @@ Remove scenario,Supprimer le scénario
 Scenario,Scénario
 Example,Exemple
 Mean,Signifier
-Female population size,Taille de la population féminine
+Female population size                     ,Taille de la population des femelles
 Years in the future,Des années dans le futur
 Trajectory,Trajectoire
-Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,Taille projetée de la population féminine adulte au fil du temps. La ligne plus foncée montre le résultat si l'on ignore l'incertitude concernant les taux démographiques et la variation au fil des années. Les lignes plus claires montrent une variété de résultats plausibles compte tenu de l'incertitude concernant les taux démographiques et la variation au fil des années. Seule la population féminine est indiquée car on suppose que le nombre de femmes est ce qui limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou en pente ascendante et en déclin si la ligne est en pente descendante.
+Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,Taille projetée de la population des femelles adulte au fil du temps. La ligne plus foncée montre le résultat si l'on ignore l'incertitude concernant les taux démographiques et la variation au fil des années. Les lignes plus claires montrent une variété de résultats plausibles compte tenu de l'incertitude concernant les taux démographiques et la variation au fil des années. Seule la population des femelles est indiquée car on suppose que le nombre de femmelles est ce qui limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou en pente ascendante et en déclin si la ligne est en pente descendante.
 Deaths,Décès
 Recruits,Recrues
-Number of females,Nombre de femmes
-Calves per 100 females,Veaux pour 100 femelles
-Female survival,Survie des femmes
-Years to < 10 females,Années à < 10 femmes
-Female replacement rate,Taux de remplacement de la population féminine
-% Female mortality,% Mortalité féminine
-The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.,Le taux moyen de mortalité féminine en % et le taux de remplacement des femmes dans chaque scénario. Les barres d'erreur indiquent les valeurs minimales et maximales attendues compte tenu de l'incertitude des paramètres de population. Une population est stable ou en augmentation lorsque le taux de remplacement des femmes est égal ou supérieur au % de mortalité féminine.
+Number of females,Nombre de femmelles
+Calves per 100 females,Faons pour 100 femelles
+Female survival,Survie des femmelles
+Years to < 10 females,Années à < 10 femmelles
+Female replacement rate,Taux de remplacement de la population des femelles
+% Female mortality,% Mortalité des femelles
+The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.,Le taux moyen de mortalité des femelles en % et le taux de remplacement des femmelles dans chaque scénario. Les barres d'erreur indiquent les valeurs minimales et maximales attendues compte tenu de l'incertitude des paramètres de population. Une population est stable ou en augmentation lorsque le taux de remplacement des femmelles est égal ou supérieur au % de mortalité des femelles.
 Data description,Description des données
 Disclaimer,Clause de non-responsabilité
 "Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.",Veuillez noter que les données résumées et décrites ici sont fournies par les utilisateurs de l'application et peuvent différer selon les projets. Les créateurs de l'application ne sont pas responsables de la qualité des données. Cliquez sur le bouton « Mettre à jour les données » dans le menu de gauche et suivez les instructions pour modifier les données ou la description des données.
-Survey data summary,Résumé des données de l'enquête
+Survey data summary,Résumé des données de l'inventaires
 Survival,Survie
 Recruitment,Recrutement
 Demographic rate estimates,Estimations des taux démographiques
 Data summary,Résumé des données
 Note that results will not be shown for populations with only one year of recruitment or survival data because one year of data is insufficient for making reliable predictions.,"Veuillez noter que les résultats ne seront pas affichés pour les populations ne disposant que d’une seule année de données de recrutement ou de survie, car une année de données est insuffisante pour faire des prédictions fiables."
-Female population,Population féminine
-Female population change,Évolution de la population féminine
+Female population,Population des femelles
+Female population change,Évolution de la population des femelles
 Glossary,Glossaire
 Frequently asked questions,Questions fréquemment posées
 Initial population,Population initiale
@@ -72,7 +72,7 @@ Total number of collars by year,Nombre total de colliers par an
 Years of survival data,Années de données de survie
 Total number of females in aerial surveys,Nombre total de femelles dans les relevés aériens
 Years of recruitment data,Années de données de recrutement
-Update survey data,Mettre à jour les données de l'enquête
+Update survey data,Mettre à jour les données de l'inventaires
 Provide a URL linking to a Google Drive spreadsheet,Fournir une URL renvoyant vers une feuille de calcul Google Drive
 Google Drive spreadsheet URL:,URL de la feuille de calcul Google Drive :
 Instructions to create a new data sheet,Instructions pour créer une nouvelle fiche technique
@@ -111,10 +111,12 @@ Year,Année
 Number of collared animals,Nombre d'animaux munis d'un collier
 Category,Catégorie
 Adult\nfemales,Femelles adultes
-Calves,Veaux
+Calves,Faons
 Adult\nmales,Mâles adultes
 Adults\nunknown sex,Adultes\sexe inconnu
 Number of animals counted,Nombre d'animaux comptés
 Annual Survival (%),Survie annuelle (%)
-Calves per 100 cows,Veaux pour 100 vaches
+Calves per 100 cows,Faons pour 100 vaches
 Population growth (lambda),Croissance démographique (lambda)
+Change:,Changement:
+Range:,Écart:

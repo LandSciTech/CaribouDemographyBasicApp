@@ -1,45 +1,11 @@
 "pop_name","R_bar","R_sd","R_iv_cv","R_iv_sd","R_bar_lower","R_bar_upper","S_bar","S_sd","S_iv_cv","S_iv_sd","S_bar_lower","S_bar_upper","Year","N0","nCollarYears","nSurvYears","nCowsAllYears","nRecruitYears","description"
-"Basse-Côte-Nord",0.266608933546446,0.169020953957414,0.115348471696878,0.960156318644236,0.203767540110979,0.329929937896435,0.845865625558524,0.62350630566244,0.331293162293064,0.937327243692322,0.64821051033042,0.952065695249917,2019,558,51,2,360,4,"Data was compiled from published sources by Rebecca Viejou.
+"A",0.189547383241696,0.0828328705754181,0.308328916529413,0.195595207569947,0.166022733431226,0.215812055498574,0.881642387076451,0.245510328536573,0.466983761271235,0.309562296981072,0.824702165013403,0.925457180376845,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
 
-**Sources**  
-Basse-Côte-Nord:   
-Heppell, S., A. Massé, A. St-Louis et I. Thibault (2013). Projet d’acquisition de connaissances sur le
-caribou forestier dans l’aire d’entrainement militaire CYA 733 : rapport final – travaux 2012 –
-2013, Ministère du Développement durable, de l’Environnement, de la Faune et des Parcs, 36 p.
-https://mffp.gouv.qc.ca/wp-content/uploads/CoteNord_2013.pdf
+#### Sources
 
-Heppell, S. (2019). Inventaire aérien du caribou forestier (*Rangifer tarandus caribou*) au cours de l’hiver
-2019 dans le secteur de la Basse-Côte-Nord, Ministère des Forêts, de la Faune et des Parcs,
-Direction de la gestion de la faune de la Côte-Nord, 24 p.  
-https://mffp.gouv.qc.ca/wp-content/uploads/CoteNord_2019a.pdf
+Markdown formating can be used to **bold** or *italicize* text. Or create lists:
+  - Item 1
+  - Item 2
 
-Heppell, S. (2020). Inventaire aérien de caribous forestiers (*Rangifer tarandus caribou*) dans les secteurs
-sud de Manicouagan et de la Moyenne-Côte-Nord à l’hiver 2020, Ministère des Forêts, de la
-Faune et des Parcs, Direction de la gestion de la faune de la Côte-Nord, Québec, 31 p. 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_Inventaire_caribou_cote-nord_2020.pdf
-
-Manicouagan:   
-Heppell, S. et L. Boissonneault (2021). Inventaire aérien de la population de caribous forestiers (*Rangifer
-tarandus caribou*) Manicouagan à l’hiver 2021. Ministère des Forêts, de la Faune et des Parcs, Direction
-de la gestion de la faune de la Côte-Nord, Québec, 21 p. et annexes 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_Inventaire_caribou_Manicouagan_2021_MFFP.pdf
-
-Outardes:   
-Brodeur, A., S. Heppell et L. Boissonneault (2022). Inventaire aérien de la population de caribous
-forestiers (*Rangifer tarandus caribou*) Outardes et du secteur sud-ouest de la population
-Caniapiscau à l’hiver 2022. Québec : ministère de l’Environnement, de la Lutte contre les
-changements climatiques, de la Faune et des Parcs, Direction de la gestion de la faune de la
-Côte-Nord, 23 p. + annexes. 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_inventaire_caribou_Outardes_hiver2022_MELCCFP.pdf
-
-Pipmuacan:  
-Dussault, C. (2013). Inventaire du caribou forestier à l’hiver 2012 au Saguenay–Lac-Saint-Jean, Société
-de la Faune et des Parcs du Québec, Direction de l’aménagement de la faune du Saguenay–
-Lac-Saint-Jean, 20 p. 
-https://mffp.gouv.qc.ca/wp-content/uploads/SLSJ_2012.pdf
-
-Plourde, J., A. Landry et S. Gravel (2020). Inventaire aérien de caribous forestiers (*Rangifer
-tarandus caribou*) du secteur Pipmuacan à l’hiver 2020, ministère des Forêts, de la Faune et des Parcs,
-Direction de la gestion de la faune du Saguenay–Lac-Saint-Jean, Québec, 17 p. 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_inventaire_caribou_Pipmuacan_SLSJ_2020.pdf"
-"Manicouagan",0.248933296194504,0.212568254108443,0.115348471696878,0.960156318644236,0.180971151188873,0.332402219381014,0.746738138651834,0.475191788029899,0.331293162293064,0.937327243692322,0.555612390933819,0.893067813223188,2021,930,71,3,277,2,NA
+See [here](https://www.markdownguide.org/cheat-sheet/) for more details about markdown"
+"B",0.203198287279354,0.105817658372326,0.308328916529413,0.195595207569947,0.17128202975314,0.236317298318443,0.906439456663578,0.291771974234623,0.466983761271235,0.309562296981072,0.850374967313221,0.946978695959549,2021,1000,519,18,2001,15,NA
