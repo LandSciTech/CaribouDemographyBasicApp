@@ -13,7 +13,9 @@ Nous projetons une valeur moyenne de la population au fil du temps ainsi qu’un
 
 La variation entre ces trajectoires reflète l’incertitude des projections, qui reposent uniquement sur les données locales disponibles des relevés. Dans cette version de l’application, **cette incertitude peut être réduite en acquérant davantage de données**.
 
-Nous travaillons également sur des méthodes permettant de réduire l’incertitude en utilisant des connaissances sur l’état du paysage et les résultats observés pour les populations de caribous à l’échelle nationale. Ces méthodes seront intégrées dans les futures versions de l’application.
+Nous travaillons également sur des méthodes de réduction de l'incertitude en utilisant les connaissances de 
+relations entre les taux démographiques des caribous et le niveau de perturbation 
+dans le paysage qui ont été observées parmi les populations à travers le pays. Nous prévoyons d'intégrer ces méthodes dans les prochaines versions de l'application.
 
 L’application permet aux utilisateurs d’ajouter et d’analyser des données sur les populations qui les intéressent. **Ils peuvent ensuite explorer comment la modification des taux de survie et de recrutement influencerait les résultats attendus pour les caribous**.
 

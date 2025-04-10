@@ -25,9 +25,10 @@ Variation among plausible trajectories indicates
 uncertainty in projections informed only by local available survey data. In this
 version of the application, **uncertainty can be reduced by acquiring more data**.
 
-We are also working on methods for reducing uncertainty using knowledge of the
-state of a landscape and outcomes for caribou populations across the country,
-and plan to incorporate these methods into future versions of the app.
+We are also working on methods for reducing uncertainty using knowledge of 
+relationships between caribou demographic rates and the level of disturbance 
+in the landscape that have been observed among populations across the country. 
+We plan to incorporate these methods into future versions of the app.
 
 The app allows users to add and analyze data for their populations of interest.
 **Users can then explore how changing survival and recruitment rates would change 
