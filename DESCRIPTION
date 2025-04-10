@@ -29,7 +29,7 @@ Depends:
 Remotes: 
     LandSciTech/bboudata,
     LandSciTech/bboutoolsMultiPop,
-    LandSciTech/caribouMetrics
+    LandSciTech/caribouMetrics@BbouIntegration
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
 Suggests: 
