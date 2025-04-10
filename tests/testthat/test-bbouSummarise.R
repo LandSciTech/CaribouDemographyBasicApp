@@ -1,15 +1,4 @@
 
-
-test_that("bboutools data works", {
-  surv_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b) %>%
-    filter(Year %in% c(2012:2016))
-  recruit_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b) %>%
-    filter(Year %in% c(2012:2016))
-  N0 <- 500
-  expect_s3_class(bbouMakeSummaryTable(surv_data, recruit_data, N0), "data.frame")
-
-})
-
 test_that("Can make figures", {
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
   i18n <- Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
@@ -33,6 +22,8 @@ test_that("Can make figures", {
 
   pop_fits <- pop_file_in
   pop_file_in <- pop_file_in$parTab
+
+  expect_s3_class(pop_file_in, "data.frame")
 
   tmp_fig_dir <- tempdir()
   dir.create(file.path(tmp_fig_dir, "figures"))
