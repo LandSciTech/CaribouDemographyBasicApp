@@ -1,6 +1,6 @@
-#### **Objet** {#intro-purpose}
+##### **Objet** {#intro-purpose}
 
-<img align="right" src="Female_caribou_and_calves.jpg" width="500">
+<img align="right" src="www/Female_caribou_and_calves.jpg" width="500">
 L’objectif de cette application est de permettre aux utilisateurs d’explorer les projections de la dynamique des populations du caribou boréal. 
 
 Ces projections tiennent compte de l’incertitude concernant l’état actuel des populations de caribou boréal et leur évolution future.
@@ -17,10 +17,10 @@ Nous travaillons également sur des méthodes permettant de réduire l’incerti
 
 L’application permet aux utilisateurs d’ajouter et d’analyser des données sur les populations qui les intéressent. **Ils peuvent ensuite explorer comment la modification des taux de survie et de recrutement influencerait les résultats attendus pour les caribous**.
 
-#### **Auteurs**
+##### **Auteures**
 Cette application a été créée par Sarah Endicott et Josie Hughes (Division des sciences de la faune et des paysages, Environnement et Changement climatique Canada) ainsi que Danielle Cantin (Service canadien de la faune, Environnement et Changement climatique Canada).
 
-#### **Remerciements**
+##### **Remerciements**
 Guy Larocque et Rebecca Viejou (Service canadien des forêts, Ressources naturelles Canada) ont contribué à la conceptualisation de l’application et à la compilation des données disponibles.
 
 

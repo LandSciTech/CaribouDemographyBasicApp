@@ -31,7 +31,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
 
   surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t("Deaths")
   surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t("Collared animals")
-  png(paste0(fig_dir, "/survivalSummary.png"),
+  png(file.path(fig_dir, "survivalSummary.png"),
       height = ht, width = wt, units = "px", res = 300
   )
   base <- ggplot(surv_long, aes(x = as.integer(Year), y = NumAnimals, group = Category,
@@ -57,7 +57,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     pivot_longer(Cows:Calves, names_to = "Category", values_to = "NumAnimals") %>%
     mutate(Category = factor(Category, levels = rev(c("Cows", "Calves", "Bulls", "UnknownAdults"))))
 
-  png(paste0(fig_dir, "/recruitmentSummary.png"),
+  png(file.path(fig_dir, "recruitmentSummary.png"),
       height = ht, width = wt, units = "px", res = 300
   )
 
@@ -72,8 +72,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     #                    breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
     #                    guide = guide_axis(minor.ticks = TRUE))+
     scale_fill_brewer(palette = "Set2",
-                      labels = rev(c(i18n$t('Adult\nfemales'), i18n$t('Calves'), i18n$t('Adult\nmales'),
-                                       i18n$t('Adults\nunknown sex'))),
+                      labels = rev(c(i18n$t('Adult females'), i18n$t('Calves'), i18n$t('Adult males'),
+                                       i18n$t('Adults unknown sex'))) %>% stringr::str_wrap(width = 10),
                         aesthetic = c("fill", "colour"))+
     labs(x = i18n$t("Year"), y = i18n$t("Number of animals counted"),
          fill = i18n$t("Category"), colour = i18n$t("Category")) +
@@ -82,14 +82,15 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   print(base)
   dev.off()
 
-  png(paste0(fig_dir,"/survBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
+  png(file.path(fig_dir,"survBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_survival(surv_fit)+
-    labs(x = i18n$t("Year"), y = i18n$t("Annual female survival"))+
+    labs(x = i18n$t("Year"))+
+    scale_y_continuous(i18n$t("Annual female survival"), labels = percent)+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
   print(plt)
   dev.off()
 
-  png(paste0(fig_dir,"/recBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
+  png(file.path(fig_dir,"recBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_recruitment(recruit_fit)+
     scale_y_continuous(transform = scales::new_transform(
       "hundred", transform = function(x){x*100}, inverse = function(x){x/100},

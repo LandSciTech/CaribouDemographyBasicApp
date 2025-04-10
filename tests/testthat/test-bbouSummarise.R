@@ -9,3 +9,43 @@ test_that("bboutools data works", {
   expect_s3_class(bbouMakeSummaryTable(surv_data, recruit_data, N0), "data.frame")
 
 })
+
+test_that("Can make figures", {
+  inst_dir <- system.file(package = "CaribouDemographyBasicApp")
+  i18n <- Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
+  i18n$set_translation_language("fr") # default translation to display
+
+  set.seed(1234)
+  surv_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b) %>%
+    filter(Year %in% c(2012:2016)) %>%
+    slice_sample(n = 30)
+  recruit_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b) %>%
+    filter(Year %in% c(2012:2016)) %>%
+    slice_sample(n = 30)
+  N0 <- 500
+  pop_file_in <- bbouMakeSummaryTable(
+    surv_data,
+    recruit_data,
+    N0 = N0,
+    shiny_progress = FALSE, i18n = i18n, return_mcmc = TRUE,
+    # hoping to make it faster...
+    niters = 10)
+
+  pop_fits <- pop_file_in
+  pop_file_in <- pop_file_in$parTab
+
+  tmp_fig_dir <- tempdir()
+  dir.create(file.path(tmp_fig_dir, "figures"))
+  bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
+                  fig_dir = file.path(tmp_fig_dir, "figures"),
+                  i18n = i18n)
+
+  figs <- list.files(file.path(tmp_fig_dir, "figures"), pattern = "png", full.names = TRUE)
+
+  if(interactive()){
+    # open the figures, check for appropriate translation
+    purrr::walk(figs, shell.exec)
+  }
+
+  purrr::walk(figs, \(x) expect_true(file.exists(x)))
+})

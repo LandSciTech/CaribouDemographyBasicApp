@@ -63,7 +63,10 @@ $(window).resize(function(e) {
     ui <-  page_sidebar(
       window_title = "app",
       padding = 1,
-      span(i18n$t("Boreal Caribou Demographic Projection Explorer"), style = "font-size: 30px; font-weight: bold"),
+      div(class = "container-fluid", style ="background-color: #E8BA59",
+          span(i18n$t("Boreal Caribou Demographic Projection Explorer"),
+             style = "color: white; font-size: 30px; font-weight: bold")
+      ),
       theme = bs_theme(bootswatch = "bootstrap", success = "#E8BA59") %>%
         bs_add_rules(
           list(
@@ -143,8 +146,8 @@ $(window).resize(function(e) {
       # languages tbl
       lang_choice <- tribble(
         ~language, ~code,
-        i18n$t("English"), "en",
-        i18n$t("French"), "fr"
+        "English", "en",
+        "Français", "fr"
       )
       lang_choice <- lang_choice$code %>% set_names(lang_choice$language)
 
@@ -664,6 +667,7 @@ $(window).resize(function(e) {
 
     # Body UI #-------------------------------------------------------------------
     output$welcome <- renderUI({
+      req(input$selected_language)
       page_fillable(
         includeMarkdown(file.path(inst_dir, "app_text",
                                    paste0("intro_", input$selected_language, ".md"))),
@@ -678,6 +682,7 @@ $(window).resize(function(e) {
           width = "600px",
           heights_equal = "row",
           card(
+            full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
             markdown(pop_file()$description[1]),
             max_height = 300

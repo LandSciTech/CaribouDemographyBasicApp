@@ -5,7 +5,7 @@ Number of years,Nombre d'années
 Run model,Exécuter le modèle
 Add alternative scenario,Ajouter un scénario alternatif
 Update data,Mettre à jour les données
-Welcome,Accueillir
+Welcome,Accueil
 Survey data,Données d'inventaires
 Projections,Projections
 Documentation,Documentation
@@ -44,7 +44,7 @@ Female population size                     ,Taille de la population des femelles
 Years in the future,Des années dans le futur
 Trajectory,Trajectoire
 Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,Taille projetée de la population des femelles adulte au fil du temps. La ligne plus foncée montre le résultat si l'on ignore l'incertitude concernant les taux démographiques et la variation au fil des années. Les lignes plus claires montrent une variété de résultats plausibles compte tenu de l'incertitude concernant les taux démographiques et la variation au fil des années. Seule la population des femelles est indiquée car on suppose que le nombre de femelles est ce qui limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou en pente ascendante et en déclin si la ligne est en pente descendante.
-Deaths,Décès
+Deaths,Animaux morts
 Recruits,Recrues
 Number of females,Nombre de femelles
 Calves per 100 females,Faons pour 100 femelles
@@ -56,7 +56,7 @@ The mean % female mortality and female replacement rate in each scenario. The er
 Data description,Description des données
 Disclaimer,Clause de non-responsabilité
 "Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.",Veuillez noter que les données résumées et décrites ici sont fournies par les utilisateurs de l'application et peuvent différer selon les projets. Les créateurs de l'application ne sont pas responsables de la qualité des données. Cliquez sur le bouton « Mettre à jour les données » dans le menu de gauche et suivez les instructions pour modifier les données ou la description des données.
-Survey data summary,Résumé des données de l'inventaires
+Survey data summary,Résumé des données d’inventaires
 Survival,Survie
 Recruitment,Recrutement
 Demographic rate estimates,Estimations des taux démographiques
@@ -108,14 +108,15 @@ Predicting survival,Prédire la survie
 Predicting recruitment,Prédire le recrutement
 Collared animals,Animaux avec collier
 Year,Année
-Number of collared animals,Nombre d'animaux munis d'un collier
+Number of collared animals,Nombre d’animaux muni d’un collier
 Category,Catégorie
-Adult\nfemales,Femelles adultes
+Adult females,Adultes femelle
 Calves,Faons
-Adult\nmales,Mâles adultes
-Adults\nunknown sex,Adultes\sexe inconnu
+Adult males,Adultes mâle
+Adults unknown sex,Adultes sexe inconnu
 Number of animals counted,Nombre d'animaux comptés
 Annual Survival (%),Survie annuelle (%)
+Annual female survival,Survie annuelle des femelles
 Calves per 100 cows,Faons pour 100 vaches
 Population growth (lambda),Croissance démographique (lambda)
 Change:,Changement:
