@@ -875,6 +875,12 @@ $(window).resize(function(e) {
       do_update(), {
         req(do_update())
 
+        showModal(modalDialog(
+          i18n$t("Please wait while the data is processed. This may take several minutes"),
+          i18n$t("See the progress bar in the bottom right."),
+          footer = NULL,
+          size = "m"))
+
         start <- Sys.time()
         withProgress({
           sh_name <- googlesheets4::gs4_get(input$survey_url)$name
