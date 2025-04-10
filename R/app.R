@@ -8,7 +8,7 @@
 #' @return launches the app in your default browser
 #' @export
 #'
-run_caribou_demog_app <- function(private = FALSE){
+run_caribou_demog_app <- function(private = FALSE, lang = "en"){
 
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 
@@ -31,7 +31,7 @@ run_caribou_demog_app <- function(private = FALSE){
   )
   # File with translations
   i18n <- Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
-  i18n$set_translation_language("en") # default translation to display
+  i18n$set_translation_language(lang) # default translation to display
 
   # add JavaScript to add an id to the <section> tag
   # so we can overlay waiter on top of it
@@ -161,7 +161,7 @@ $(window).resize(function(e) {
         selectInput('selected_language',
                     i18n$t("Change language"),
                     choices = lang_choice,
-                    selected = i18n$get_key_translation()) %>%
+                    selected = lang) %>%
           tagAppendAttributes(style = 'font-size:20px')
       }
 

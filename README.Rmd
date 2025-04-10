@@ -57,6 +57,15 @@ library(CaribouDemographyBasicApp)
 run_caribou_demog_app()
 
 ```
+
+To launch the app in French include the lang = "fr" argument:
+
+``` r
+run_caribou_demog_app(lang = "fr)
+
+```
+
+
 ## Updating the R package and app
 
 If you want to see the latest changes made to the app you will need to re-install 
@@ -66,3 +75,4 @@ the package from GitHub. Run the code below in the R console:
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp", upgrade = FALSE)
 
 ```
+
