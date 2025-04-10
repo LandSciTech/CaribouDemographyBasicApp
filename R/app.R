@@ -489,9 +489,9 @@ $(window).resize(function(e) {
                                  breaks = c("samp", "mean"),
                                  labels = c(i18n$t("Example"), i18n$t("Mean")))+
         scale_alpha_discrete(range = c(0.2, 1), guide = NULL)+
-        scale_color_brewer(palette = "Dark2")+
+        scale_color_brewer(palette = "Dark2", labels = \(x)i18n$t(x))+
         # scale_colour_identity(guide = guide_legend(), labels = c()) +
-        labs(col = i18n$t("Scenario"), y = i18n$t("Female population size       "),
+        labs(col = i18n$t("Scenario"), y = i18n$t("Female population size") %>% str_wrap(25),
              x = i18n$t("Years in the future"),
              alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"),
              caption = i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.") %>%
@@ -545,21 +545,11 @@ $(window).resize(function(e) {
 
     # Population stats table #---------------------------------------------------
     pop_table <- eventReactive(input$run_model,{
-      bar_bounds <- pop_file() %>% filter(pop_name == input$pop_name) %>%
-        select(matches("upper|lower")) %>%
-        mutate(across(everything(), \(x){round(x * 100)}))
+
 
       cur_tab <- tibble(Scenario = "Current",
                         R_t_mean = input$R_bar,
-                        `Calves per 100 females` = paste0(
-                          round(input$R_bar, 0), "<br>Range: ",
-                          bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper
-                        ),
-                        S_t_mean = input$S_bar,
-                        `Female survival` = paste0(
-                          round(input$S_bar, 0), "%<br>Range: ",
-                          bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"
-                        ))
+                        S_t_mean = input$S_bar)
 
       pct_change <- function(old, new, digits = 0){
         out <- round((new - old)/old *100, digits)
@@ -575,11 +565,7 @@ $(window).resize(function(e) {
                             \(x, y, z, nm) tibble(
                               Scenario = ifelse(z == "", nm, z),
                               R_t_mean = x,
-                              `Calves per 100 females` = paste0(
-                                round(x, 0),  "<br>% Change: ", pct_change(input$R_bar, x)),
-                              S_t_mean = y,
-                              `Female survival` = paste0(
-                                round(y, 0), "%<br>% Change: ", pct_change(input$S_bar, y))
+                              S_t_mean = y
                             ))
       } else {
         alt_tab <- NULL
@@ -605,7 +591,27 @@ $(window).resize(function(e) {
     })
 
     output$pop_table <- renderTable({
+      bar_bounds <- pop_file() %>% filter(pop_name == input$pop_name) %>%
+        select(matches("upper|lower")) %>%
+        mutate(across(everything(), \(x){round(x * 100)}))
+
       pop_table() %>%
+        mutate(
+          `Calves per 100 females` = ifelse(
+            Scenario == "Current",
+            paste0(round(input$R_bar, 0), "<br>", i18n$t("Range"), ": ",
+                   bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper),
+            paste0(round(R_t_mean, 0),  "<br>% ",i18n$t("Change"),": ",
+                   pct_change(input$R_bar, R_t_mean))
+          ),
+          `Female survival` = ifelse(
+            Scenario == "Current",
+            paste0(round(input$S_bar, 0), "<br>", i18n$t("Range"), ": ",
+                   bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"),
+            paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Change"),": ",
+                   pct_change(input$S_bar, S_t_mean))
+          ), .before = `Time to < 10 females`
+        ) %>%
         select(-R_t_mean, -S_t_mean, -matches("._t_m")) %>%
         # rename_with(\(x){paste(ifelse(str_detect(x, "min"), "Minimum", "Maximum"),
         #                        "realized",

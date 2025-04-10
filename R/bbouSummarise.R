@@ -38,14 +38,15 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
                                 shape = Category, colour = Category)) +
     geom_point(size = 2) +
     facet_wrap(~PopulationName) +
-    scale_color_brewer(palette = "Set2")+
+    scale_color_brewer(palette = "Set2", labels = \(x) str_wrap(x, 10))+
+    scale_shape_discrete(labels = \(x) str_wrap(x, 10))+
     scale_y_continuous(expand = expansion(mult = c(0, 0.05)))+
     scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
                        breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
                        guide = guide_axis(minor.ticks = TRUE))+
     labs(x = i18n$t("Year"), y = i18n$t("Number of collared animals"), colour = i18n$t("Category"),
          shape = i18n$t("Category")) +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "top")+
     coord_cartesian(clip = 'off')
   print(base)
   dev.off()

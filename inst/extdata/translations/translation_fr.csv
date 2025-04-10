@@ -39,7 +39,7 @@ Alternative scenario name,Nom du scénario alternatif
 Remove scenario,Supprimer le scénario
 Scenario,Scénario
 Example,Exemple
-Mean,Signifier
+Mean,Moyenne
 Female population size                     ,Taille de la population des femelles
 Years in the future,Des années dans le futur
 Trajectory,Trajectoire
@@ -119,5 +119,5 @@ Annual Survival (%),Survie annuelle (%)
 Annual female survival,Survie annuelle des femelles
 Calves per 100 cows,Faons pour 100 vaches
 Population growth (lambda),Croissance démographique (lambda)
-Change:,Changement:
-Range:,Écart:
+Change,Changement
+Range,Écart
