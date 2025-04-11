@@ -3,7 +3,7 @@ addl_params_ui <- function(id, mod_defaults, i18n, name){
     open = FALSE,
     id = paste0("addl_params_", id),
     accordion_panel(
-    title = paste0(name, ": ", i18n$t("Additional model parameters")),
+    title = paste0(name, ": ", i18n$t("Additional model parameters for scenario")),
     sliderInput(paste0("P_0", "_", id),
                 label = i18n$t("Maximum recruitment multiplier"),
                 value = mod_defaults$P_0, min = 0, max = 1

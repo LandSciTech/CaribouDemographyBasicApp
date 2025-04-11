@@ -18,9 +18,9 @@ Manual parameter entry,Saisie manuelle des paramètres
 Population name,Nom de la population
 Other model parameters,Autres paramètres du modèle
 Advanced users can adjust these parameters to explore sensitivity to various demographic model assumptions.,Les utilisateurs avancés peuvent ajuster ces paramètres pour explorer la sensibilité à diverses hypothèses de modèles démographiques.
-Detailed descriptions will be provided in the app documentation (not yet written).,Des descriptions détaillées seront fournies dans la documentation de l'application (pas encore écrite).
-"In the meantime, see the","En attendant, voir le"
-package documentation to learn about some of the parameters.,documentation du package pour en savoir plus sur certains paramètres.
+Detailed descriptions will be provided in the app documentation (not yet written).,Des descriptions détaillées seront fournies dans la documentation de l'application (pas encore disponible).
+"In the meantime, see the","En attendant, voir la documentation du package"
+package documentation to learn about some of the parameters., pour en savoir plus sur certains paramètres.
 Number of example trajectories,Nombre d'exemples de trajectoires
 Estimated demographic parameters,Paramètres démographiques estimés
 Type of interannual variation,Type de variation interannuelle
@@ -94,7 +94,7 @@ Click the Authenticate button below and follow the instructions to give this app
 "Alternatively, change the settings on the Google sheet so ""Anyone with the link can view""",Vous pouvez également modifier les paramètres de la feuille Google pour que « Toute personne disposant du lien puisse voir »
 Authenticate,Authentifier
 Downloading data from,Téléchargement de données depuis
-Additional model parameters,Paramètres supplémentaires du modèle
+Additional model parameters for scenario,Paramètres de modèle supplémentaires pour le scénario
 Maximum recruitment multiplier,Multiplicateur de recrutement maximal
 Recruitment multiplier at carrying capacity,Multiplicateur de recrutement à capacité de charge
 Density dependence shape parameter,Paramètre de forme de dépendance à la densité
