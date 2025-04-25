@@ -426,7 +426,7 @@ $(window).resize(function(e) {
                                         R_sd = input$R_sd, S_sd = input$S_sd,
                                         R_iv_cv = input$R_iv_cv, S_iv_cv = input$S_iv_cv,
                                         R_iv_sd = input$R_iv_sd, S_iv_sd = input$S_iv_sd,
-                                        scn_nm = i18n$t("Current"), type = input$ivType,
+                                        scn_nm = "Current", type = input$ivType,
                                         addl_params = get_addl_params("cur", input)))
 
       if(any(do_alt_scns())){
@@ -457,7 +457,7 @@ $(window).resize(function(e) {
 
       # set factor levels so Current is always first
       scn_levs <- c("Current", setdiff(unique(out$scn), "Current"))
-      scn_labs <- c(i18n$t("Current"), setdiff(unique(out$scn), "Current"))
+      scn_labs <- c("Current", setdiff(unique(out$scn), "Current"))
 
       out <- out %>%
         mutate(scn = factor(scn, levels = scn_levs, labels = scn_labs))
@@ -545,7 +545,6 @@ $(window).resize(function(e) {
 
     # Population stats table #---------------------------------------------------
     pop_table <- eventReactive(input$run_model,{
-
 
       cur_tab <- tibble(Scenario = "Current",
                         R_t_mean = input$R_bar,
@@ -876,7 +875,7 @@ $(window).resize(function(e) {
         req(do_update())
 
         showModal(modalDialog(
-          i18n$t("Please wait while the data is processed. This may take several minutes"),
+          i18n$t("Please wait while the data is processed. This may take several minutes."),
           i18n$t("See the progress bar in the bottom right."),
           footer = NULL,
           size = "m"))

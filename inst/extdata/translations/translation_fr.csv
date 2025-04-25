@@ -41,7 +41,7 @@ Scenario,Scénario
 Example,Exemple
 Mean,Moyenne
 Female population size                     ,Taille de la population des femelles
-Years in the future,Des années dans le futur
+Years in the future,Années dans le futur
 Trajectory,Trajectoire
 Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,Taille projetée de la population des femelles adulte au fil du temps. La ligne plus foncée montre le résultat si l'on ignore l'incertitude concernant les taux démographiques et la variation au fil des années. Les lignes plus claires montrent une variété de résultats plausibles compte tenu de l'incertitude concernant les taux démographiques et la variation au fil des années. Seule la population des femelles est indiquée car on suppose que le nombre de femelles est ce qui limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou en pente ascendante et en déclin si la ligne est en pente descendante.
 Deaths,Animaux morts
@@ -121,3 +121,8 @@ Calves per 100 cows,Faons pour 100 vaches
 Population growth (lambda),Croissance démographique (lambda)
 Change,Changement
 Range,Écart
+Please wait while the data is processed. This may take several minutes.,Veuillez patienter pendant le traitement des données. Cela peut prendre plusieurs minutes.
+See the progress bar in the bottom right.,Voir la barre de progression en bas à droite.
+No,Non
+Yes,Oui
+Data from survey,
