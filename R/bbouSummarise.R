@@ -84,23 +84,63 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   dev.off()
 
   png(file.path(fig_dir,"survBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
-  plt <- bb_plot_year_survival(surv_fit)+
+  plt <- bb_plot_year_survival(surv_fit)
+
+  # colour points based on whether the population had data in that year or if it
+  # is borrowed from other populations/years
+  plt$data <- plt$data %>%
+    left_join(surv_fit$data %>%
+                mutate(PopulationName, Annual = as.character(Annual) %>%
+                         as.numeric(), has_data = 1, .keep = "used"),
+              by = c("PopulationName", CaribouYear = "Annual")) %>%
+    mutate(has_data = replace_na(has_data, 0) %>% as.factor())
+
+  mapping <- plt$mapping
+  mapping[5][[1]] <- as.name("has_data")
+  names(mapping)[5] <- "colour"
+  plt$mapping <- mapping
+  plt2 <- plt+
+    scale_colour_discrete(type = c("grey70", "black"),
+                          name = i18n$t("Data from survey"),
+                          label = c(i18n$t("No"), i18n$t("Yes")))+
     labs(x = i18n$t("Year"))+
+    scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
     scale_y_continuous(i18n$t("Annual female survival"), labels = percent)+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-  print(plt)
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+          legend.position = "top")
+  print(plt2)
   dev.off()
 
   png(file.path(fig_dir,"recBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
-  plt <- bb_plot_year_recruitment(recruit_fit)+
+  plt <- bb_plot_year_recruitment(recruit_fit)
+
+  # colour points based on whether the population had data in that year or if it
+  # is borrowed from other populations/years
+  plt$data <- plt$data %>%
+    left_join(recruit_fit$data %>%
+                mutate(PopulationName, Annual = as.character(Annual) %>%
+                         as.numeric(), has_data = 1, .keep = "used"),
+              by = c("PopulationName", CaribouYear = "Annual")) %>%
+    mutate(has_data = replace_na(has_data, 0) %>% as.factor())
+
+  mapping <- plt$mapping
+  mapping[5][[1]] <- as.name("has_data")
+  names(mapping)[5] <- "colour"
+  plt$mapping <- mapping
+
+  plt2 <- plt+
+    scale_colour_discrete(type = c("grey70", "black"),
+                          name = i18n$t("Data from survey"),
+                          label = c(i18n$t("No"), i18n$t("Yes")))+
     scale_y_continuous(transform = scales::new_transform(
       "hundred", transform = function(x){x*100}, inverse = function(x){x/100},
       format = scales::label_number(scale = 100)
     ))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
     labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 females"))+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-  print(plt)
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+          legend.position = "top")
+  print(plt2)
   dev.off()
 
   # Not sure if we should use these since haven't used the lambda concept in the app so far
