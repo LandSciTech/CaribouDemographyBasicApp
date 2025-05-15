@@ -16,7 +16,6 @@ inv.logit <-function(x){
 #'
 #' @return numeric
 #'
-#' @noRd
 #' @export
 doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_cv, S_iv_cv,R_iv_sd,S_iv_sd,
                   scn_nm, type="logistic", addl_params){
