@@ -978,6 +978,7 @@ $(window).resize(function(e) {
 
         shiny::removeModal()
         nav_select(id = "body", selected = "input_data_tab")
+        do_update(FALSE)
       }
     )
   }
