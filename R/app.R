@@ -780,13 +780,17 @@ $(window).resize(function(e) {
       pop_file_in <- pop_file()
 
       pop_file_in %>%
-        select(pop_name, N0, Year, nCollarYears, nSurvYears, nCowsAllYears, nRecruitYears) %>%
+        select(pop_name, N0, Year,
+               # nCollarYears,
+               nSurvYears,
+               # nCowsAllYears,
+               nRecruitYears) %>%
         set_names(c(i18n$t("Population name"),
                     i18n$t("Initial population"),
                     i18n$t("Initial population year"),
-                    i18n$t("Total number of collars by year"),
+                    # i18n$t("Total number of collars by year"),
                     i18n$t("Years of survival data"),
-                    i18n$t("Total number of females in aerial surveys"),
+                    # i18n$t("Total number of females in aerial surveys"),
                     i18n$t("Years of recruitment data")))
 
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0)
