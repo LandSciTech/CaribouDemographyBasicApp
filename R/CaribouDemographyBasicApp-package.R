@@ -6,7 +6,6 @@
 #' @import shiny
 #' @import bslib
 #' @import caribouMetrics
-#' @import bslib
 #' @import tidyverse
 #' @import shiny.i18n
 #' @import bboutools
