@@ -61,7 +61,7 @@ run_caribou_demog_app()
 To launch the app in French include the lang = "fr" argument:
 
 ``` r
-run_caribou_demog_app(lang = "fr)
+run_caribou_demog_app(lang = "fr")
 
 ```
 

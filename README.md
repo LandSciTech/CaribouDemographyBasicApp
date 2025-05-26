@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 <!-- badges: end -->
-<h4 id="intro-purpose"><strong>Purpose</strong></h4>
-<img align="right" src="Female_caribou_and_calves.jpg" width="500">
+<h5 id="intro-purpose"><strong>Purpose</strong></h5>
+<img align="right" src="www/Female_caribou_and_calves.jpg" width="500">
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. 
 <p>Projections include uncertainty about the
@@ -25,17 +25,18 @@ uncertainty distributions.</p>
 <p>Variation among plausible trajectories indicates
 uncertainty in projections informed only by local available survey data. In this
 version of the application, <strong>uncertainty can be reduced by acquiring more data</strong>.</p>
-<p>We are also working on methods for reducing uncertainty using knowledge of the
-state of a landscape and outcomes for caribou populations across the country,
-and plan to incorporate these methods into future versions of the app.</p>
+<p>We are also working on methods for reducing uncertainty using knowledge of
+relationships between caribou demographic rates and the level of disturbance
+in the landscape that have been observed among populations across the country.
+We plan to incorporate these methods into future versions of the app.</p>
 <p>The app allows users to add and analyze data for their populations of interest.
 <strong>Users can then explore how changing survival and recruitment rates would change
 expected outcomes for caribou</strong>.</p>
-<h4 id="authors"><strong>Authors</strong></h4>
+<h5 id="authors"><strong>Authors</strong></h5>
 <p>This app was created by Sarah Endicott and Josie Hughes (Wildlife and Landscape
 Science Division, Environment and Climate Change Canada), and Danielle Cantin
 (Canadian Wildlife Service, Environment and Climate Change Canada).</p>
-<h4 id="acknowlegments"><strong>Acknowlegments</strong></h4>
+<h5 id="acknowlegments"><strong>Acknowlegments</strong></h5>
 <p>Guy Larocque and Rebecca Viejou (Canadian Forest Service, Natural Resources Canada)<br />
 participated in conceptualizing the app and compiling available data.</p>
 
@@ -80,7 +81,7 @@ run_caribou_demog_app()
 To launch the app in French include the lang = “fr” argument:
 
 ``` r
-run_caribou_demog_app(lang = "fr)
+run_caribou_demog_app(lang = "fr")
 ```
 
 ## Updating the R package and app

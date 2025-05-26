@@ -12,7 +12,8 @@
 #' @return Nothing. Figures are saved to `fig_dir`.
 #' @export
 #'
-bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 400, wt = 600){
+bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 400, wt = 600,
+                            show_interpolated = TRUE){
   # make figures
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x))
@@ -93,16 +94,25 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
                 mutate(PopulationName, Annual = as.character(Annual) %>%
                          as.numeric(), has_data = 1, .keep = "used"),
               by = c("PopulationName", CaribouYear = "Annual")) %>%
-    mutate(has_data = replace_na(has_data, 0) %>% as.factor())
+    mutate(has_data = replace_na(has_data, 0) %>% as.character())
 
-  mapping <- plt$mapping
-  mapping[5][[1]] <- as.name("has_data")
-  names(mapping)[5] <- "colour"
-  plt$mapping <- mapping
-  plt2 <- plt+
-    scale_colour_discrete(type = c("grey70", "black"),
-                          name = i18n$t("Data from survey"),
-                          label = c(i18n$t("No"), i18n$t("Yes")))+
+  if(!show_interpolated){
+    plt$data <- plt$data %>%
+      filter(has_data == "1")
+  }else {
+
+    mapping <- plt$mapping
+    mapping[5][[1]] <- as.name("has_data")
+    names(mapping)[5] <- "colour"
+    plt$mapping <- mapping
+
+    plt <- plt +
+      scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
+                            name = i18n$t("Data from survey"),
+                            label = c(i18n$t("No"), i18n$t("Yes")))
+  }
+
+  plt2 <- plt +
     labs(x = i18n$t("Year"))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
     scale_y_continuous(i18n$t("Annual female survival"), labels = percent)+
@@ -123,15 +133,23 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
               by = c("PopulationName", CaribouYear = "Annual")) %>%
     mutate(has_data = replace_na(has_data, 0) %>% as.factor())
 
-  mapping <- plt$mapping
-  mapping[5][[1]] <- as.name("has_data")
-  names(mapping)[5] <- "colour"
-  plt$mapping <- mapping
+  if(!show_interpolated){
+    plt$data <- plt$data %>%
+      filter(has_data == "1")
+  }else {
 
-  plt2 <- plt+
-    scale_colour_discrete(type = c("grey70", "black"),
-                          name = i18n$t("Data from survey"),
-                          label = c(i18n$t("No"), i18n$t("Yes")))+
+    mapping <- plt$mapping
+    mapping[5][[1]] <- as.name("has_data")
+    names(mapping)[5] <- "colour"
+    plt$mapping <- mapping
+
+    plt <- plt +
+      scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
+                            name = i18n$t("Data from survey"),
+                            label = c(i18n$t("No"), i18n$t("Yes")))
+  }
+
+  plt2 <- plt +
     scale_y_continuous(transform = scales::new_transform(
       "hundred", transform = function(x){x*100}, inverse = function(x){x/100},
       format = scales::label_number(scale = 100)

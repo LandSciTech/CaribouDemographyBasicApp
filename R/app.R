@@ -487,7 +487,7 @@ $(window).resize(function(e) {
         scale_x_discrete(expand = expansion())+
         scale_linewidth_discrete(range = c(1, 2),
                                  breaks = c("samp", "mean"),
-                                 labels = c(i18n$t("Example"), i18n$t("Mean")))+
+                                 labels = c(i18n$t("Possible"), i18n$t("Mean")))+
         scale_alpha_discrete(range = c(0.2, 1), guide = NULL)+
         scale_color_brewer(palette = "Dark2", labels = \(x)i18n$t(x))+
         # scale_colour_identity(guide = guide_legend(), labels = c()) +
@@ -957,7 +957,8 @@ $(window).resize(function(e) {
 
           bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
                           fig_dir = file.path(inst_dir, "www"),
-                          i18n = i18n)
+                          i18n = i18n,
+                          show_interpolated = FALSE)
 
           # Add description
           desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
@@ -967,8 +968,14 @@ $(window).resize(function(e) {
 
           dat_desc <- googlesheets4::read_sheet(input$survey_url, desc_sh)
 
+          desc_nms <- colnames(dat_desc)
+          if(length(desc_nms) > 1){
+            desc_nms <- stringr::str_subset(desc_nms,
+                                           paste0("_",input$selected_language,"$"))
+          }
+
           pop_file_in$description <- NA_character_
-          pop_file_in$description[1] <- dat_desc[[1]][1]
+          pop_file_in$description[1] <- dat_desc[,desc_nms][[1]][1]
 
           end <- Sys.time()
           print(end - start)
@@ -985,6 +992,9 @@ $(window).resize(function(e) {
         do_update(FALSE)
       }
     )
+    session$onSessionEnded(function() {
+      stopApp()
+    })
   }
 
   # Run the application

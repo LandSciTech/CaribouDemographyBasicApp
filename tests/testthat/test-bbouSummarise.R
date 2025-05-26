@@ -29,7 +29,8 @@ test_that("Can make figures", {
   dir.create(file.path(tmp_fig_dir, "figures"))
   bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
                   fig_dir = file.path(tmp_fig_dir, "figures"),
-                  i18n = i18n)
+                  i18n = i18n,
+                  show_interpolated = FALSE)
 
   figs <- list.files(file.path(tmp_fig_dir, "figures"), pattern = "png", full.names = TRUE)
 
@@ -38,5 +39,6 @@ test_that("Can make figures", {
     purrr::walk(figs, shell.exec)
   }
 
+  beepr::beep(3)
   purrr::walk(figs, \(x) expect_true(file.exists(x)))
 })

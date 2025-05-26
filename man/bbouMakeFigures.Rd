@@ -10,7 +10,8 @@ bbouMakeFigures(
   fig_dir,
   i18n = NULL,
   ht = 400,
-  wt = 600
+  wt = 600,
+  show_interpolated = TRUE
 )
 }
 \arguments{
