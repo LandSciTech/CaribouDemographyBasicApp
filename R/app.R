@@ -144,10 +144,9 @@ $(window).resize(function(e) {
     output$lang_select_ui <- renderUI({
       input$selected_language
       # languages tbl
-      lang_choice <- tribble(
-        ~language, ~code,
-        "English", "en",
-        "Français", "fr"
+      lang_choice <- data.frame(
+        language = c("English", "Français"),
+        code = c("en", "fr")
       )
       lang_choice <- lang_choice$code %>% set_names(lang_choice$language)
 
@@ -546,14 +545,9 @@ $(window).resize(function(e) {
     # Population stats table #---------------------------------------------------
     pop_table <- eventReactive(input$run_model,{
 
-      cur_tab <- tibble(Scenario = "Current",
+      cur_tab <- data.frame(Scenario = "Current",
                         R_t_mean = input$R_bar,
                         S_t_mean = input$S_bar)
-
-      pct_change <- function(old, new, digits = 0){
-        out <- round((new - old)/old *100, digits)
-        paste0(ifelse(out > 0, "+", ""), out)
-      }
 
       if(any(do_alt_scns())){
         R_lst <- get_not_null_input("alt_R_bar_", input)
@@ -561,7 +555,7 @@ $(window).resize(function(e) {
         scn_nms_lst <- get_not_null_input("alt_name_", input)
 
         alt_tab <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
-                            \(x, y, z, nm) tibble(
+                            \(x, y, z, nm) data.frame(
                               Scenario = ifelse(z == "", nm, z),
                               R_t_mean = x,
                               S_t_mean = y
@@ -593,6 +587,11 @@ $(window).resize(function(e) {
       bar_bounds <- pop_file() %>% filter(pop_name == input$pop_name) %>%
         select(matches("upper|lower")) %>%
         mutate(across(everything(), \(x){round(x * 100)}))
+
+      pct_change <- function(old, new, digits = 0){
+        out <- round((new - old)/old *100, digits)
+        paste0(ifelse(out > 0, "+", ""), out)
+      }
 
       pop_table() %>%
         mutate(

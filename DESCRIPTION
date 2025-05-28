@@ -9,23 +9,6 @@ License: TBD
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Depends: 
-    bboudata,
-    bboutools (>= 0.1.0),
-    bslib,
-    caribouMetrics,
-    ggplot2,
-    googlesheets4,
-    here,
-    mcmcr,
-    purrr,
-    scales,
-    shiny,
-    shiny.i18n,
-    shinyjs,
-    stringr,
-    tidyverse,
-    waiter
 Remotes: 
     LandSciTech/bboudata,
     LandSciTech/bboutoolsMultiPop,
@@ -33,9 +16,30 @@ Remotes:
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
 Suggests: 
+    beepr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Depends:
+    nimble,
 Imports: 
+    dplyr,
     ggforce,
+    grDevices,
     magrittr,
-    markdown
+    methods,
+    rlang,
+    stats,
+    tidyr,
+    bboudata,
+    bslib,
+    caribouMetrics,
+    ggplot2,
+    googlesheets4,
+    purrr,
+    scales,
+    shiny,
+    shiny.i18n,
+    shinyjs,
+    stringr,
+    waiter,
+    bboutools

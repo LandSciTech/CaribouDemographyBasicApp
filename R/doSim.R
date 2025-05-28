@@ -38,8 +38,8 @@ doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_cv, S_iv
   }
   if(type=="logistic"){
      #convert mean
-     R_b0 = rnorm(numPops,logit(R_bar),R_sd)
-     S_b0 = rnorm(numPops,logit(S_bar),S_sd)
+     R_b0 = rnorm(numPops,nimble::logit(R_bar),R_sd)
+     S_b0 = rnorm(numPops,nimble::logit(S_bar),S_sd)
      varSample= list(R_t = inv.logit(R_b0),
                      S_t = inv.logit(S_b0))
      interannualVar = list(R_annual=rlnorm(numPops,log(R_iv_cv),R_iv_sd),

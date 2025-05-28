@@ -2,8 +2,8 @@
 # translate them using google translate
 
 library(gtranslate)
-library(tidyverse)
 library(shiny.i18n)
+devtools::load_all(".")
 
 # Create csv with english phrases to translate
 create_translation_file(here::here("R/app.R"),
@@ -19,7 +19,7 @@ list.files("R", full.names = TRUE) %>%
 
 # Combine all the files and use gtranslate to translate them
 to_trans <- list.files(here::here("inst/extdata/translations"), pattern = "\\d.csv", full.names = TRUE) %>%
-  map_dfr(read_csv) %>%
+  map_dfr(read.csv) %>%
   distinct() %>%
   mutate(en = key, fr = translate(en, to = "fr", trim_str = FALSE), .keep = "none")
 
@@ -28,4 +28,4 @@ list.files(here::here("inst/extdata/translations"), pattern = "\\d.csv", full.na
 
 
 # Save the csv that the app will use to translate
-write_csv(to_trans, "inst/extdata/translations/translation_fr.csv")
+write.csv(to_trans, "inst/extdata/translations/translation_fr.csv", row.names = FALSE)
