@@ -39,6 +39,7 @@ Alternative scenario name,Nom du scénario alternatif
 Remove scenario,Supprimer le scénario
 Scenario,Scénario
 Possible,Possible
+Plausible,Plausible
 Mean,Moyenne
 Female population size                     ,Taille de la population des femelles
 Years in the future,Années dans le futur
@@ -50,7 +51,7 @@ Number of females,Nombre de femelles
 Calves per 100 females,Faons pour 100 femelles
 Female survival,Survie des femelles
 Years to < 10 females,Années à < 10 femelles
-Female replacement rate,Taux de remplacement de la population des femelles
+Female replacement rate,Taux de remplacement des femelles
 % Female mortality,% Mortalité des femelles
 The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.,Le taux moyen de mortalité des femelles en % et le taux de remplacement des femelles dans chaque scénario. Les barres d'erreur indiquent les valeurs minimales et maximales attendues compte tenu de l'incertitude des paramètres de population. Une population est stable ou en augmentation lorsque le taux de remplacement des femelles est égal ou supérieur au % de mortalité des femelles.
 Data description,Description des données

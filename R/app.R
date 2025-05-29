@@ -486,7 +486,7 @@ $(window).resize(function(e) {
         scale_x_discrete(expand = expansion())+
         scale_linewidth_discrete(range = c(1, 2),
                                  breaks = c("samp", "mean"),
-                                 labels = c(i18n$t("Possible"), i18n$t("Mean")))+
+                                 labels = c(i18n$t("Plausible"), i18n$t("Mean")))+
         scale_alpha_discrete(range = c(0.2, 1), guide = NULL)+
         scale_color_brewer(palette = "Dark2", labels = \(x)i18n$t(x))+
         # scale_colour_identity(guide = guide_legend(), labels = c()) +
