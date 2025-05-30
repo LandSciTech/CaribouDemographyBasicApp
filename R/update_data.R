@@ -13,6 +13,13 @@
 update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDemographyBasicApp"),
                         i18n = NULL,
                         shiny_progress = FALSE){
+  # set plot theme
+  theme_set(
+    theme_classic()+
+      theme(text = element_text(size = 20),
+            plot.caption = element_text(hjust = 0))
+  )
+
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x))
   }

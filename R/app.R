@@ -697,7 +697,7 @@ $(window).resize(function(e) {
           ),
           card(
             h4(i18n$t("Disclaimer"), id = "intro-survey-data"),
-            p(i18n$t('Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.')),
+            p(i18n$t('Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data.')),
             max_height = 300
           ),
           navset_card_tab(
