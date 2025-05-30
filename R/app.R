@@ -8,7 +8,7 @@
 #' @return launches the app in your default browser
 #' @export
 #'
-run_caribou_demog_app <- function(private = FALSE, lang = "en"){
+run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_data = TRUE){
 
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 
@@ -95,9 +95,13 @@ $(window).resize(function(e) {
         actionButton("add_alt", i18n$t("Add alternative scenario"),
                      icon("plus", lib = "glyphicon"),
                      class = "btn-success"),
-        actionButton("update_data", i18n$t("Update data"),
-                     icon("cloud-download", lib = "glyphicon"),
-                     class = "btn-success"),
+        if(allow_update_data){
+          actionButton("update_data", i18n$t("Update data"),
+                       icon("cloud-download", lib = "glyphicon"),
+                       class = "btn-success")
+        } else {
+          NULL
+        },
 
         uiOutput("adv_params_ui")
 
