@@ -42,4 +42,5 @@ Imports:
     shinyjs,
     stringr,
     waiter,
-    bboutools
+    bboutools,
+    markdown
