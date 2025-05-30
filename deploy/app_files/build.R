@@ -11,11 +11,14 @@ options(repos = r)
 # install.packages("pkgbuild", type = "binary")
 # pkgbuild::check_build_tools(debug = TRUE)
 
+
+
 # remove installed packages to get a clean slate
 lib_use <- file.path(rd, "R/library")
-pkgs_rm <- installed.packages(lib.loc = lib_use, priority = NA_character_)[,1]
-message(pkgs_rm)
-remove.packages(pkgs_rm, lib.use)
+unlink(file.path(lib_use, "00LOCK"), recursive = TRUE)
+# pkgs_rm <- installed.packages(lib.loc = lib_use, priority = NA_character_)[,1]
+# message(pkgs_rm)
+# remove.packages(pkgs_rm, lib_use)
 
 if(!requireNamespace("remotes", quietly = TRUE)){
   install.packages("remotes", type = "binary", )

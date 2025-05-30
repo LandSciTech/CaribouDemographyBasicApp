@@ -1,4 +1,4 @@
-@echo %on
+@echo %off
 setlocal enabledelayedexpansion
 
 set "RootDir=%~dp0app_files\"
@@ -41,10 +41,20 @@ if not !RPathFound! == true (
 )
 
 :buildApp
-"%R%" --no-save -f "%RootDir%build.R" > log.out 2>&1
+"%R%" --no-save -f "%RootDir%build.R" > log.out 2>&1 & type log.out
+
+powershell "[console]::beep(400,500)"
+
+if not exist "%RootDir%R/library/CaribouDemographyBasicApp" (
+    echo "App package not properly installed. Please try again."
+    exit /b 1
+)
 
 :packApp
 echo "Packaging the app into caribou_demography_app.tar, this will take several minutes"
 tar --exclude rtools --exclude build.R -cf caribou_demography_app.tar app_files run.bat README-USER.txt
+
+powershell "[console]::beep(400,500)"
+powershell "[console]::beep(400,500)"
 
 exit /b 0
