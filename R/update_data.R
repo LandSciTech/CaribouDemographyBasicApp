@@ -11,7 +11,12 @@
 #' googlesheets4::gs4_deauth()
 #' update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
 update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDemographyBasicApp"),
+                        i18n = NULL,
                         shiny_progress = FALSE){
+  if(is.null(i18n)){
+    i18n <- list(t = function(x)paste0(x))
+  }
+
   start <- Sys.time()
 
   sh_name <- googlesheets4::gs4_get(survey_url)$name
