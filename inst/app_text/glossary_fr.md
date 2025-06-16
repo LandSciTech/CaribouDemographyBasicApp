@@ -1,6 +1,10 @@
 - **% de survie des femelles:** Pourcentage estimé de femelles adultes qui survivent en moyenne chaque année.
   
 - **Faons pour 100 femelles:** Le nombre estimé de faons pour 100 femelles observées, en moyenne. Les faons sont observés au cours d'enquêtes aériennes généralement menées environ 9 mois après la mise bas, de sorte que ce chiffre inclut les faons mâles et femelles qui ont survécu à la plus grande partie de leur première année de vie.
+
+- **% Différence:** Différence en pourcentage entre les taux démographiques du scénario alternatif
+  et ceux du scénario actuel. Elle est calculée en soustrayant le taux du scénario alternatif
+  du taux actuel, puis en divisant le résultat par le taux actuel et en multipliant le résultat par 100.
   
 - **% de mortalité des femelles:** Pourcentage estimé de femelles adultes qui meurent en moyenne chaque année. 
   Calculé comme 100 moins le % de survie des femelles. 

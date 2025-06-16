@@ -4,6 +4,10 @@
   observed during aerial surveys typically conducted ~ 9 months after calving so
   this includes both male and female calves that survived most of their first year of life.
   
+- **% Difference:** The percentage difference in demographic rates in the alternative
+  scenario compared to the current scenario. Calculated as the alternative scenario
+  rate minus the current rate and divided by the current rate, multiplied by 100. 
+  
 - **% Female mortality:** The estimated percentage of adult females that die each year on average. 
   Calculated as 100 minus % female survival. 
 

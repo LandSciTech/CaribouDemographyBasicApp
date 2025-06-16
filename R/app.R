@@ -605,14 +605,14 @@ $(window).resize(function(e) {
             Scenario == "Current",
             paste0(round(input$R_bar, 0), "<br>", i18n$t("Range"), ": ",
                    bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper),
-            paste0(round(R_t_mean, 0),  "<br>% ",i18n$t("Change"),": ",
+            paste0(round(R_t_mean, 0),  "<br>% ",i18n$t("Difference"),": ",
                    pct_change(input$R_bar, R_t_mean))
           ),
           `Female survival` = ifelse(
             Scenario == "Current",
             paste0(round(input$S_bar, 0), "% <br>", i18n$t("Range"), ": ",
                    bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"),
-            paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Change"),": ",
+            paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Difference"),": ",
                    pct_change(input$S_bar, S_t_mean))
           ), .before = `Time to < 10 females`
         ) %>%
