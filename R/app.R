@@ -116,6 +116,7 @@ $(window).resize(function(e) {
         tags$script(add_id_to_section)
       ),
       waiter::useWaiter(),
+      waiter::waiterShowOnLoad(),
       navset_bar(
         id = "body",
         fillable = FALSE,
@@ -678,12 +679,14 @@ $(window).resize(function(e) {
     # Body UI #-------------------------------------------------------------------
     output$welcome <- renderUI({
       req(input$selected_language)
-      page_fillable(
+      ret <- page_fillable(
         includeMarkdown(file.path(inst_dir, "app_text",
                                    paste0("intro_", input$selected_language, ".md"))),
         # this hidden input allows us to wait for this UI to render before adding to it
         div(style = "display:none", textInput(inputId = "hidden", label = "", value = "1"))
       )
+      waiter::waiter_hide()
+      ret
     })
     output$input_data <- renderUI({
       pop_file()
@@ -739,8 +742,15 @@ $(window).resize(function(e) {
         )
       )
     })
+
+    observeEvent(input$body == "results_tab", {
+      if(input$body == "results_tab"){
+        waiter::waiter_show()
+        message("observe results tab")
+      }
+    })
     output$results <- renderUI({
-      page_fillable(
+      ret <- page_fillable(
         layout_columns(
           col_widths = c(12, 6, 3, 3, 12),
 
@@ -770,6 +780,8 @@ $(window).resize(function(e) {
                      width = min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w())))
         )
       )
+      waiter::waiter_hide()
+      ret
     })
     output$documentation <- renderUI({
       withMathJax(
@@ -900,6 +912,7 @@ $(window).resize(function(e) {
         do_update(FALSE)
       }
     )
+
     session$onSessionEnded(function() {
       stopApp()
     })
