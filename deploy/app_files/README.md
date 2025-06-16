@@ -1,17 +1,17 @@
 # Deploy Shiny app(s) locally on Windows
 
 I have modified this from https://github.com/derryleng/Shiny_Desktop_App to work 
-for installing shiny apps stored as packages on GitHub
+for installing shiny apps stored as R packages on GitHub
 
 
-This will deploy a Shiny app as a standalone Windows desktop applications.
+This will deploy a Shiny app as a standalone Windows desktop application.
 
 - Optionally bundle in a portable R installation ([see below](#bundle-a-portable-r-installation)).
 - Optionally bundle in a web browser ([see below](#bundle-a-portable-web-browser)).
 - Edit build.R to install the app and its dependencies and bundle the files in a tar.
 - Edit run.R to run the app.
 - Double click build.bat to install the app and bundle the files.
-- Double click run.bat to launch the an app.
+- Double click run.bat to launch the app.
 
 ## Bundle a portable R installation
 
