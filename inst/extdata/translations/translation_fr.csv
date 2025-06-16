@@ -45,11 +45,11 @@ Female population size                     ,Taille de la population des femelles
 Years in the future,Années dans le futur
 Trajectory,Trajectoire
 Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,Taille projetée de la population des femelles adulte au fil du temps. La ligne plus foncée montre le résultat si l'on ignore l'incertitude concernant les taux démographiques et la variation au fil des années. Les lignes plus claires montrent une variété de résultats plausibles compte tenu de l'incertitude concernant les taux démographiques et la variation au fil des années. Seule la population des femelles est indiquée car on suppose que le nombre de femelles est ce qui limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou en pente ascendante et en déclin si la ligne est en pente descendante.
-Deaths,Animaux morts
+Deaths,Caribous morts
 Recruits,Recrues
 Number of females,Nombre de femelles
 Calves per 100 females,Faons pour 100 femelles
-Female survival,Survie des femelles
+% Female survival,% de survie des femelles
 Years to < 10 females,Années à < 10 femelles
 Female replacement rate,Taux de remplacement des femelles
 % Female mortality,% Mortalité des femelles
@@ -107,15 +107,15 @@ Fitting survival,Survie adaptée
 Fitting recruitment,Recrutement adapté
 Predicting survival,Prédire la survie
 Predicting recruitment,Prédire le recrutement
-Collared animals,Animaux avec collier
+Collared caribou,Caribous avec collier
 Year,Année
-Number of collared animals,Nombre d’animaux muni d’un collier
+Number of collared caribou,Nombre de caribous muni d’un collier
 Category,Catégorie
 Adult females,Adultes femelle
 Calves,Faons
 Adult males,Adultes mâle
 Adults unknown sex,Adultes sexe inconnu
-Number of animals counted,Nombre d'animaux comptés
+Number of caribou counted,Nombre de caribous comptés
 Annual Survival (%),Survie annuelle (%)
 Annual female survival,Survie annuelle des femelles
 Calves per 100 cows,Faons pour 100 vaches

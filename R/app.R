@@ -485,7 +485,7 @@ $(window).resize(function(e) {
         ggplot(
           aes(x = time, y = N, group = interaction(id, scn, type),
               linewidth = type, colour = scn, alpha = type))+
-        geom_line()+
+        geom_line(na.rm = TRUE)+
         scale_y_continuous(limits = c(0, min(input$N0*3, max(pop_plt$N))), expand = expansion())+
         scale_x_discrete(expand = expansion())+
         scale_linewidth_discrete(range = c(1, 2),
@@ -593,6 +593,8 @@ $(window).resize(function(e) {
         mutate(across(everything(), \(x){round(x * 100)}))
 
       pct_change <- function(old, new, digits = 0){
+        new <- round(new, digits)
+        old <- round(old, digits)
         out <- round((new - old)/old *100, digits)
         paste0(ifelse(out > 0, "+", ""), out)
       }
@@ -608,7 +610,7 @@ $(window).resize(function(e) {
           ),
           `Female survival` = ifelse(
             Scenario == "Current",
-            paste0(round(input$S_bar, 0), "<br>", i18n$t("Range"), ": ",
+            paste0(round(input$S_bar, 0), "% <br>", i18n$t("Range"), ": ",
                    bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"),
             paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Change"),": ",
                    pct_change(input$S_bar, S_t_mean))
@@ -620,7 +622,7 @@ $(window).resize(function(e) {
         #                        ifelse(str_detect(x, "^R"), "recruitment", "survival"))},
         #             .cols = matches("._t_m"))%>%
         mutate(Scenario = ifelse(Scenario == "Current", i18n$t("Current"), Scenario)) %>%
-        set_names(c(i18n$t("Scenario"), i18n$t("Calves per 100 females"), i18n$t("Female survival"),
+        set_names(c(i18n$t("Scenario"), i18n$t("Calves per 100 females"), i18n$t("% Female survival"),
                     i18n$t("Years to < 10 females")))
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0,
     sanitize.text.function = identity)

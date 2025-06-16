@@ -31,7 +31,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
                  values_to = "NumAnimals")
 
   surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t("Deaths")
-  surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t("Collared animals")
+  surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t("Collared caribou")
   png(file.path(fig_dir, "survivalSummary.png"),
       height = ht, width = wt, units = "px", res = 300
   )
@@ -45,7 +45,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
                        breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
                        guide = guide_axis(minor.ticks = TRUE))+
-    labs(x = i18n$t("Year"), y = i18n$t("Number of collared animals"), colour = i18n$t("Category"),
+    labs(x = i18n$t("Year"), y = i18n$t("Number of collared caribou"), colour = i18n$t("Category"),
          shape = i18n$t("Category")) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "top")+
     coord_cartesian(clip = 'off')
@@ -77,7 +77,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
                       labels = rev(c(i18n$t('Adult females'), i18n$t('Calves'), i18n$t('Adult males'),
                                        i18n$t('Adults unknown sex'))) %>% stringr::str_wrap(width = 10),
                         aesthetic = c("fill", "colour"))+
-    labs(x = i18n$t("Year"), y = i18n$t("Number of animals counted"),
+    labs(x = i18n$t("Year"), y = i18n$t("Number of caribou counted"),
          fill = i18n$t("Category"), colour = i18n$t("Category")) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
