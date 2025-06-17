@@ -56,7 +56,7 @@ $(window).resize(function(e) {
 
   mod_defaults <- caribouPopGrowth %>% formals() %>% eval()
 
-  pop_file <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
+  pop_file_temp <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
 
   # UI #-------------------------------------------------------------------------
   {
@@ -116,7 +116,8 @@ $(window).resize(function(e) {
         tags$script(add_id_to_section)
       ),
       waiter::useWaiter(),
-      waiter::waiterShowOnLoad(),
+      waiter::waiterPreloader(),
+      waiter::autoWaiter(),
       navset_bar(
         id = "body",
         fillable = FALSE,
@@ -183,6 +184,8 @@ $(window).resize(function(e) {
     o <- observe({
       req(pop_file())
       req(input$S_bar)
+      req(input$pop_name)
+      pop_file(pop_file() %>% filter(pop_name == input$pop_name))
       shinyjs::click("run_model")
       nav_select(id = "body", selected = "welcome_tab")
       o$destroy() # destroy observer as it has no use after initial button click
@@ -191,7 +194,7 @@ $(window).resize(function(e) {
     output$param_source_ui <- renderUI({
       input$selected_language
 
-      pops_use <- pop_file() %>% filter(nSurvYears > 1, nRecruitYears > 1) %>%
+      pops_use <- all_pops() %>% filter(nSurvYears > 1, nRecruitYears > 1) %>%
         pull(pop_name)
 
       tagList(
@@ -235,7 +238,8 @@ $(window).resize(function(e) {
     })
 
     # make reactive so it can be updated
-    pop_file <- reactiveVal(pop_file)
+    pop_file <- reactiveVal(pop_file_temp %>% filter(pop_name == "Basse-Côte-Nord"))
+    all_pops <- reactiveVal(pop_file_temp)
 
     # Current population --------------------------------
     output$cur_pop_ui <- renderUI({
@@ -244,10 +248,11 @@ $(window).resize(function(e) {
       # option for loading data from file
       input$selected_language
       req(input$pop_name)
-      pop_default <- pop_file() %>% filter(pop_name == input$pop_name) %>%
+
+      pop_default <- all_pops() %>% filter(pop_name == input$pop_name) %>%
         select(-pop_name, -contains("iv"))
 
-      iv_default <- pop_file() %>% filter(pop_name == input$pop_name) %>%
+      iv_default <- all_pops() %>% filter(pop_name == input$pop_name) %>%
         select(contains("iv")) %>%
         rename_with(\(x)str_remove(x, "_iv") %>% str_to_upper())
 
@@ -424,6 +429,8 @@ $(window).resize(function(e) {
 
 
     pop_mod <- eventReactive(input$run_model, {
+      # update pop_file when model re-runs
+      pop_file(pop_file_temp %>% filter(pop_name == input$pop_name))
 
       cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
@@ -487,7 +494,7 @@ $(window).resize(function(e) {
           aes(x = time, y = N, group = interaction(id, scn, type),
               linewidth = type, colour = scn, alpha = type))+
         geom_line(na.rm = TRUE)+
-        scale_y_continuous(limits = c(0, min(input$N0*3, max(pop_plt$N))), expand = expansion())+
+        scale_y_continuous(limits = c(0, min(isolate(input$N0)*3, max(pop_plt$N))), expand = expansion())+
         scale_x_discrete(expand = expansion())+
         scale_linewidth_discrete(range = c(1, 2),
                                  breaks = c("samp", "mean"),
@@ -589,7 +596,7 @@ $(window).resize(function(e) {
     })
 
     output$pop_table <- renderTable({
-      bar_bounds <- pop_file() %>% filter(pop_name == input$pop_name) %>%
+      bar_bounds <- pop_file() %>%
         select(matches("upper|lower")) %>%
         mutate(across(everything(), \(x){round(x * 100)}))
 
@@ -604,17 +611,17 @@ $(window).resize(function(e) {
         mutate(
           `Calves per 100 females` = ifelse(
             Scenario == "Current",
-            paste0(round(input$R_bar, 0), "<br>", i18n$t("Range"), ": ",
+            paste0(round(isolate(input$R_bar), 0), "<br>", i18n$t("Range"), ": ",
                    bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper),
             paste0(round(R_t_mean, 0),  "<br>% ",i18n$t("Difference"),": ",
-                   pct_change(input$R_bar, R_t_mean))
+                   pct_change(isolate(input$R_bar), R_t_mean))
           ),
           `Female survival` = ifelse(
             Scenario == "Current",
-            paste0(round(input$S_bar, 0), "% <br>", i18n$t("Range"), ": ",
+            paste0(round(isolate(input$S_bar), 0), "% <br>", i18n$t("Range"), ": ",
                    bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"),
             paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Difference"),": ",
-                   pct_change(input$S_bar, S_t_mean))
+                   pct_change(isolate(input$S_bar), S_t_mean))
           ), .before = `Time to < 10 females`
         ) %>%
         select(-R_t_mean, -S_t_mean, -matches("._t_m")) %>%
@@ -689,7 +696,7 @@ $(window).resize(function(e) {
       ret
     })
     output$input_data <- renderUI({
-      pop_file()
+      all_pops()
       page_fillable(
         layout_column_wrap(
           width = "600px",
@@ -697,7 +704,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
-            markdown(pop_file()$description[1]),
+            markdown(all_pops()$description[1]),
             max_height = 300
           ),
           card(
@@ -743,12 +750,6 @@ $(window).resize(function(e) {
       )
     })
 
-    observeEvent(input$body == "results_tab", {
-      if(input$body == "results_tab"){
-        waiter::waiter_show()
-        message("observe results tab")
-      }
-    })
     output$results <- renderUI({
       ret <- page_fillable(
         layout_columns(
@@ -793,10 +794,7 @@ $(window).resize(function(e) {
     })
 
     output$data_summary <- renderTable({
-      pop_mod()
-      pop_file_in <- pop_file()
-
-      pop_file_in %>%
+      all_pops() %>%
         select(pop_name, N0, Year,
                # nCollarYears,
                nSurvYears,
@@ -901,11 +899,11 @@ $(window).resize(function(e) {
           footer = NULL,
           size = "m"))
 
-        pop_file_in <- withProgress({update_data(input$survey_url,
+        withProgress({pop_file_in <- update_data(input$survey_url,
                                                  shiny_progress = TRUE)})
 
         # update the reactive value
-        pop_file(pop_file_in)
+        all_pops(pop_file_in)
 
         shiny::removeModal()
         nav_select(id = "body", selected = "input_data_tab")
