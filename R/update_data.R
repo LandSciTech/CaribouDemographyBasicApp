@@ -127,4 +127,6 @@ update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDem
   # save the file locally so only re-run when asked
   write.csv(pop_file_in, file.path(inst_dir, "extdata", "temp_pop_file_local.csv"), row.names = FALSE)
 
+  pop_file_in
+
 }
