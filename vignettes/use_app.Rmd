@@ -1,0 +1,68 @@
+---
+title: "Using the app"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the app}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CaribouDemographyBasicApp)
+```
+
+```{=html}
+<!--- A vignette to outline the uses of the app including: General description of the interface Uncertainty
+How to update data
+Technical write up on how models are fit that refers back to bboutools/caribouMetrics --->
+```
+
+# Using the app
+
+The Boreal Caribou Demographic Projection Explorer App is designed to provide a user-friendly interface for exploring caribou demographic data and metrics. The app allows users to visualize and analyze caribou population dynamics, including survival rates, recruitment, and population trends.
+
+This app is designed to use existing methods developed in the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a>
+R package to estimate demographic rates and project future population growth while incorporating the uncertainty associated with these estimates. The demographic rates presented in the app are derived from survival and recruitment surveys. These are both estimated from field surveys of collared caribou [@nbckc2021; @nbckc2022]. Typically female caribou (cows) are captured in the late winter and fitted with collars that transmit data on their location and survival. Recruitment is estimated by counting the number of calves per cow in groups containing collared caribou. Recruitment surveys are typically done \~ 9 months after calving so it represents the number of calves that were born and survived until the survey. This survey data is used to estimate the **% female survival** and the number of **calves per 100 cows**. These demographic rates can be combined in a simple recruitment-mortality population model [@hatter1991; @hatter2020] to project population growth over time.
+
+## Key terms
+
+```{r, echo=FALSE, results='asis'}
+res <- knitr::knit_child(here::here("inst", "app_text", "glossary_en.md"), quiet = TRUE)
+cat(res, sep = '\n')
+```
+
+## General Description of the Interface
+
+The app interface consists of several tabs: 
+
+- **Welcome**: Provides an introduction to the app. 
+- **Survey data**: Provides a summary of the data used to calculate the demographic rates. 
+- **Projections**: Is the primary tab for exploring caribou population dynamics. It allows users to visualize population growth under the current demographic rates and to explore alternative scenarios with increased or decreased demographic rates.
+
+## Uncertainty
+
+
+
+## How to Update Data
+
+Only users who installed the R package directly, rather than downloading the .tar file can update the data used to calculate the demographic rates. 
+
+To update the data used in the app, follow these steps:
+1.  Update the data in your Google spreadsheet. 
+2.  Click on the **Update Data** button and if necessary follow the instructions to allow the app access to your Google Drive account.
+4.  Wait while the model is re-fit, this could take ~ 5 mins.
+5.  The app will automatically update the demographic rates and projections based on the new data. 
+
+## Technical Write-Up on Model Fitting
+
+The app utilizes the `bboutools` package to fit demographic models to caribou data. The fitting process involves several steps:

@@ -7,3 +7,4 @@
 *.png
 deploy/*.tar
 deploy/log.out
+inst/doc
