@@ -900,6 +900,7 @@ $(window).resize(function(e) {
           size = "m"))
 
         withProgress({pop_file_in <- update_data(input$survey_url,
+                                                 lang = input$selected_language,
                                                  shiny_progress = TRUE)})
 
         # update the reactive value
