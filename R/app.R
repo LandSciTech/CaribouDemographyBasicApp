@@ -504,9 +504,7 @@ $(window).resize(function(e) {
         # scale_colour_identity(guide = guide_legend(), labels = c()) +
         labs(col = i18n$t("Scenario"), y = i18n$t("Female population size") %>% str_wrap(25),
              x = i18n$t("Years in the future"),
-             alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"),
-             caption = i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.") %>%
-               str_wrap(max(pop_cont_w(), 700)/7.5 - 10))+
+             alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"))+
         guides(linewidth = guide_legend(override.aes = list(alpha = c(0.2, 1))),
                colour = guide_legend(override.aes = list(linewidth = c(2))))
 
@@ -757,7 +755,8 @@ $(window).resize(function(e) {
 
           navset_tab(
             nav_panel(i18n$t("Female population"),
-                      plotOutput("pop_plot")),
+                      plotOutput("pop_plot"),
+                      em(i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward."))),
             # nav_panel(i18n$t("Female population change"),
             #           plotOutput("pop_change"))
           ),
