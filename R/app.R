@@ -760,8 +760,7 @@ $(window).resize(function(e) {
             # nav_panel(i18n$t("Female population change"),
             #           plotOutput("pop_change"))
           ),
-
-          tableOutput("pop_table"),
+          card(id = "pop_table_card", tableOutput("pop_table")),
           card(
             full_screen = TRUE,
             card_header(i18n$t("Glossary")),

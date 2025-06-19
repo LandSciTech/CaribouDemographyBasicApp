@@ -57,18 +57,40 @@ knitr::include_graphics(here::here("tests/testthat/_snaps/windows/run_app", "inp
 
 The **Projections** tab is where users can visualize population growth over time based on the current demographic rates and explore alternative scenarios. The first graph shows the projected adult female population size over time. The darker line shows the estimated population size if we ignore uncertainty about demographic rates and variation between years. The paler lines show a variety of plausible outcomes given the uncertainty about demographic rates and the observed variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward. It is important to keep in mind that the darker line is just a best guess for the trend and in many cases some plausible lines will show a decreasing population while others show a stable or increasing one. This is expected and shows the uncertainty associated with the available data. When making decisions it is recommended to consider all the plausible trajectories for the population.
 
+```{r out.width=600}
+# knitr::include_graphics(here::here("inst", "www", "survivalSummary.png" ))
+# knitr::include_graphics(here::here("inst", "www", "recruitmentSummary.png" ))
+knitr::include_graphics(here::here("tests/testthat/_snaps/windows/run_app", "full_results.png" ))
+```
+
 Below the population graph is a table summarizing the demographic rates from the current scenario and the projected number of years until the estimated population size reaches less than 10 females. This is considered the quasi-extinction threshold, meaning if there are fewer than 10 females the population will not be able to recover @eccc2011. Below the table is a bar graph showing the % female mortality and the female replacement rate. The coloured bars show the mean % female mortality and female replacement rate in each scenario across the plausible trajectories. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is considered stable or increasing when the female replacement rate is equal to or greater than % female mortality, meaning that the number of female calves joining the population is larger than the number of adult females dying each year.
 
-In addition to exploring the projected population size based on the current demographic rates, we can also explore scenarios with higher or lower values for the demographic rates to understand how potential future changes could impact the population. To demonstrate this click the "Add alternative scenario" button, fill in a descriptive name for the scenario, (e.g "Increase survival"), and move the survival slider to 90%, then click Run model. This will add the results for the alternate scenario to the graphs and tables in a different colour. We can see that with 90% survival the population is more likely to be increasing over time but there are still some plausible trajectories with a decreasing population. The table shows that in the "Increase survival" scenario we have increased female survival by 7% of the survival in the current scenario (i.e. $(90 - 84)/84 \times 100 = 7$)
+In addition to exploring the projected population size based on the current demographic rates, we can also explore scenarios with higher or lower values for the demographic rates to understand how potential future changes could impact the population. To demonstrate this click the "Add alternative scenario" button, fill in a descriptive name for the scenario, (e.g "Increase recruitment"), and move the recruitment slider to 29, then click Run model. This will add the results for the alternate scenario to the graphs and tables in a different colour. We can see that with 29 calves per 100 cows the population is more likely to be increasing over time but there are still some plausible trajectories with a decreasing population. The table shows that in the "Increase recruitment" scenario we have increased recruitment by 53% of the recruitment in the current scenario (i.e. $(29 - 19)/19 \times 100 = 53$)
 
-## Uncertainty
+```{r out.width=600}
+knitr::include_graphics(here::here("tests/testthat/_snaps/windows/run_app", "alt_results.png" ))
+```
 
 ## How to Update Data
 
-Only users who installed the R package directly, rather than downloading the .tar file can update the data used to calculate the demographic rates.
+Only users who installed the R package from GitHub directly, rather than downloading the .tar file can update the data used to calculate the demographic rates.
 
-To update the data used in the app, follow these steps: 1. Update the data in your Google spreadsheet. 2. Click on the **Update Data** button and if necessary follow the instructions to allow the app access to your Google Drive account. 4. Wait while the model is re-fit, this could take \~ 5 mins. 5. The app will automatically update the demographic rates and projections based on the new data.
+To update the data used in the app, follow these steps:
 
-## Technical Write-Up on Model Fitting
+1.  Update the data in your Google spreadsheet. The spreadsheet must follow the format used by [bboutools](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data). Copy the URL for your spreadsheet
 
-The app utilizes the `bboutools` package to fit demographic models to caribou data. The fitting process involves several steps:
+2.  Click on the "Update Data" button, paste your URL in the URL text box, and click "Update"
+
+3.  If necessary, you will be prompted to follow instructions to allow the app access to your Google Drive account. To avoid this you can change the settings on the Google Sheet to allow "anyone with the link" to view your spreadsheet.
+
+4.  Wait while the model is re-fit, this could take \~ 5 mins.
+
+5.  The app will automatically update the demographic rates and projections based on the new data.
+
+## Technical Details of Model Fitting
+
+The app utilizes the [`bboutools`](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) package to fit Bayesian models to caribou demographic data [@dalgarno2025]. `bboutools` fits Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect if there is data from more than 5 years.
+
+Why is conf_level = FALSE in predict???
+
+## Uncertainty

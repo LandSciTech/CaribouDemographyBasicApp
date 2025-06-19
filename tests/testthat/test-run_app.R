@@ -8,10 +8,9 @@ test_that("App loads properly", {
   skip_on_covr()
 
   shiny_app <- run_caribou_demog_app()
-  app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
+  app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE), seed = 1234)
 
   app$set_window_size(width = 1700, height = 1400)
-  app$set_inputs(body = "welcome_tab")
   app$wait_for_idle()
   app$expect_screenshot(name = "welcome")
 
@@ -21,7 +20,7 @@ test_that("App loads properly", {
 
   app$set_window_size(width = 1619, height = 1065)
   app$set_inputs(
-    pop_name = "Basse-Côte-Nord",
+    pop_name = "A",
     cur_pop = character(0),
     addl_params_cur = character(0),
     ivType = "logistic",
@@ -44,14 +43,23 @@ test_that("App loads properly", {
     wait_ = FALSE
   )
 
-  n <- 10
-  n <- n+1
+  n <- ""
+  # n <- 1
+  # n <- n+1
   app$set_window_size(width = 1000, height = 1000)
   app$set_inputs(dimension = c(10000,1000), allow_no_input_binding_ = TRUE)
   app$click("run_model")
   app$wait_for_idle()
   app$expect_screenshot(name = paste0("pop_plot", n), selector = "#pop_plot")
-  shell.exec(paste0("C:/Users/ENDICO~1/AppData/Local/Temp/RtmpGGpAxE/st2-737c511b282d/pop_plot", n, ".png"))
+
+
+  app$set_window_size(width = 1619, height = 1565)
+  app$expect_screenshot(name = paste0("pop_table", n), selector = "#pop_table_card")
+  app$expect_screenshot(name = paste0("r_m_plot", n), selector = "#r_m_plot")
+
+  app$expect_screenshot(name = paste0("full_results", n))
+  # shell.exec(paste0("C:/Users/ENDICO~1/AppData/Local/Temp/RtmpIREbKJ/st2-685c62b657b6/full_results", n, ".png"))
+
 
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
     stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
@@ -61,14 +69,14 @@ test_that("App loads properly", {
   expect_equal(pop_tbl$Scenario[1], "Current")
 
 
-  app$set_window_size(width = 1619, height = 1065)
+  app$set_window_size(width = 1619, height = 1565)
   app$click("add_alt")
   app$wait_for_idle()
   # app$set_inputs(alt_box_1 = "alt_box_p_1")
   app$set_inputs(
-    alt_S_bar_1 = 92,
-    alt_R_bar_1 = 44,
-    alt_name_1 = "test1",
+    alt_S_bar_1 = 88,
+    alt_R_bar_1 = 29,
+    alt_name_1 = "Increase recruitment",
     addl_params_1 = character(0),
     P_0_1 = 1,
     P_K_1 = 0.6,
@@ -81,13 +89,16 @@ test_that("App loads properly", {
   )
   app$click("run_model")
   app$wait_for_idle()
+
+  app$expect_screenshot(name = paste0("alt_results", n))
+
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
     stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
     stringr::str_replace_all("\n;", "\n") %>%
     {read.table(text = ., sep = ";", header = TRUE)}
 
   expect_equal(pop_tbl$Scenario[2], "test1")
-
+  app$stop()
 
 })
 
@@ -114,5 +125,5 @@ test_that("Update data works properly", {
   pop_nm <- app$get_text("#pop_name")
 
   expect_equal(pop_nm, "\nA")
-
+  app$stop()
 })
