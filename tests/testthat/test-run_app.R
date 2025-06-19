@@ -1,7 +1,7 @@
 library(shinytest2)
 library(CaribouDemographyBasicApp)
 
-shinytest2::record_test(run_caribou_demog_app())
+# shinytest2::record_test(run_caribou_demog_app())
 
 test_that("App loads properly", {
   skip_on_ci()
@@ -9,6 +9,15 @@ test_that("App loads properly", {
 
   shiny_app <- run_caribou_demog_app()
   app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
+
+  app$set_window_size(width = 1700, height = 1400)
+  app$set_inputs(body = "welcome_tab")
+  app$wait_for_idle()
+  app$expect_screenshot(name = "welcome")
+
+  app$set_inputs(body = "input_data_tab")
+  app$wait_for_idle()
+  app$expect_screenshot(name = "input_data")
 
   app$set_window_size(width = 1619, height = 1065)
   app$set_inputs(
@@ -34,19 +43,28 @@ test_that("App loads properly", {
     r_max_cur = 1.3,
     wait_ = FALSE
   )
+
+  n <- 10
+  n <- n+1
+  app$set_window_size(width = 1000, height = 1000)
+  app$set_inputs(dimension = c(10000,1000), allow_no_input_binding_ = TRUE)
   app$click("run_model")
+  app$wait_for_idle()
+  app$expect_screenshot(name = paste0("pop_plot", n), selector = "#pop_plot")
+  shell.exec(paste0("C:/Users/ENDICO~1/AppData/Local/Temp/RtmpGGpAxE/st2-737c511b282d/pop_plot", n, ".png"))
 
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
-    stringr::str_replace_all("  ", ";") %>%
-    {readr::read_delim(., delim = ";", skip_empty_rows = TRUE)}
+    stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
+    stringr::str_replace_all("\n;", "\n") %>%
+    {read.table(text = ., sep = ";", header = TRUE)}
 
-  expect_equal(pop_tbl$` Scenario`[1], "Current")
+  expect_equal(pop_tbl$Scenario[1], "Current")
 
 
   app$set_window_size(width = 1619, height = 1065)
   app$click("add_alt")
   app$wait_for_idle()
-  app$set_inputs(alt_box_1 = "alt_box_p_1")
+  # app$set_inputs(alt_box_1 = "alt_box_p_1")
   app$set_inputs(
     alt_S_bar_1 = 92,
     alt_R_bar_1 = 44,
@@ -62,22 +80,26 @@ test_that("App loads properly", {
     wait_ = FALSE
   )
   app$click("run_model")
+  app$wait_for_idle()
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
-    stringr::str_replace_all("  ", ";") %>%
-    {readr::read_delim(., delim = ";", skip_empty_rows = TRUE)}
+    stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
+    stringr::str_replace_all("\n;", "\n") %>%
+    {read.table(text = ., sep = ";", header = TRUE)}
 
-  expect_equal(pop_tbl$` Scenario`[2], "test1")
+  expect_equal(pop_tbl$Scenario[2], "test1")
+
 
 })
 
 test_that("Update data works properly", {
-  skip("Skipping because not working")
+  skip("Skipping takes too long")
   skip_on_ci()
   skip_on_covr()
   skip_if_not_installed("googlesheets4")
 
   shiny_app <- run_caribou_demog_app()
   app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
+  app$set_window_size(width = 1619, height = 1065)
   app$click("update_data")
   app$set_inputs(survey_url = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", wait_ = FALSE)
   app$click("update_data_submit", wait_ = FALSE)
@@ -85,7 +107,12 @@ test_that("Update data works properly", {
 
   app$click("run_model", wait_ = FALSE)
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
-    stringr::str_replace_all("  ", ";") %>%
+    stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
+    stringr::str_replace_all("\n;", "\n") %>%
     {readr::read_delim(., delim = ";", skip_empty_rows = TRUE)}
+
+  pop_nm <- app$get_text("#pop_name")
+
+  expect_equal(pop_nm, "\nA")
 
 })

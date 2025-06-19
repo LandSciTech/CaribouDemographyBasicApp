@@ -4,7 +4,7 @@
 #' @param inst_dir dir where results are saved
 #' @param shiny_progress Is this inside a shiny app and called with `shiny::withProgress`
 #'
-#' @returns
+#' @returns A data frame with the population estimates.
 #' @export
 #'
 #' @examples

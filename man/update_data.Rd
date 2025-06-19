@@ -7,6 +7,8 @@
 update_data(
   survey_url,
   inst_dir = system.file(package = "CaribouDemographyBasicApp"),
+  i18n = NULL,
+  lang = "en",
   shiny_progress = FALSE
 )
 }
@@ -19,4 +21,8 @@ update_data(
 }
 \description{
 Get updated data from google spreadsheet
+}
+\examples{
+googlesheets4::gs4_deauth()
+update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
 }

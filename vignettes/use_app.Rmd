@@ -1,6 +1,8 @@
 ---
 title: "Using the app"
-output: rmarkdown::html_vignette
+output: 
+  bookdown::html_document2:
+      base_format: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using the app}
   %\VignetteEncoding{UTF-8}
@@ -13,6 +15,7 @@ bibliography: references.bib
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  echo = FALSE,
   comment = "#>"
 )
 ```
@@ -31,8 +34,7 @@ Technical write up on how models are fit that refers back to bboutools/caribouMe
 
 The Boreal Caribou Demographic Projection Explorer App is designed to provide a user-friendly interface for exploring caribou demographic data and metrics. The app allows users to visualize and analyze caribou population dynamics, including survival rates, recruitment, and population trends.
 
-This app is designed to use existing methods developed in the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a>
-R package to estimate demographic rates and project future population growth while incorporating the uncertainty associated with these estimates. The demographic rates presented in the app are derived from survival and recruitment surveys. These are both estimated from field surveys of collared caribou [@nbckc2021; @nbckc2022]. Typically female caribou (cows) are captured in the late winter and fitted with collars that transmit data on their location and survival. Recruitment is estimated by counting the number of calves per cow in groups containing collared caribou. Recruitment surveys are typically done \~ 9 months after calving so it represents the number of calves that were born and survived until the survey. This survey data is used to estimate the **% female survival** and the number of **calves per 100 cows**. These demographic rates can be combined in a simple recruitment-mortality population model [@hatter1991; @hatter2020] to project population growth over time.
+This app is designed to use existing methods developed in the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a> R package to estimate demographic rates and project future population growth while incorporating the uncertainty associated with these estimates. The demographic rates presented in the app are derived from survival and recruitment surveys. These are both estimated from field surveys of collared caribou [@nbckc2021; @nbckc2022]. Typically female caribou (cows) are captured in the late winter and fitted with collars that transmit data on their location and survival. Recruitment is estimated by counting the number of calves per cow in groups containing collared caribou. Recruitment surveys are typically done \~ 9 months after calving so it represents the number of calves that were born and survived until the survey. This survey data is used to estimate the **% female survival** and the number of **calves per 100 cows**. These demographic rates can be combined in a simple recruitment-mortality population model [@hatter1991; @hatter2020] to project population growth over time.
 
 ## Key terms
 
@@ -41,27 +43,31 @@ res <- knitr::knit_child(here::here("inst", "app_text", "glossary_en.md"), quiet
 cat(res, sep = '\n')
 ```
 
-## General Description of the Interface
+## Typical app usage
 
-The app interface consists of several tabs: 
+Typically the app will be made available to users with caribou data for the populations of interest already loaded in the app. Users can then explore the demographic rates and projections for these populations.
 
-- **Welcome**: Provides an introduction to the app. 
-- **Survey data**: Provides a summary of the data used to calculate the demographic rates. 
-- **Projections**: Is the primary tab for exploring caribou population dynamics. It allows users to visualize population growth under the current demographic rates and to explore alternative scenarios with increased or decreased demographic rates.
+The **Welcome** tab provides an overview of the app and its functionality. Users can navigate to the **Survey data** tab to view the data used to calculate demographic rates, including survival and recruitment rates. This tab includes a description of the data written by the data providers and a disclaimer. The data description section can be expanded to full screen for easier reading. See section \@ref(how-to-update-data) for how to change the description and the input data. The next section contains graphs showing the survey data, including number of caribou collared and number of caribou counted in each year for each population, that is used to determine the demographic rates. You can switch between the survival and recruitment data graphs by clicking the button in the top right of the "Survey data summary" section. The next section shows the demographic rates estimated by the model for each population and year . The point shows the median value and the line shows the range of values that are plausible. So, for example, if the median estimated survival is 80% and the range is between 76% and 86%, it means that the midpoint of all the survival estimates was 80% and that 95% of all the survival estimates were between 76% and 86%. See section \@ref(uncertainty) for more details. Finally, the Data summary section includes a table showing the initial population used to start the projections, the year the initial population was recorded, and the number of years of data available for survival and recruitment.
+
+```{r out.width=600}
+# knitr::include_graphics(here::here("inst", "www", "survivalSummary.png" ))
+# knitr::include_graphics(here::here("inst", "www", "recruitmentSummary.png" ))
+knitr::include_graphics(here::here("tests/testthat/_snaps/windows/run_app", "input_data.png" ))
+```
+
+The **Projections** tab is where users can visualize population growth over time based on the current demographic rates and explore alternative scenarios. The first graph shows the projected adult female population size over time. The darker line shows the estimated population size if we ignore uncertainty about demographic rates and variation between years. The paler lines show a variety of plausible outcomes given the uncertainty about demographic rates and the observed variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward. It is important to keep in mind that the darker line is just a best guess for the trend and in many cases some plausible lines will show a decreasing population while others show a stable or increasing one. This is expected and shows the uncertainty associated with the available data. When making decisions it is recommended to consider all the plausible trajectories for the population.
+
+Below the population graph is a table summarizing the demographic rates from the current scenario and the projected number of years until the estimated population size reaches less than 10 females. This is considered the quasi-extinction threshold, meaning if there are fewer than 10 females the population will not be able to recover @eccc2011. Below the table is a bar graph showing the % female mortality and the female replacement rate. The coloured bars show the mean % female mortality and female replacement rate in each scenario across the plausible trajectories. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is considered stable or increasing when the female replacement rate is equal to or greater than % female mortality, meaning that the number of female calves joining the population is larger than the number of adult females dying each year.
+
+In addition to exploring the projected population size based on the current demographic rates, we can also explore scenarios with higher or lower values for the demographic rates to understand how potential future changes could impact the population. To demonstrate this click the "Add alternative scenario" button, fill in a descriptive name for the scenario, (e.g "Increase survival"), and move the survival slider to 90%, then click Run model. This will add the results for the alternate scenario to the graphs and tables in a different colour. We can see that with 90% survival the population is more likely to be increasing over time but there are still some plausible trajectories with a decreasing population. The table shows that in the "Increase survival" scenario we have increased female survival by 7% of the survival in the current scenario (i.e. $(90 - 84)/84 \times 100 = 7$)
 
 ## Uncertainty
 
-
-
 ## How to Update Data
 
-Only users who installed the R package directly, rather than downloading the .tar file can update the data used to calculate the demographic rates. 
+Only users who installed the R package directly, rather than downloading the .tar file can update the data used to calculate the demographic rates.
 
-To update the data used in the app, follow these steps:
-1.  Update the data in your Google spreadsheet. 
-2.  Click on the **Update Data** button and if necessary follow the instructions to allow the app access to your Google Drive account.
-4.  Wait while the model is re-fit, this could take ~ 5 mins.
-5.  The app will automatically update the demographic rates and projections based on the new data. 
+To update the data used in the app, follow these steps: 1. Update the data in your Google spreadsheet. 2. Click on the **Update Data** button and if necessary follow the instructions to allow the app access to your Google Drive account. 4. Wait while the model is re-fit, this could take \~ 5 mins. 5. The app will automatically update the demographic rates and projections based on the new data.
 
 ## Technical Write-Up on Model Fitting
 

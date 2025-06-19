@@ -4,7 +4,7 @@
 .httr-oauth
 .DS_Store
 .quarto
-*.png
+inst/www/*.png
 deploy/*.tar
 deploy/log.out
 inst/doc
