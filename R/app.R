@@ -676,9 +676,7 @@ $(window).resize(function(e) {
         geom_errorbar()+
         facet_wrap(~Scenario, nrow = 1)+
         scale_fill_brewer(palette = "Dark2")+
-        labs(x = NULL, y = NULL, fill = i18n$t("Scenario"),
-             caption = i18n$t("The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.") %>%
-               str_wrap(min(100+(250*(n_distinct(pop_mod()$scn))), r_m_cont_w())/6 - 10))
+        labs(x = NULL, y = NULL, fill = i18n$t("Scenario"))
     })
 
     # Body UI #-------------------------------------------------------------------
@@ -749,6 +747,7 @@ $(window).resize(function(e) {
     })
 
     output$results <- renderUI({
+      r_m_plot_width <- min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w()))
       ret <- page_fillable(
         layout_columns(
           col_widths = c(12, 6, 3, 3, 12),
@@ -756,7 +755,8 @@ $(window).resize(function(e) {
           navset_tab(
             nav_panel(i18n$t("Female population"),
                       plotOutput("pop_plot"),
-                      em(i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward."))),
+                      p(style = 'padding-left: 25px',
+                        i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward."))),
             # nav_panel(i18n$t("Female population change"),
             #           plotOutput("pop_change"))
           ),
@@ -776,8 +776,17 @@ $(window).resize(function(e) {
                                       paste0("faq_", input$selected_language, ".md"))),
             height = "150px"
           ),
-          plotOutput("r_m_plot", fill = FALSE,
-                     width = min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w())))
+          layout_column_wrap(
+            width = paste0(min(pop_cont_w(), r_m_plot_width+50), "px"),
+            fixed_width = TRUE,
+            card(
+              plotOutput("r_m_plot", fill = FALSE,
+                         width = r_m_plot_width-50),
+              p(style = 'padding-left: 25px',
+                i18n$t("The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.")),
+
+            )
+          )
         )
       )
       waiter::waiter_hide()
