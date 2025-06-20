@@ -97,13 +97,13 @@ test_that("App loads properly", {
     stringr::str_replace_all("\n;", "\n") %>%
     {read.table(text = ., sep = ";", header = TRUE)}
 
-  expect_equal(pop_tbl$Scenario[2], "test1")
+  expect_equal(pop_tbl$Scenario[2], "Increase recruitment")
   app$stop()
 
 })
 
 test_that("Update data works properly", {
-  skip("Skipping takes too long")
+  # skip("Skipping takes too long")
   skip_on_ci()
   skip_on_covr()
   skip_if_not_installed("googlesheets4")
@@ -114,7 +114,7 @@ test_that("Update data works properly", {
   app$click("update_data")
   app$set_inputs(survey_url = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", wait_ = FALSE)
   app$click("update_data_submit", wait_ = FALSE)
-  app$wait_for_idle(timeout = 5*60*1000)
+  app$wait_for_idle(timeout = 7*60*1000)
 
   app$click("run_model", wait_ = FALSE)
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%

@@ -89,8 +89,6 @@ To update the data used in the app, follow these steps:
 
 ## Technical Details of Model Fitting
 
-The app utilizes the [`bboutools`](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) package to fit Bayesian models to caribou demographic data [@dalgarno2025]. `bboutools` fits Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect if there is data from more than 5 years.
-
-Why is conf_level = FALSE in predict???
+The app utilizes the [`bboutools`](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) package to fit Bayesian models to caribou demographic data [@dalgarno2025]. `bboutools` fits Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect if there is data from more than 5 years. The models are summarized by taking samples from the posterior distribution to determine the estimated rate in a typical year, the
 
 ## Uncertainty

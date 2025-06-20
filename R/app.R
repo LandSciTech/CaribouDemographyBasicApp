@@ -103,7 +103,20 @@ $(window).resize(function(e) {
           NULL
         },
 
-        uiOutput("adv_params_ui")
+        uiOutput("adv_params_ui"),
+        tags$footer(em(paste0("R package version: ",
+                           packageVersion("CaribouDemographyBasicApp"))),
+                    align = "center",
+                    style = "
+                 bottom:11.5px;
+                 width:100%;
+                 height:25px;
+                 color: black;
+                 padding: 0px;
+                 z-index: 100;
+                ")
+
+
 
         # This .rmd file is missing
         # radioButtons('format', 'Document format', c('HTML', 'PDF', 'Word'),
@@ -115,9 +128,9 @@ $(window).resize(function(e) {
       tags$head(
         tags$script(add_id_to_section)
       ),
-      waiter::useWaiter(),
-      waiter::waiterPreloader(),
-      waiter::autoWaiter(),
+      #waiter::useWaiter(),
+      #waiter::waiterPreloader(),
+      #waiter::autoWaiter(),
       navset_bar(
         id = "body",
         fillable = FALSE,
@@ -688,7 +701,7 @@ $(window).resize(function(e) {
         # this hidden input allows us to wait for this UI to render before adding to it
         div(style = "display:none", textInput(inputId = "hidden", label = "", value = "1"))
       )
-      waiter::waiter_hide()
+      #waiter::waiter_hide()
       ret
     })
     output$input_data <- renderUI({
@@ -788,7 +801,7 @@ $(window).resize(function(e) {
           )
         )
       )
-      waiter::waiter_hide()
+      #waiter::waiter_hide()
       ret
     })
     output$documentation <- renderUI({
