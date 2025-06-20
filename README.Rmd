@@ -18,26 +18,33 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, results='asis'}
 inst_dir <- system.file(package = "CaribouDemographyBasicApp")
-htmltools::includeMarkdown(file.path(inst_dir, "app_text", "intro_en.md"))
+htmltools::includeMarkdown(file.path(inst_dir, "app_text", "intro_en.md")) |>
+  stringr::str_replace("www/Female_caribou_and_calves.jpg",
+                       file.path(inst_dir, "www/Female_caribou_and_calves.jpg"))|>
+  knitr::raw_html()
 ```
 
 
 ## Installation
 
+There are two options available for installing the app. Users who do not have R installed and are not familiar with R packages can follow the instructions on the [Releases](https://github.com/LandSciTech/CaribouDemographyBasicApp/releases) page to download a version of the app that is packaged with a version of R. Please note, you will not be able to update the caribou demographic data stored with the app when it is installed this way.
+
+R users or those who wish to update the caribou demographic data used in the app can follow the instructions below to install the R package.  
+
 To run the app you will need to install R and we recommend RStudio as well.
 Follow the instructions [here](https://posit.co/download/rstudio-desktop/) to
 install both.
 
-In addition you will need to install the Rtools application. You can do this by selecting the version corresponding to your version of R [here](https://cran.r-project.org/bin/windows/Rtools/). Or you can run the following code in the R console which should prompt Rtools to be installed. 
+In addition, you will need to install the Rtools application. You can do this by selecting the version corresponding to your version of R [here](https://cran.r-project.org/bin/windows/Rtools/). Or you can run the following code in the R console which should prompt Rtools to be installed. 
 
 ```r
 install.packages("pkgbuild")
 pkgbuild::check_build_tools()
 
 ```
-Wait for the tool to download and install, following in instructions that pop-up. When installation is complete close R or RStudio and open it again in a fresh session for the changes to take effect. 
+Wait for the tool to download and install, following the instructions that pop-up. When installation is complete close R or RStudio and open it again in a fresh session for the changes to take effect. 
 
 You can install the CaribouDemographyBasicApp R package by running the following
 in the R console:
