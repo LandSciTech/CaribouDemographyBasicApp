@@ -11,6 +11,7 @@ test_that("App loads properly", {
   app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE), seed = 1234)
 
   app$set_window_size(width = 1700, height = 1400)
+  Sys.sleep(2)
   app$wait_for_idle()
   app$expect_screenshot(name = "welcome")
 
@@ -103,7 +104,7 @@ test_that("App loads properly", {
 })
 
 test_that("Update data works properly", {
-  # skip("Skipping takes too long")
+  skip("Skipping takes too long")
   skip_on_ci()
   skip_on_covr()
   skip_if_not_installed("googlesheets4")

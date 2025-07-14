@@ -24,11 +24,6 @@ run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_dat
   }
 
 
-  theme_set(
-    theme_classic()+
-      theme(text = element_text(size = 20),
-            plot.caption = element_text(hjust = 0))
-  )
   # File with translations
   i18n <- Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
   i18n$set_translation_language(lang) # default translation to display
@@ -159,6 +154,12 @@ $(window).resize(function(e) {
 
   # Server #----------------------------------------------------------------------
   server <- function(input, output, session) {
+
+    theme_set(
+      theme_classic()+
+        theme(text = element_text(size = 20),
+              plot.caption = element_text(hjust = 0))
+    )
 
     output$lang_select_ui <- renderUI({
       input$selected_language

@@ -39,17 +39,6 @@ The Boreal Caribou Demographic Projection Explorer App is designed to provide a 
 This app is designed to use existing methods developed in the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a> and <a href="https://landscitech.github.io/caribouMetrics/" target="_blank">caribouMetrics</a> R packages to estimate demographic rates and project future population growth while incorporating the uncertainty associated with these estimates. The demographic rates presented in the app are derived from survival and recruitment surveys. These are both estimated from field surveys of collared caribou [@nbckc2021; @nbckc2022]. Typically female caribou (cows) are captured in the late winter and fitted with collars that transmit data on their location and survival. Recruitment is estimated by counting the number of calves per cow in groups containing collared caribou. Recruitment surveys are typically done \~ 9 months after calving so it represents the number of calves that were born and survived until the survey. This survey data is used to estimate the **% female survival** and the number of **calves per 100 cows**. These demographic rates can be combined in a simple recruitment-mortality population model [@hatter1991; @hatter2020] to project population growth over time.
 
 
-<!-- Not using because I think this is all covered in the text but a useful method! -->
-<!-- ## Key terms -->
-
-<!-- ```{r, echo=FALSE, results='asis'} -->
-
-<!-- res <- knitr::knit_child(here::here("inst", "app_text", "glossary_en.md"), quiet = TRUE) -->
-
-<!-- cat(res, sep = '\n') -->
-
-<!-- ``` -->
-
 ## Typical app usage
 
 Typically the app will be made available to users with caribou data for the populations of interest already loaded in the app. Users can then explore the demographic rates and projections for these populations.
@@ -74,7 +63,6 @@ Below the population graph is a table summarizing the demographic rates from the
 
 In addition to exploring the projected population size based on the current demographic rates, we can also explore scenarios with higher or lower values for the demographic rates to understand how potential future changes could impact the population. To demonstrate this click the "Add alternative scenario" button, fill in a descriptive name for the scenario, (e.g "Increase recruitment"), and move the recruitment slider to 29, then click Run model. This will add the results for the alternate scenario to the graphs and tables in a different colour. We can see that with 29 calves per 100 cows the population is more likely to be increasing over time but there are still some plausible trajectories with a decreasing population. The table shows that in the "Increase recruitment" scenario the % Difference is 53% meaning we have increased recruitment by 53% of the value in the current scenario (i.e. $(29 - 19)/19 \times 100 = 53$)
 
-<!-- **Note the background in the images doesn't use the right ggplot theme** -->
 
 ```{r out.width=600}
 knitr::include_graphics(here::here("tests/testthat/_snaps/windows/run_app", "alt_results.png" ))
@@ -98,20 +86,8 @@ To update the data used in the app, follow these steps:
 
 ## Technical Details of Model Fitting
 
-The app utilizes the [`bboutools`](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) package to fit Bayesian models to caribou demographic data [@dalgarno2025]. `bboutools` fits Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect if there is data from more than 5 years. The models are summarized for the recruitment and survival rates by taking samples from the posterior distribution and taking the mean to estimate the rate in a typical year, the standard deviation to estimate the variation in the rates and the 95% Credible Interval to estimate the upper and lower bounds of plausible values for the rate, given the survey data provided. These models are only run when the data is updated and the resulting rates are stored in the app and used to make projections.
+The app utilizes the [`bboutools`](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) package to fit Bayesian models to caribou demographic data [@dalgarno2025]. `bboutools` fits Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect if there is data from more than 5 years. The parameters needed to inform the demographic projections are extracted from these models. The parameters extracted include the mean, standard deviation and 95% credible interval and also the interannual variation in these parameters. It is necessary to extract the parameters from the app rather than using the model directly so that the parameters can be modified to reflect alternative scenarios. These models are only run when the data is updated and the resulting rates are stored in the app and used to make projections.
 
-**How is interannual variation done**
-
-**Should I explain the sharing data among years extension to bboutools?**
-
-The demographic rates for the population and the expected variation in them are then used to populate the app for the "Current" scenario and to project the expected female population over the next 20 years. The projected population growth is determined for 35 example trajectories with demographic rates sampled from the normal distribution based on the mean and standard deviation of the rate. Then `caribouMetrics::caribouPopGrowth()` is used to run a two-stage demographic model which projects the growth of the population over 20 years. In addition, a version of the demographic model is run based on the mean demographic rates and ignoring interannual variation to produce the mean estimate of the population trajectory over time. This demographic model is re-run anytime that Run model is clicked which will change the resulting graphs slightly since some parts of the model include random values. If an alternative scenario is added the same model is run with the provided demographic rates to project the population under that scenario. 
-
-**How are the "beta" and "logistic" methods in doSim the same?**
-
-**Should we be documenting the beta type in doSim?**
-
-## Uncertainty
-
-**This might be covered enough already**
+The demographic rates for the population and the expected variation in them are then used to populate the app for the "Current" scenario and to project the expected female population over the next 20 years. The projected population growth is determined for 35 example trajectories with demographic rates sampled from the normal distribution based on the mean and standard deviation of the rate. Then `caribouMetrics::caribouPopGrowth()` is used to run a two-stage demographic model which projects the growth of the population over 20 years. In addition, a version of the demographic model is run based on the mean demographic rates and ignoring interannual variation to produce the mean estimate of the population trajectory over time. This demographic model is re-run anytime that "Run model" is clicked which will change the resulting graphs slightly since some parts of the model include random values. If an alternative scenario is added the same model is run with the provided demographic rates to project the population under that scenario. 
 
 # References
