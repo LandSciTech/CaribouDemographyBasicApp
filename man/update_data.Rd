@@ -8,10 +8,7 @@ update_data(
   survey_url,
   inst_dir = system.file(package = "CaribouDemographyBasicApp"),
   i18n = NULL,
-<<<<<<< HEAD
-=======
   lang = "en",
->>>>>>> c774b0eb8939338c661e3db1faec8f49e7a5f9c5
   shiny_progress = FALSE
 )
 }
@@ -21,6 +18,9 @@ update_data(
 \item{inst_dir}{dir where results are saved}
 
 \item{shiny_progress}{Is this inside a shiny app and called with \code{shiny::withProgress}}
+}
+\value{
+A data frame with the population estimates.
 }
 \description{
 Get updated data from google spreadsheet
