@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 <h5 id="intro-purpose"><strong>Purpose</strong></h5>
-<img align="right" src="www/Female_caribou_and_calves.jpg" width="500">
+<img align="right" src="C:/Users/EndicottS/AppData/Local/Programs/R/R-4.4.1/library/CaribouDemographyBasicApp/www/Female_caribou_and_calves.jpg" width="500">
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. 
 <p>Projections include uncertainty about the
@@ -42,11 +42,22 @@ participated in conceptualizing the app and compiling available data.</p>
 
 ## Installation
 
+There are two options available for installing the app. Users who do not
+have R installed and are not familiar with R packages can follow the
+instructions on the
+[Releases](https://github.com/LandSciTech/CaribouDemographyBasicApp/releases)
+page to download a version of the app that is packaged with a version of
+R. Please note, you will not be able to update the caribou demographic
+data stored with the app when it is installed this way.
+
+R users or those who wish to update the caribou demographic data used in
+the app can follow the instructions below to install the R package.
+
 To run the app you will need to install R and we recommend RStudio as
 well. Follow the instructions
 [here](https://posit.co/download/rstudio-desktop/) to install both.
 
-In addition you will need to install the Rtools application. You can do
+In addition, you will need to install the Rtools application. You can do
 this by selecting the version corresponding to your version of R
 [here](https://cran.r-project.org/bin/windows/Rtools/). Or you can run
 the following code in the R console which should prompt Rtools to be
@@ -57,7 +68,7 @@ install.packages("pkgbuild")
 pkgbuild::check_build_tools()
 ```
 
-Wait for the tool to download and install, following in instructions
+Wait for the tool to download and install, following the instructions
 that pop-up. When installation is complete close R or RStudio and open
 it again in a fresh session for the changes to take effect.
 

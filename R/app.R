@@ -24,11 +24,6 @@ run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_dat
   }
 
 
-  theme_set(
-    theme_classic()+
-      theme(text = element_text(size = 20),
-            plot.caption = element_text(hjust = 0))
-  )
   # File with translations
   i18n <- Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
   i18n$set_translation_language(lang) # default translation to display
@@ -103,7 +98,20 @@ $(window).resize(function(e) {
           NULL
         },
 
-        uiOutput("adv_params_ui")
+        uiOutput("adv_params_ui"),
+        tags$footer(em(paste0("R package version: ",
+                           packageVersion("CaribouDemographyBasicApp"))),
+                    align = "center",
+                    style = "
+                 bottom:11.5px;
+                 width:100%;
+                 height:25px;
+                 color: black;
+                 padding: 0px;
+                 z-index: 100;
+                ")
+
+
 
         # This .rmd file is missing
         # radioButtons('format', 'Document format', c('HTML', 'PDF', 'Word'),
@@ -115,9 +123,9 @@ $(window).resize(function(e) {
       tags$head(
         tags$script(add_id_to_section)
       ),
-      waiter::useWaiter(),
-      waiter::waiterPreloader(),
-      waiter::autoWaiter(),
+      #waiter::useWaiter(),
+      #waiter::waiterPreloader(),
+      #waiter::autoWaiter(),
       navset_bar(
         id = "body",
         fillable = FALSE,
@@ -146,6 +154,12 @@ $(window).resize(function(e) {
 
   # Server #----------------------------------------------------------------------
   server <- function(input, output, session) {
+
+    theme_set(
+      theme_classic()+
+        theme(text = element_text(size = 20),
+              plot.caption = element_text(hjust = 0))
+    )
 
     output$lang_select_ui <- renderUI({
       input$selected_language
@@ -504,9 +518,7 @@ $(window).resize(function(e) {
         # scale_colour_identity(guide = guide_legend(), labels = c()) +
         labs(col = i18n$t("Scenario"), y = i18n$t("Female population size") %>% str_wrap(25),
              x = i18n$t("Years in the future"),
-             alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"),
-             caption = i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.") %>%
-               str_wrap(max(pop_cont_w(), 700)/7.5 - 10))+
+             alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"))+
         guides(linewidth = guide_legend(override.aes = list(alpha = c(0.2, 1))),
                colour = guide_legend(override.aes = list(linewidth = c(2))))
 
@@ -678,9 +690,7 @@ $(window).resize(function(e) {
         geom_errorbar()+
         facet_wrap(~Scenario, nrow = 1)+
         scale_fill_brewer(palette = "Dark2")+
-        labs(x = NULL, y = NULL, fill = i18n$t("Scenario"),
-             caption = i18n$t("The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.") %>%
-               str_wrap(min(100+(250*(n_distinct(pop_mod()$scn))), r_m_cont_w())/6 - 10))
+        labs(x = NULL, y = NULL, fill = i18n$t("Scenario"))
     })
 
     # Body UI #-------------------------------------------------------------------
@@ -692,7 +702,7 @@ $(window).resize(function(e) {
         # this hidden input allows us to wait for this UI to render before adding to it
         div(style = "display:none", textInput(inputId = "hidden", label = "", value = "1"))
       )
-      waiter::waiter_hide()
+      #waiter::waiter_hide()
       ret
     })
     output$input_data <- renderUI({
@@ -751,18 +761,20 @@ $(window).resize(function(e) {
     })
 
     output$results <- renderUI({
+      r_m_plot_width <- min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w()))
       ret <- page_fillable(
         layout_columns(
           col_widths = c(12, 6, 3, 3, 12),
 
           navset_tab(
             nav_panel(i18n$t("Female population"),
-                      plotOutput("pop_plot")),
+                      plotOutput("pop_plot"),
+                      p(style = 'padding-left: 25px',
+                        i18n$t("Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward."))),
             # nav_panel(i18n$t("Female population change"),
             #           plotOutput("pop_change"))
           ),
-
-          tableOutput("pop_table"),
+          card(id = "pop_table_card", tableOutput("pop_table")),
           card(
             full_screen = TRUE,
             card_header(i18n$t("Glossary")),
@@ -777,11 +789,20 @@ $(window).resize(function(e) {
                                       paste0("faq_", input$selected_language, ".md"))),
             height = "150px"
           ),
-          plotOutput("r_m_plot", fill = FALSE,
-                     width = min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w())))
+          layout_column_wrap(
+            width = paste0(min(pop_cont_w(), r_m_plot_width+50), "px"),
+            fixed_width = TRUE,
+            card(
+              plotOutput("r_m_plot", fill = FALSE,
+                         width = r_m_plot_width-50),
+              p(style = 'padding-left: 25px',
+                i18n$t("The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.")),
+
+            )
+          )
         )
       )
-      waiter::waiter_hide()
+      #waiter::waiter_hide()
       ret
     })
     output$documentation <- renderUI({
@@ -900,6 +921,7 @@ $(window).resize(function(e) {
           size = "m"))
 
         withProgress({pop_file_in <- update_data(input$survey_url,
+                                                 lang = input$selected_language,
                                                  shiny_progress = TRUE)})
 
         # update the reactive value

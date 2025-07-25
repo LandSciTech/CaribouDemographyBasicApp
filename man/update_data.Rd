@@ -8,6 +8,10 @@ update_data(
   survey_url,
   inst_dir = system.file(package = "CaribouDemographyBasicApp"),
   i18n = NULL,
+<<<<<<< HEAD
+=======
+  lang = "en",
+>>>>>>> c774b0eb8939338c661e3db1faec8f49e7a5f9c5
   shiny_progress = FALSE
 )
 }

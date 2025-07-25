@@ -4,14 +4,14 @@
 #' @param inst_dir dir where results are saved
 #' @param shiny_progress Is this inside a shiny app and called with `shiny::withProgress`
 #'
-#' @returns
+#' @returns A data frame with the population estimates.
 #' @export
 #'
 #' @examples
 #' googlesheets4::gs4_deauth()
 #' update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
 update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDemographyBasicApp"),
-                        i18n = NULL,
+                        i18n = NULL, lang = "en",
                         shiny_progress = FALSE){
   # set plot theme
   theme_set(
@@ -115,7 +115,7 @@ update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDem
   desc_nms <- colnames(dat_desc)
   if(length(desc_nms) > 1){
     desc_nms <- stringr::str_subset(desc_nms,
-                                    paste0("_",input$selected_language,"$"))
+                                    paste0("_", lang,"$"))
   }
 
   pop_file_in$description <- NA_character_
