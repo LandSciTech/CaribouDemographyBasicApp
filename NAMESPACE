@@ -2,8 +2,6 @@
 
 export("%>%")
 export(bbouMakeFigures)
-export(doSim)
-export(inv.logit)
 export(run_caribou_demog_app)
 export(update_data)
 import(bboutools)

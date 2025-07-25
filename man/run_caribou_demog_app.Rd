@@ -4,7 +4,7 @@
 \alias{run_caribou_demog_app}
 \title{Run the Boreal Caribou Demographic Projection Explorer}
 \usage{
-run_caribou_demog_app(private = FALSE, lang = "en")
+run_caribou_demog_app(private = FALSE, lang = "en", allow_update_data = TRUE)
 }
 \arguments{
 \item{private}{If private then you will need to follow instructions in console to authenticate google drive}
