@@ -19,6 +19,9 @@ update_data(
 
 \item{shiny_progress}{Is this inside a shiny app and called with \code{shiny::withProgress}}
 }
+\value{
+A data frame with the population estimates.
+}
 \description{
 Get updated data from google spreadsheet
 }
