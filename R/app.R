@@ -274,8 +274,8 @@ $(window).resize(function(e) {
       # } else {
       #   iv_default <- eval(formals(caribouPopGrowth)$interannualVar)
       #   iv_default$type <- "beta"
-      #   iv_default$R_SD <- 0
-      #   iv_default$S_SD <- 0
+      #   iv_default$R_shape <- 0
+      #   iv_default$S_shape <- 0
       #
       #   pop_default <- demographicRates(data.frame(fire = 0, Anthro = 0, fire_excl_anthro = 0),
       #                                   demographicCoefficients(100)) %>%
@@ -316,21 +316,21 @@ $(window).resize(function(e) {
                          label = i18n$t("Standard deviation of calves per 100 females"),
                          value = round(pop_default$R_sd, 3)
             ),
-            sliderInput("S_iv_cv",
+            sliderInput("S_iv_mean",
                         label = i18n$t("Interannual variation of survival rate"),
-                        value = iv_default$S_CV, min = 0, max = 2, step = 0.01
+                        value = iv_default$S_MEAN, min = 0.01, max = 2, step = 0.01
             ),
-            sliderInput("R_iv_cv",
+            sliderInput("R_iv_mean",
                         label = i18n$t("Interannual variation of calves per 100 females"),
-                        value = iv_default$R_CV, min = 0, max = 2, step = 0.01
+                        value = iv_default$R_MEAN, min = 0.01, max = 2, step = 0.01
             ),
-            sliderInput("S_iv_sd",
-                        label = i18n$t("Uncertainty about interannual variation of survival rate"),
-                        value = iv_default$S_SD, min = 0, max = 1.5,step=0.01
+            sliderInput("S_iv_shape",
+                        label = i18n$t("Shape of the distribution of interannual variation of survival rate"),
+                        value = iv_default$S_SHAPE, min = 0.01, max = 7,step=0.1
             ),
-            sliderInput("R_iv_sd",
-                        label = i18n$t("Uncertainty about interannual variation of calves per 100 females"),
-                        value = iv_default$R_SD, min = 0, max = 1.5,step=0.01
+            sliderInput("R_iv_shape",
+                        label = i18n$t("Shape of the distribution of interannual variation of calves per 100 females"),
+                        value = iv_default$R_SHAPE, min = 0.01, max = 7,step=0.1
             )
           )
         ),
@@ -449,8 +449,8 @@ $(window).resize(function(e) {
       cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
-                                        R_iv_cv = input$R_iv_cv, S_iv_cv = input$S_iv_cv,
-                                        R_iv_sd = input$R_iv_sd, S_iv_sd = input$S_iv_sd,
+                                        R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
+                                        R_iv_shape = input$R_iv_shape, S_iv_shape = input$S_iv_shape,
                                         scn_nm = "Current", type = input$ivType,
                                         addl_params = get_addl_params("cur", input)))
 
@@ -465,8 +465,8 @@ $(window).resize(function(e) {
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
-                                    R_iv_cv = input$R_iv_cv, S_iv_cv = input$S_iv_cv,
-                                    R_iv_sd = input$R_iv_sd, S_iv_sd = input$S_iv_sd,
+                                    R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
+                                    R_iv_shape = input$R_iv_shape, S_iv_shape = input$S_iv_shape,
                                     scn_nm = ifelse(z == "", nm, z),
                                     type = input$ivType,
                                     addl_params = get_addl_params(str_remove(nm, "alt_name_"),
