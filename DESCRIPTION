@@ -26,7 +26,7 @@ RoxygenNote: 7.3.2
 Remotes: 
     LandSciTech/bboudata,
     LandSciTech/bboutoolsMultiPop,
-    LandSciTech/caribouMetrics@BbouIntegration
+    LandSciTech/caribouMetrics@BbouIntegrationStable
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
 Suggests: 
