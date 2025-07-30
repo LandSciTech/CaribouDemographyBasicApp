@@ -4,9 +4,9 @@
 \name{CaribouDemographyBasicApp-package}
 \alias{CaribouDemographyBasicApp}
 \alias{CaribouDemographyBasicApp-package}
-\title{CaribouDemographyBasicApp: Explore Demographic Projections for Boreal Caribou}
+\title{CaribouDemographyBasicApp: What the Package Does (One Line, Title Case)}
 \description{
-Explore projections of boreal caribou population growth overtime based on demographic rates determined from provided recruitment and survival data. Demographic rates are estimated using the caribouMetrics and bboutools packages to build a Basyesian population model. Uncertainty in projected population growth incorporates the uncertainty in extimated demographic rates and interannual variation.
+What the package does (one paragraph).
 }
 \seealso{
 Useful links:
@@ -17,17 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sarah Endicott \email{sarah.endicott@ec.gc.ca} (\href{https://orcid.org/0000-0001-9644-5343}{ORCID})
-
-Authors:
-\itemize{
-  \item Josie Hughes \email{josie.hughes@ec.gc.ca}
-}
-
-Other contributors:
-\itemize{
-  \item His Majesty the King in Right of Canada as represented by the Minister of the Environment [copyright holder]
-}
+\strong{Maintainer}: Sarah Endicott \email{sarah.endicott@canada.ca} (\href{https://orcid.org/0000-0001-9644-5343}{ORCID})
 
 }
 \keyword{internal}
