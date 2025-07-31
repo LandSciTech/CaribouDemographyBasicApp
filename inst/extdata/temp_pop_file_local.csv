@@ -1,60 +1,11 @@
-pop_name,R_bar,R_sd,R_iv_mean,R_iv_shape,R_bar_lower,R_bar_upper,S_bar,S_sd,S_iv_mean,S_iv_shape,S_bar_lower,S_bar_upper,Year,N0,nCollarYears,nSurvYears,nCowsAllYears,nRecruitYears,description
-Basse-Côte-Nord,0.268557778,0.133516279,0.102613961,1.420725508,0.219846536,0.322324845,0.846925692,0.540623834,0.4314237,3.248512109,0.671148565,0.946282377,2020,175,51,2,360,4,"<img src=""www/BOCA_provrangesLabelled_2020_LkReservoirs_map.jpg"" width=""600"">
+"pop_name","R_bar","R_sd","R_iv_mean","R_iv_shape","R_bar_lower","R_bar_upper","S_bar","S_sd","S_iv_mean","S_iv_shape","S_bar_lower","S_bar_upper","Year","N0","nCollarYears","nSurvYears","nCowsAllYears","nRecruitYears","description"
+"A",0.189025128262174,0.0826361082227598,0.319478381552015,26.7306057406194,0.16431573075255,0.214652141498479,0.882448613343552,0.242154927778965,0.490993077260453,12.9467920989741,0.82297018378807,0.923261957291522,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
 
-Les données ont été compilées par Rebecca Viejou à partir de sources publiées.
+#### Sources
 
-**Sources**  
-Basse-Côte-Nord:   
-Heppell, S., A. Massé, A. St-Louis et I. Thibault (2013). Projet d’acquisition de connaissances sur le
-caribou forestier dans l’aire d’entrainement militaire CYA 733 : rapport final – travaux 2012 –
-2013, Ministère du Développement durable, de l’Environnement, de la Faune et des Parcs, 36 p.
-https://mffp.gouv.qc.ca/wp-content/uploads/CoteNord_2013.pdf
+Markdown formating can be used to **bold** or *italicize* text. Or create lists:
+  - Item 1
+  - Item 2
 
-Heppell, S. (2019). Inventaire aérien du caribou forestier (*Rangifer tarandus caribou*) au cours de l’hiver
-2019 dans le secteur de la Basse-Côte-Nord, Ministère des Forêts, de la Faune et des Parcs,
-Direction de la gestion de la faune de la Côte-Nord, 24 p.  
-https://mffp.gouv.qc.ca/wp-content/uploads/CoteNord_2019a.pdf
-
-Heppell, S. (2020). Inventaire aérien de caribous forestiers (*Rangifer tarandus caribou*) dans les secteurs
-sud de Manicouagan et de la Moyenne-Côte-Nord à l’hiver 2020, Ministère des Forêts, de la
-Faune et des Parcs, Direction de la gestion de la faune de la Côte-Nord, Québec, 31 p. 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_Inventaire_caribou_cote-nord_2020.pdf
-
-Manicouagan:   
-Heppell, S. et L. Boissonneault (2021). Inventaire aérien de la population de caribous forestiers (*Rangifer
-tarandus caribou*) Manicouagan à l’hiver 2021. Ministère des Forêts, de la Faune et des Parcs, Direction
-de la gestion de la faune de la Côte-Nord, Québec, 21 p. et annexes 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_Inventaire_caribou_Manicouagan_2021_MFFP.pdf
-
-Outardes:   
-Brodeur, A., S. Heppell et L. Boissonneault (2022). Inventaire aérien de la population de caribous
-forestiers (*Rangifer tarandus caribou*) Outardes et du secteur sud-ouest de la population
-Caniapiscau à l’hiver 2022. Québec : ministère de l’Environnement, de la Lutte contre les
-changements climatiques, de la Faune et des Parcs, Direction de la gestion de la faune de la
-Côte-Nord, 23 p. + annexes. 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_inventaire_caribou_Outardes_hiver2022_MELCCFP.pdf
-
-Pipmuacan:  
-Dussault, C. (2013). Inventaire du caribou forestier à l’hiver 2012 au Saguenay–Lac-Saint-Jean, Société
-de la Faune et des Parcs du Québec, Direction de l’aménagement de la faune du Saguenay–
-Lac-Saint-Jean, 20 p. 
-https://mffp.gouv.qc.ca/wp-content/uploads/SLSJ_2012.pdf
-
-Plourde, J., A. Landry et S. Gravel (2020). Inventaire aérien de caribous forestiers (*Rangifer
-tarandus caribou*) du secteur Pipmuacan à l’hiver 2020, ministère des Forêts, de la Faune et des Parcs,
-Direction de la gestion de la faune du Saguenay–Lac-Saint-Jean, Québec, 17 p. 
-https://mffp.gouv.qc.ca/wp-content/uploads/RA_inventaire_caribou_Pipmuacan_SLSJ_2020.pdf
-
-Nottaway:  
-Szor, G., et Brodeur, V. (2017). Inventaire aérien de la population de caribous forestiers (*Rangifer 
-tarandus caribou*) de la harde Nottaway. Ministère des Forêts, dela Faune et des Parcs, Direction de la
-gestion de la faune Nord - du - Québec. en mars 2016.
- https://mffp.gouv.qc.ca/wp-content/uploads/NordDuQc_2016.pdf
-
-Szor, G., et G. Gingras. 2022. Inventaire aérien de la population de caribous forestiers (*Rangifer 
-tarandus caribou*) Nottaway à l’hiver 2022. Ministère des Forêts, de la Faune et des Parcs, Direction de la
-gestion de la faune du Nord-du-Québec, Québec, 22 p. + annexes.
-https://mffp.gouv.qc.ca/documents/faune/inventaire-aerien-caribous-forestiers-detour.pdf"
-Caniapiscau,0.184340959,0.131291777,0.102613961,1.420725508,0.146916315,0.224019961,0.964452447,0.874990108,0.4314237,3.248512109,0.858653138,0.994765135,2022,484,43,2,518,4,NA
-Manicouagan,0.246634669,0.168105968,0.102613961,1.420725508,0.188282893,0.308731201,0.735975439,0.385899241,0.4314237,3.248512109,0.568706514,0.862515544,2021,930,71,3,277,2,NA
-Nottaway,0.213776265,0.197075162,0.102613961,1.420725508,0.15582561,0.282246413,0.797450676,0.392818373,0.4314237,3.248512109,0.649651005,0.897117019,2022,282,74,4,149,2,NA
+See [here](https://www.markdownguide.org/cheat-sheet/) for more details about markdown"
+"B",0.20423283919114,0.10810892335854,0.319478381552015,26.7306057406194,0.171846331413029,0.240239833912563,0.907322872253765,0.293248203736803,0.490993077260453,12.9467920989741,0.848271144017514,0.947007552906122,2021,1000,519,18,2001,15,NA

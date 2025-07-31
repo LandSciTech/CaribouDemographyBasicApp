@@ -326,11 +326,11 @@ $(window).resize(function(e) {
             ),
             sliderInput("S_iv_shape",
                         label = i18n$t("Shape of the distribution of interannual variation of survival rate"),
-                        value = iv_default$S_SHAPE, min = 0.01, max = 7,step=0.1
+                        value = iv_default$S_SHAPE, min = 0.01, max = 50, step=0.1
             ),
             sliderInput("R_iv_shape",
                         label = i18n$t("Shape of the distribution of interannual variation of calves per 100 females"),
-                        value = iv_default$R_SHAPE, min = 0.01, max = 7,step=0.1
+                        value = iv_default$R_SHAPE, min = 0.01, max = 50, step=0.1
             )
           )
         ),
