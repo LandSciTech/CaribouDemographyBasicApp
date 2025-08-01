@@ -9,8 +9,23 @@
 #' @export
 #'
 run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_data = TRUE){
-
+# default data is stored in the package but if the user updates the data it is
+# stored in data_dir
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
+  data_dir <- tools::R_user_dir("CaribouDemographyBasicApp", "data")
+  if(!dir.exists(data_dir)) dir.create(data_dir)
+  if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
+
+  # use data_dir version if it works and copy it into www so app can find images
+  if(file.exists(file.path(data_dir, "temp_pop_file_local.csv"))){
+    pop_file_temp <- read.csv(file.path(data_dir, "temp_pop_file_local.csv"))
+    file.copy(from = file.path(data_dir, "www"), to = inst_dir,
+              recursive = TRUE)
+  } else {
+    pop_file_temp <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
+  }
+
+
 
   #Authenticate Google Sheets
   if(!private){
@@ -50,9 +65,6 @@ $(window).resize(function(e) {
 "
 
   mod_defaults <- caribouPopGrowth %>% formals() %>% eval()
-
-  pop_file_temp <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
-
   # UI #-------------------------------------------------------------------------
   {
     ui <-  page_sidebar(
@@ -926,6 +938,10 @@ $(window).resize(function(e) {
 
         # update the reactive value
         all_pops(pop_file_in)
+
+        # update the figures in www
+        file.copy(from = file.path(data_dir, "www"), to = inst_dir,
+                  recursive = TRUE)
 
         shiny::removeModal()
         nav_select(id = "body", selected = "input_data_tab")

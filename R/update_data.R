@@ -1,7 +1,7 @@
 #' Get updated data from google spreadsheet
 #'
 #' @param survey_url sheet url
-#' @param inst_dir dir where results are saved
+#' @param save_dir dir where results are saved
 #' @param shiny_progress Is this inside a shiny app and called with `shiny::withProgress`
 #'
 #' @returns A data frame with the population estimates.
@@ -10,7 +10,7 @@
 #' @examples
 #' googlesheets4::gs4_deauth()
 #' update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
-update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDemographyBasicApp"),
+update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data"),
                         i18n = NULL, lang = "en",
                         shiny_progress = FALSE){
   # set plot theme
@@ -100,7 +100,7 @@ update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDem
   pop_file_in <- subset(pop_file_in, is.element(pop_name,pops_run))
 
   bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
-                  fig_dir = file.path(inst_dir, "www"),
+                  fig_dir = file.path(save_dir, "www"),
                   i18n = i18n,
                   show_interpolated = FALSE)
 
@@ -125,7 +125,7 @@ update_data <- function(survey_url, inst_dir = system.file(package = "CaribouDem
   print(end - start)
 
   # save the file locally so only re-run when asked
-  write.csv(pop_file_in, file.path(inst_dir, "extdata", "temp_pop_file_local.csv"), row.names = FALSE)
+  write.csv(pop_file_in, file.path(save_dir, "temp_pop_file_local.csv"), row.names = FALSE)
 
   pop_file_in
 

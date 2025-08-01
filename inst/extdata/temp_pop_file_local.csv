@@ -1,11 +1,19 @@
 "pop_name","R_bar","R_sd","R_iv_mean","R_iv_shape","R_bar_lower","R_bar_upper","S_bar","S_sd","S_iv_mean","S_iv_shape","S_bar_lower","S_bar_upper","Year","N0","nCollarYears","nSurvYears","nCowsAllYears","nRecruitYears","description"
-"A",0.189025128262174,0.0826361082227598,0.319478381552015,26.7306057406194,0.16431573075255,0.214652141498479,0.882448613343552,0.242154927778965,0.490993077260453,12.9467920989741,0.82297018378807,0.923261957291522,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
+"A",0.189611821704941,0.0827927238818965,0.31572776262552,25.9901859588135,0.165589264445983,0.215782275339744,0.883045043281014,0.232241071109981,0.500178896280864,12.7439776195635,0.829042899334669,0.922839776391803,2020,500,900,31,2353,27,"This is simulated example data from the bboudata R package. It is intended to illustrate methods, and does not reflect reality for any particular boreal caribou population.
 
-#### Sources
+This text is included in the ""data_description"" tab of the survey data spreadsheet. See the example [here](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing).
 
-Markdown formating can be used to **bold** or *italicize* text. Or create lists:
+If you want to include formatted text in the description you need to use the Markdown language.  Below are some examples but see [here](https://www.markdownguide.org/cheat-sheet/) for more details about markdown.
+
+Markdown formating can be used to **bold** or *italicize* text, create [links](www.google.com), or create lists:
   - Item 1
   - Item 2
 
-See [here](https://www.markdownguide.org/cheat-sheet/) for more details about markdown"
-"B",0.20423283919114,0.10810892335854,0.319478381552015,26.7306057406194,0.171846331413029,0.240239833912563,0.907322872253765,0.293248203736803,0.490993077260453,12.9467920989741,0.848271144017514,0.947007552906122,2021,1000,519,18,2001,15,NA
+And headings: 
+
+#### Heading 1
+
+##### Heading 2
+
+Note in Google Sheets you can use Ctrl-Enter to add a new line."
+"B",0.203159911923042,0.103340439156508,0.31572776262552,25.9901859588135,0.172237214018008,0.236876570891607,0.907381465567617,0.284613871052887,0.500178896280864,12.7439776195635,0.852339549337524,0.947529488222788,2021,1000,519,18,2001,15,NA
