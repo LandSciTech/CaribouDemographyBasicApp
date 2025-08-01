@@ -24,7 +24,7 @@ if(!requireNamespace("remotes", quietly = TRUE)){
   install.packages("remotes", type = "binary", )
 }
 # installs the app and all it's dependencies
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp@dev",
                         type = "binary", upgrade = "always")
 
 # Update the data
