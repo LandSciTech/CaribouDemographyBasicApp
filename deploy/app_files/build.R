@@ -39,6 +39,6 @@ i18n$set_translation_language("fr") # default translation to display
 
 def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"
 message("updating caribou demography app data")
-update_data(def_survey_url, i18n = i18n)
+update_data(def_survey_url, i18n = i18n, save_dir = inst_dir)
 
 
