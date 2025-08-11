@@ -5,7 +5,7 @@ library(CaribouDemographyBasicApp)
 
 # shinytest2::record_test(run_caribou_demog_app())
 
-vig_pics <- here::here("vignettes/snaphots")
+vig_pics <- here::here("vignettes/snapshots")
 
 # delete because can't overwrite
 unlink(vig_pics, recursive = TRUE)
@@ -96,6 +96,7 @@ test_that("App loads properly", {
   )
   app$click("run_model")
   app$wait_for_idle()
+  Sys.sleep(5)
 
   app$get_screenshot(file.path(vig_pics, "alt_results.png"))
 
