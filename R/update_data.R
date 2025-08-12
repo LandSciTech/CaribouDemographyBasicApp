@@ -13,6 +13,11 @@
 update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data"),
                         i18n = NULL, lang = "en",
                         shiny_progress = FALSE){
+
+  if(!dir.exists(save_dir)) dir.create(save_dir)
+  if(!dir.exists(file.path(save_dir, "www"))) dir.create(file.path(save_dir, "www"))
+  if(!dir.exists(file.path(save_dir, "extdata"))) dir.create(file.path(save_dir, "extdata"))
+
   # set plot theme
   theme_set(
     theme_classic()+
@@ -125,7 +130,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   print(end - start)
 
   # save the file locally so only re-run when asked
-  write.csv(pop_file_in, file.path(save_dir, "temp_pop_file_local.csv"), row.names = FALSE)
+  write.csv(pop_file_in, file.path(save_dir, "extdata/temp_pop_file_local.csv"), row.names = FALSE)
 
   pop_file_in
 
