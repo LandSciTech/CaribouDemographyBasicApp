@@ -4,10 +4,21 @@
 \alias{run_caribou_demog_app}
 \title{Run the Boreal Caribou Demographic Projection Explorer}
 \usage{
-run_caribou_demog_app(private = FALSE, lang = "en")
+run_caribou_demog_app(
+  private = FALSE,
+  lang = "en",
+  allow_update_data = TRUE,
+  data_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data")
+)
 }
 \arguments{
-\item{private}{If private then you will need to follow instructions in console to authenticate google drive}
+\item{private}{If private then you will need to follow instructions in console to authenticate google drive.}
+
+\item{lang}{Language to launch the app in. Options are "en" or "fr".}
+
+\item{allow_update_data}{Should the update data button be available?}
+
+\item{data_dir}{Directory where data can be stored on the users computer.}
 }
 \value{
 launches the app in your default browser

@@ -6,7 +6,7 @@
 \usage{
 update_data(
   survey_url,
-  inst_dir = system.file(package = "CaribouDemographyBasicApp"),
+  save_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data"),
   i18n = NULL,
   lang = "en",
   shiny_progress = FALSE
@@ -15,7 +15,7 @@ update_data(
 \arguments{
 \item{survey_url}{sheet url}
 
-\item{inst_dir}{dir where results are saved}
+\item{save_dir}{dir where results are saved}
 
 \item{shiny_progress}{Is this inside a shiny app and called with \code{shiny::withProgress}}
 }

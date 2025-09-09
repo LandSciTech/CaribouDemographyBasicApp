@@ -61,5 +61,6 @@ Imports:
     stringr,
     waiter,
     bboutools,
-    markdown
+    markdown,
+    tools
 VignetteBuilder: knitr
