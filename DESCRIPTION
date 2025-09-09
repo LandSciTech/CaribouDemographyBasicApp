@@ -63,5 +63,6 @@ Imports:
     markdown,
     tools,
     rmarkdown,
-    bookdown
+    bookdown,
+    here
 VignetteBuilder: knitr
