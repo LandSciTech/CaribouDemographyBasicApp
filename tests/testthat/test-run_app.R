@@ -1,7 +1,15 @@
 library(shinytest2)
 library(CaribouDemographyBasicApp)
 
+# Note these tests use the installed version so must build and install before testing changes
+
 # shinytest2::record_test(run_caribou_demog_app())
+
+vig_pics <- here::here("vignettes/snapshots")
+
+# delete because can't overwrite
+unlink(vig_pics, recursive = TRUE)
+dir.create(vig_pics)
 
 test_that("App loads properly", {
   skip_on_ci()
@@ -13,11 +21,12 @@ test_that("App loads properly", {
   app$set_window_size(width = 1700, height = 1400)
   Sys.sleep(2)
   app$wait_for_idle()
-  app$expect_screenshot(name = "welcome")
+  app$get_screenshot(file.path(vig_pics, "welcome.png"))
 
   app$set_inputs(body = "input_data_tab")
   app$wait_for_idle()
-  app$expect_screenshot(name = "input_data")
+  app$get
+  app$get_screenshot(file.path(vig_pics, "input_data.png"))
 
   app$set_window_size(width = 1619, height = 1065)
   app$set_inputs(
@@ -44,21 +53,18 @@ test_that("App loads properly", {
     wait_ = FALSE
   )
 
-  n <- ""
-  # n <- 1
-  # n <- n+1
   app$set_window_size(width = 1000, height = 1000)
   app$set_inputs(dimension = c(10000,1000), allow_no_input_binding_ = TRUE)
   app$click("run_model")
   app$wait_for_idle()
-  app$expect_screenshot(name = paste0("pop_plot", n), selector = "#pop_plot")
+  app$get_screenshot(file.path(vig_pics, "pop_plot.png"), selector = "#pop_plot")
 
 
   app$set_window_size(width = 1619, height = 1565)
-  app$expect_screenshot(name = paste0("pop_table", n), selector = "#pop_table_card")
-  app$expect_screenshot(name = paste0("r_m_plot", n), selector = "#r_m_plot")
+  app$get_screenshot(file.path(vig_pics, "pop_table.png"), selector = "#pop_table_card")
+  app$get_screenshot(file.path(vig_pics, "r_m_plot.png"), selector = "#r_m_plot")
 
-  app$expect_screenshot(name = paste0("full_results", n))
+  app$get_screenshot(file.path(vig_pics, "full_results.png"))
   # shell.exec(paste0("C:/Users/ENDICO~1/AppData/Local/Temp/RtmpIREbKJ/st2-685c62b657b6/full_results", n, ".png"))
 
 
@@ -90,8 +96,9 @@ test_that("App loads properly", {
   )
   app$click("run_model")
   app$wait_for_idle()
+  Sys.sleep(5)
 
-  app$expect_screenshot(name = paste0("alt_results", n))
+  app$get_screenshot(file.path(vig_pics, "alt_results.png"))
 
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
     stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%

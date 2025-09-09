@@ -24,7 +24,7 @@ if(!requireNamespace("remotes", quietly = TRUE)){
   install.packages("remotes", type = "binary", )
 }
 # installs the app and all it's dependencies
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp@dev",
                         type = "binary", upgrade = "always")
 
 # Update the data
@@ -39,6 +39,6 @@ i18n$set_translation_language("fr") # default translation to display
 
 def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"
 message("updating caribou demography app data")
-update_data(def_survey_url, i18n = i18n)
+update_data(def_survey_url, i18n = i18n, save_dir = inst_dir)
 
 

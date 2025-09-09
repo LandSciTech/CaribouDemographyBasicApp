@@ -122,7 +122,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   dev.off()
 
   png(file.path(fig_dir,"recBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
-  plt <- bb_plot_year_recruitment(recruit_fit)
+  plt <- bb_plot_year_calf_cow_ratio(recruit_fit)
 
   # colour points based on whether the population had data in that year or if it
   # is borrowed from other populations/years

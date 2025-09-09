@@ -9,8 +9,24 @@
 #' @export
 #'
 run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_data = TRUE){
-
+# default data is stored in the package but if the user updates the data it is
+# stored in data_dir
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
+  data_dir <- tools::R_user_dir("CaribouDemographyBasicApp", "data")
+  if(!dir.exists(data_dir)) dir.create(data_dir)
+  if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
+  if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
+
+  # use data_dir version if it works and copy it into www so app can find images
+  if(file.exists(file.path(data_dir, "extdata/temp_pop_file_local.csv"))){
+    pop_file_temp <- read.csv(file.path(data_dir, "extdata/temp_pop_file_local.csv"))
+    file.copy(from = file.path(data_dir, "www"), to = inst_dir,
+              recursive = TRUE)
+  } else {
+    pop_file_temp <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
+  }
+
+
 
   #Authenticate Google Sheets
   if(!private){
@@ -50,9 +66,6 @@ $(window).resize(function(e) {
 "
 
   mod_defaults <- caribouPopGrowth %>% formals() %>% eval()
-
-  pop_file_temp <- read.csv(file.path(inst_dir, "extdata/temp_pop_file_local.csv"))
-
   # UI #-------------------------------------------------------------------------
   {
     ui <-  page_sidebar(
@@ -274,8 +287,8 @@ $(window).resize(function(e) {
       # } else {
       #   iv_default <- eval(formals(caribouPopGrowth)$interannualVar)
       #   iv_default$type <- "beta"
-      #   iv_default$R_SD <- 0
-      #   iv_default$S_SD <- 0
+      #   iv_default$R_shape <- 0
+      #   iv_default$S_shape <- 0
       #
       #   pop_default <- demographicRates(data.frame(fire = 0, Anthro = 0, fire_excl_anthro = 0),
       #                                   demographicCoefficients(100)) %>%
@@ -316,21 +329,21 @@ $(window).resize(function(e) {
                          label = i18n$t("Standard deviation of calves per 100 females"),
                          value = round(pop_default$R_sd, 3)
             ),
-            sliderInput("S_iv_cv",
+            sliderInput("S_iv_mean",
                         label = i18n$t("Interannual variation of survival rate"),
-                        value = iv_default$S_CV, min = 0, max = 2, step = 0.01
+                        value = iv_default$S_MEAN, min = 0.01, max = 2, step = 0.01
             ),
-            sliderInput("R_iv_cv",
+            sliderInput("R_iv_mean",
                         label = i18n$t("Interannual variation of calves per 100 females"),
-                        value = iv_default$R_CV, min = 0, max = 2, step = 0.01
+                        value = iv_default$R_MEAN, min = 0.01, max = 2, step = 0.01
             ),
-            sliderInput("S_iv_sd",
-                        label = i18n$t("Uncertainty about interannual variation of survival rate"),
-                        value = iv_default$S_SD, min = 0, max = 1.5,step=0.01
+            sliderInput("S_iv_shape",
+                        label = i18n$t("Shape of the distribution of interannual variation of survival rate"),
+                        value = iv_default$S_SHAPE, min = 0.01, max = 50, step=0.1
             ),
-            sliderInput("R_iv_sd",
-                        label = i18n$t("Uncertainty about interannual variation of calves per 100 females"),
-                        value = iv_default$R_SD, min = 0, max = 1.5,step=0.01
+            sliderInput("R_iv_shape",
+                        label = i18n$t("Shape of the distribution of interannual variation of calves per 100 females"),
+                        value = iv_default$R_SHAPE, min = 0.01, max = 50, step=0.1
             )
           )
         ),
@@ -449,8 +462,8 @@ $(window).resize(function(e) {
       cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
-                                        R_iv_cv = input$R_iv_cv, S_iv_cv = input$S_iv_cv,
-                                        R_iv_sd = input$R_iv_sd, S_iv_sd = input$S_iv_sd,
+                                        R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
+                                        R_iv_shape = input$R_iv_shape, S_iv_shape = input$S_iv_shape,
                                         scn_nm = "Current", type = input$ivType,
                                         addl_params = get_addl_params("cur", input)))
 
@@ -465,8 +478,8 @@ $(window).resize(function(e) {
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
-                                    R_iv_cv = input$R_iv_cv, S_iv_cv = input$S_iv_cv,
-                                    R_iv_sd = input$R_iv_sd, S_iv_sd = input$S_iv_sd,
+                                    R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
+                                    R_iv_shape = input$R_iv_shape, S_iv_shape = input$S_iv_shape,
                                     scn_nm = ifelse(z == "", nm, z),
                                     type = input$ivType,
                                     addl_params = get_addl_params(str_remove(nm, "alt_name_"),
@@ -922,10 +935,15 @@ $(window).resize(function(e) {
 
         withProgress({pop_file_in <- update_data(input$survey_url,
                                                  lang = input$selected_language,
-                                                 shiny_progress = TRUE)})
+                                                 shiny_progress = TRUE,
+                                                 save_dir = data_dir)})
 
         # update the reactive value
         all_pops(pop_file_in)
+
+        # update the figures in www
+        file.copy(from = file.path(data_dir, "www"), to = inst_dir,
+                  recursive = TRUE)
 
         shiny::removeModal()
         nav_select(id = "body", selected = "input_data_tab")
