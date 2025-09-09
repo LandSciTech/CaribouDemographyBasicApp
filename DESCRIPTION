@@ -31,7 +31,6 @@ URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
 Suggests: 
     beepr,
-    here,
     knitr,
     shinytest2,
     testthat (>= 3.0.0)

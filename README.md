@@ -4,9 +4,12 @@
 # CaribouDemographyBasicApp
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/LandSciTech/CaribouDemographyBasicApp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/CaribouDemographyBasicApp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
 <h5 id="intro-purpose"><strong>Purpose</strong></h5>
-<img align="right" src="C:/Users/EndicottS/AppData/Local/Programs/R/R-4.4.1/library/CaribouDemographyBasicApp/www/Female_caribou_and_calves.jpg" width="500">
+<img align="right" src="C:/Users/EndicottS/AppData/Local/Temp/RtmpILMaDs/temp_libpath5c407035630/CaribouDemographyBasicApp/www/Female_caribou_and_calves.jpg" width="500">
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. 
 <p>Projections include uncertainty about the

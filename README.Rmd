@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # CaribouDemographyBasicApp
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/LandSciTech/CaribouDemographyBasicApp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/CaribouDemographyBasicApp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ```{r, echo=FALSE, results='asis'}
