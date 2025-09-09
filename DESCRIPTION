@@ -62,5 +62,6 @@ Imports:
     bboutools,
     markdown,
     tools,
-    rmarkdown
+    rmarkdown,
+    bookdown
 VignetteBuilder: knitr
