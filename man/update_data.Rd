@@ -19,13 +19,6 @@ update_data(
 
 \item{shiny_progress}{Is this inside a shiny app and called with \code{shiny::withProgress}}
 }
-\value{
-A data frame with the population estimates.
-}
 \description{
 Get updated data from google spreadsheet
-}
-\examples{
-googlesheets4::gs4_deauth()
-update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
 }
