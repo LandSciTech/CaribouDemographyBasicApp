@@ -1,0 +1,101 @@
+---
+title: "Utilisation de l’application"
+output: 
+  bookdown::html_document2:
+      base_format: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Utilisation de l’application}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  echo = FALSE,
+  message = FALSE, 
+  warning = FALSE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CaribouDemographyBasicApp)
+lang <- "fr"
+```
+
+```{=html}
+<!--- A vignette to outline the uses of the app including: General description of the interface Uncertainty
+How to update data
+Technical write up on how models are fit that refers back to bboutools/caribouMetrics --->
+```
+
+# Utilisation de l’application
+
+L’application « Explorateur de projections démographiques du caribou boréal » est conçue pour offrir une interface conviviale permettant d’explorer les données démographiques et les indicateurs liés au caribou boréal. L’application permet aux utilisateurs de visualiser et d’analyser la dynamique des populations de caribous, notamment les taux de survie, le recrutement et les tendances démographiques.
+
+Cette application est conçue pour utiliser les méthodes existantes développées dans les packages R <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a> et <a href="https://landscitech.github.io/caribouMetrics/" target="_blank">caribouMetrics</a> afin d’estimer les taux démographiques et de projeter la croissance future des populations, tout en intégrant l’incertitude associée à ces estimations. Les taux démographiques présentés dans l’application proviennent d’inventaires de survie et de recrutement, toutes deux estimées à partir de relevés sur le terrain de caribous munis de colliers [@nbckc2021; @nbckc2022]. En général, les caribous femelles sont capturés à la fin de l’hiver et équipés de colliers qui transmettent des données sur leur localisation et leur survie. Le recrutement est estimé en comptant le nombre de faons par femelle dans les groupes contenant des caribous suivis par collier. Les inventaires de recrutement sont généralement effectuées environ neuf mois après la mise bas, ce qui représente le nombre de faons nés et ayant survécu jusqu’au relevé. Ces données d’inventaires sont utilisées pour estimer le **% de survie des femelles** et le nombre de **faons pour 100 femelles**. Ces taux démographiques peuvent être combinés dans un simple modèle de population recrutement-mortalité [@hatter1991; @hatter2020] pour projeter la croissance de la population dans le temps.
+
+## Utilisation typique de l’application
+
+En général, l’application est mise à disposition des utilisateurs avec les données de caribous des populations d’intérêt déjà chargées dans l’application. Les utilisateurs peuvent alors explorer les taux démographiques et les projections pour ces populations.
+
+- L’onglet **Accueil** fournit un aperçu de l’application et de ses fonctionnalités. Dans la barre latérale, les utilisateurs peuvent choisir la langue (français ou anglais) et sélectionner les options utilisées dans l'onglet **Projections**.
+- Les utilisateurs peuvent accéder à l’onglet **Données d’inventaires** pour consulter les données utilisées afin de calculer les taux démographiques, y compris les taux de survie et de recrutement. Cet onglet comporte 5 sections débutant avec une description des données rédigée par les fournisseurs ainsi qu’un avertissement. La description des données peut être affichée en plein écran pour une lecture plus aisée en sélectionnant le bouton « expand » en bas et à droite de la fenêtre. 
+- La section suivante contient des graphiques montrant les données des relevés utilisées pour déterminer les estimés de taux démographiques. Les graphiques de survie montrent combien de caribous ont été équipés de colliers et combien sont morts, tandis que les graphiques de recrutement montrent le nombre d’animaux par catégorie recensés lors du relevé. Vous pouvez basculer entre les graphiques de survie et de recrutement en cliquant sur le bouton situé en haut à droite de la section « Résumé des données d’inventaires ».
+- La section suivante montre les taux démographiques estimés par le modèle pour chaque population et chaque année. Le point représente la valeur médiane et la ligne, la plage des valeurs plausibles. Par exemple, si la survie médiane estimée est de 80 % et la plage se situe entre 76 % et 86 %, cela signifie que la valeur centrale de toutes les estimations est de 80 % et que 95 % de toutes les estimations se trouvent entre 76 % et 86 %. Voir la section \@ref(technical-details) pour plus de détails.
+- Enfin, la section « Résumé des données » contient un tableau indiquant la population initiale utilisée pour lancer les projections, l’année de ce recensement initial et le nombre d’années de données disponibles pour la survie et le recrutement.
+
+
+```{r out.width=600}
+# knitr::include_graphics(here::here("inst", "www", "survivalSummary.png" ))
+# knitr::include_graphics(here::here("inst", "www", "recruitmentSummary.png" ))
+knitr::include_graphics(here::here("vignettes/snapshots", paste0("input_data_", lang, ".png" )))
+```
+
+- L’onglet **Projections** est l’endroit où les utilisateurs peuvent visualiser la croissance de la population au fil du temps selon les taux démographiques actuels et explorer des scénarios alternatifs. Dans la barre latérale, les utilisateurs peuvent sélectionner la population de caribous et le nombre d'années pour la simulation. Pour mettre à jour les résultats affichés dans le graphique, cliquez sur « Exécuter le modèle ». Veuillez noter que les résultats ne seront pas affichés pour les populations pour lesquelles nous ne disposons que d'une seule année de données sur le recrutement ou la survie, car une seule année de données est insuffisante pour établir des prévisions fiables.
+- Le premier graphique montre la taille projetée de la population de femelles adultes dans le temps. La ligne foncée indique la taille estimée si l’on ignore l’incertitude sur les taux démographiques et la variation interannuelle. Les lignes pâles montrent une variété de trajectoires plausibles compte tenu de l’incertitude et de la variation observée entre les années. Seule la population femelle est représentée, car on suppose que le nombre de femelles limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou ascendante, et en déclin si elle est descendante. Si certaines trajectoires plausibles sont à la hausse tandis que d'autres sont à la baisse, il existe une incertitude quant à savoir si la population est en déclin ou non. Des données supplémentaires permettront de réduire l'incertitude du modèle.
+
+
+```{r out.width=600}
+# knitr::include_graphics(here::here("inst", "www", "survivalSummary.png" ))
+# knitr::include_graphics(here::here("inst", "www", "recruitmentSummary.png" ))
+knitr::include_graphics(here::here("vignettes/snapshots", paste0("full_results_", lang, ".png" )))
+```
+
+- Sous le graphique de population se trouve un tableau résumant les taux démographiques du scénario actuel et le nombre d’années estimé avant que la population passe sous 10 femelles. Ce seuil est dit de quasi-extinction, signifiant que si la population tombe en dessous de 10 femelles, elle ne pourra pas se rétablir @eccc2011.
+- Sous le tableau se trouve un diagramme à barres montrant le % de mortalité des femelles et le taux de remplacement des femelles. Les barres colorées montrent la moyenne du % de mortalité et du taux de remplacement pour chaque scénario, et les barres d’erreur montrent les valeurs minimales et maximales prévues compte tenu de l’incertitude.  
+- Une population est considérée comme stable ou en croissance lorsque le taux de remplacement est égal ou supérieur au % de mortalité ce qui signifie que le nombre de faons femelles qui rejoignent la population est supérieur au nombre de femelles adultes qui meurent chaque année.
+
+En plus d’explorer la taille projetée de la population selon les taux démographiques actuels, nous pouvons également explorer des **scénarios** avec des valeurs plus élevées ou plus faibles pour comprendre comment des changements futurs pourraient affecter la population. Par exemple, cliquez sur « Ajouter un scénario alternatif », nommez-le (« Augmenter le recrutement à 29 % »), déplacez le curseur de recrutement à 29, puis cliquez sur «Exécuter le modèle ». Les résultats pour le scénario alternatif seront ajoutés aux graphiques et aux tableaux dans une couleur différente. Nous pouvons constater qu'avec 29 faons pour 100 femelles, la population est plus susceptible d'augmenter au fil du temps, mais il existe encore certaines trajectoires plausibles avec une population en baisse. Le tableau montre que dans le scénario « Augmentation le recrutement à 29% », la différence en pourcentage est de 53 %, ce qui signifie que nous avons augmenté le recrutement de 53 % par rapport à la valeur du scénario actuel si par exemple la valeur initiale était de 19 (c'est-à-dire $(29 - 19)/19 \times 100 = 53$). Cet onglet comprend également un glossaire des termes utilisés ainsi qu'une foire aux questions.
+
+
+```{r out.width=600}
+knitr::include_graphics(here::here("vignettes/snapshots", paste0("alt_results_", lang, ".png" )))
+```
+
+## Comment modifier ou mettre à jour les données
+
+Il existe deux façons d’installer l’application :  
+1. Télécharger une version de l’application fournie avec tous les logiciels nécessaires pour l’exécuter et les données de caribous.  (Voir la [Releases page]( https://github.com/LandSciTech/CaribouDemographyBasicApp/releases) ou bien
+2. Installer le package R dans votre propre version de R via la console R (voir les [instructions d’installation](https://github.com/LandSciTech/CaribouDemographyBasicApp?tab=readme-ov-file#installation) pour plus de détails). Seuls les utilisateurs ayant installé le package R via la console, plutôt que la version de l’application fournie, peuvent modifier les données incluses dans l’application.
+L’application utilise des données de survie et de recrutement des caribous stockées dans une Google Sheet pour calculer les taux démographiques. Cela permet à plusieurs utilisateurs de collaborer à la modification des données. Ces données sont téléchargées et utilisées pour ajuster les modèles bayésiens de survie et de recrutement, et les résultats sont stockés dans le package R afin que les modèles n’aient pas besoin d’être réajustés à chaque utilisation de l’application.
+Pour modifier les données utilisées dans l’application, procédez comme suit :
+1. Créez une feuille de calcul Google pour vos données d’enquête. La feuille doit respecter le format utilisé par [bboutools](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data). Vous pouvez copier ce [modèle Google Sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing) et le remplir avec vos propres données.
+2. Partagez votre Google Sheet afin qu’elle puisse être consultée dans l’application. Cliquez sur le bouton **Share** (Partager) en haut à droite de la feuille. Ensuite, donnez l’accès soit à des comptes de messagerie précis, soit définissez les paramètres sur « Toute personne disposant du lien peut consulter ». Copiez le lien pour partager la feuille.
+3. Dans l’application, cliquez sur le bouton **Mettre à jour les données**, collez votre lien dans la zone de texte URL, puis cliquez sur **Mise à jour**.
+4. Si nécessaire, suivez les instructions pour autoriser l’application à accéder à votre compte Google Drive. Pour éviter cela, vous pouvez modifier les paramètres de la feuille Google pour permettre à « Toute personne disposant du lien » de consulter la feuille.
+5. Patientez pendant que le modèle se réajuste ; cela peut prendre environ 5 minutes.
+6. L’application mettra automatiquement à jour les taux démographiques et les projections en fonction des nouvelles données.
+
+## Détails techniques de l’ajustement du modèle {#technical-details}
+L’application utilise le package [`bboutools`](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) pour ajuster des modèles bayésiens aux données démographiques des caribous [@dalgarno2025].  `bboutools` ajuste des modèles bayésiens de recrutement et de survie annuels en utilisant des modèles linéaires généralisés à effets mixtes, où l’année est traitée comme un effet aléatoire si les données couvrent plus de cinq ans.  Les paramètres nécessaires aux projections démographiques sont extraits de ces modèles.  Ils incluent la moyenne, l’écart type, l’intervalle de crédibilité à 95 % ainsi que la variation interannuelle.  
+Il est nécessaire d'extraire les paramètres de l'application plutôt que d'utiliser directement le modèle afin que les paramètres puissent être modifiés pour refléter d'autres scénarios. Les modèles ne sont exécutés que lorsque les données sont mises à jour, et les taux obtenus sont stockés dans l’application pour être utilisés dans les projections. 
+Les taux démographiques et leur variation attendue sont utilisés pour alimenter l’application dans le scénario **Actuel** et pour projeter l’évolution de la population des femelles sur les 20 prochaines années.  La croissance projetée de la population est déterminée à partir de 35 trajectoires simulées, où les taux démographiques sont échantillonnés à partir d’une distribution normale fondée sur la moyenne et l’écart type des taux.  Ensuite, `caribouMetrics::caribouPopGrowth()` exécute un modèle démographique en deux étapes qui projette la croissance sur 20 ans.  En parallèle, une version du modèle fondée uniquement sur les taux moyens (en ignorant la variation interannuelle) est utilisée pour produire l’estimation moyenne de la trajectoire de la population au fil du temps.  
+Ce modèle démographique est réexécuté chaque fois que l’on clique sur **Exécuter le modèle**, ce qui peut entraîner de légères variations dans les graphiques, puisque certaines parties du modèle utilisent des valeurs aléatoires.  Si un scénario alternatif est ajouté, le même modèle est exécuté avec les taux fournis pour projeter la population dans ce scénario.
+
+# Références
+

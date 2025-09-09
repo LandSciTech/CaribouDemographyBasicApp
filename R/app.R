@@ -822,12 +822,29 @@ $(window).resize(function(e) {
       ret
     })
     output$documentation <- renderUI({
-      withMathJax(
-        includeMarkdown(
-          #TODO
-          ".md File to be written"
-        )
+      file_name_lang <- paste0("use_app_", input$selected_language, ".html")
+      vig_file <- system.file(file.path("doc", file_name_lang),
+                                     package = "CaribouDemographyBasicApp")
+      if(vig_file == ""){
+        vig_file <- file.path("vignettes", file_name_lang)
+        if(!file.exists(vig_file))
+        rmarkdown::render(file.path("vignettes", paste0("use_app_", input$selected_language, ".Rmd")),
+                          output_file = here::here(vig_file),
+                          output_options = list(self_contained = TRUE, toc = TRUE))
+      }
+
+      # keep only body
+      vig_html_in <- readLines(vig_file)
+      start <- stringr::str_which(vig_html_in, "</head>") + 1
+      end <- stringr::str_which(vig_html_in, "</body>")
+      drop <- stringr::str_which(vig_html_in, "<h1 class=\"title toc-ignore\">.*</h1>")
+      use <- c(start:(drop-1), (drop+1):end)
+      writeLines(vig_html_in[use], con = file.path(inst_dir, "www", file_name_lang))
+      div(
+        includeHTML(file.path(inst_dir, "www", file_name_lang))
       )
+      # tags$iframe(readLines(file.path(inst_dir, "www", "use_app.html")), width = "100%")
+
     })
 
     output$data_summary <- renderTable({

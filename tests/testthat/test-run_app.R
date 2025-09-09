@@ -11,6 +11,11 @@ vig_pics <- here::here("vignettes/snapshots")
 unlink(vig_pics, recursive = TRUE)
 dir.create(vig_pics)
 
+# do for both languages
+lang <- "en"
+altname <- "Augmentation le recrutement"
+altname <- "Increase recruitment"
+
 test_that("App loads properly", {
   skip_on_ci()
   skip_on_covr()
@@ -18,15 +23,17 @@ test_that("App loads properly", {
   shiny_app <- run_caribou_demog_app()
   app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE), seed = 1234)
 
+  app$set_inputs(selected_language = lang)
+
   app$set_window_size(width = 1700, height = 1400)
   Sys.sleep(2)
   app$wait_for_idle()
-  app$get_screenshot(file.path(vig_pics, "welcome.png"))
+  app$get_screenshot(file.path(vig_pics, paste0("welcome_", lang, ".png")))
 
   app$set_inputs(body = "input_data_tab")
   app$wait_for_idle()
   app$get
-  app$get_screenshot(file.path(vig_pics, "input_data.png"))
+  app$get_screenshot(file.path(vig_pics, paste0("input_data_", lang, ".png")))
 
   app$set_window_size(width = 1619, height = 1065)
   app$set_inputs(
@@ -57,14 +64,14 @@ test_that("App loads properly", {
   app$set_inputs(dimension = c(10000,1000), allow_no_input_binding_ = TRUE)
   app$click("run_model")
   app$wait_for_idle()
-  app$get_screenshot(file.path(vig_pics, "pop_plot.png"), selector = "#pop_plot")
+  app$get_screenshot(file.path(vig_pics, paste0("pop_plot_", lang, ".png")), selector = "#pop_plot")
 
 
   app$set_window_size(width = 1619, height = 1565)
-  app$get_screenshot(file.path(vig_pics, "pop_table.png"), selector = "#pop_table_card")
-  app$get_screenshot(file.path(vig_pics, "r_m_plot.png"), selector = "#r_m_plot")
+  app$get_screenshot(file.path(vig_pics, paste0("pop_table_", lang, ".png")), selector = "#pop_table_card")
+  app$get_screenshot(file.path(vig_pics, paste0("r_m_plot_", lang, ".png")), selector = "#r_m_plot")
 
-  app$get_screenshot(file.path(vig_pics, "full_results.png"))
+  app$get_screenshot(file.path(vig_pics, paste0("full_results_", lang, ".png")))
   # shell.exec(paste0("C:/Users/ENDICO~1/AppData/Local/Temp/RtmpIREbKJ/st2-685c62b657b6/full_results", n, ".png"))
 
 
@@ -73,7 +80,7 @@ test_that("App loads properly", {
     stringr::str_replace_all("\n;", "\n") %>%
     {read.table(text = ., sep = ";", header = TRUE)}
 
-  expect_equal(pop_tbl$Scenario[1], "Current")
+  expect_true(pop_tbl[1,1] %in% c("Current", "Actuel"))
 
 
   app$set_window_size(width = 1619, height = 1565)
@@ -83,7 +90,7 @@ test_that("App loads properly", {
   app$set_inputs(
     alt_S_bar_1 = 88,
     alt_R_bar_1 = 29,
-    alt_name_1 = "Increase recruitment",
+    alt_name_1 = altname,
     addl_params_1 = character(0),
     P_0_1 = 1,
     P_K_1 = 0.6,
@@ -98,14 +105,14 @@ test_that("App loads properly", {
   app$wait_for_idle()
   Sys.sleep(5)
 
-  app$get_screenshot(file.path(vig_pics, "alt_results.png"))
+  app$get_screenshot(file.path(vig_pics, paste0("alt_results_", lang, ".png")))
 
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
     stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
     stringr::str_replace_all("\n;", "\n") %>%
     {read.table(text = ., sep = ";", header = TRUE)}
 
-  expect_equal(pop_tbl$Scenario[2], "Increase recruitment")
+  expect_equal(pop_tbl[2,1], altname)
   app$stop()
 
 })
