@@ -33,7 +33,6 @@ Suggests:
     beepr,
     here,
     knitr,
-    rmarkdown,
     shinytest2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
@@ -62,5 +61,6 @@ Imports:
     waiter,
     bboutools,
     markdown,
-    tools
+    tools,
+    rmarkdown
 VignetteBuilder: knitr
