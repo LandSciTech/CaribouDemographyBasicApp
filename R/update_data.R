@@ -44,8 +44,11 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   if(length(recruit_sh)<1){
     stop("The spreadsheet does not include a sheet named recruit")
   }
+  nms <- c("PopulationName", "Year", "Month", "Day", "Cows",
+           "Bulls", "UnknownAdults", "Yearlings", "Calves")
   survey_recruit <- googlesheets4::read_sheet(survey_url, recruit_sh,
                                               na = "NA") %>%
+    select(any_of(nms)) %>%
     filter(if_all(everything(), \(x)!is.na(x))) %>%
     bboudata::bbd_chk_data_recruitment(multi_pops = TRUE)
 
@@ -69,9 +72,11 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
     stop("The spreadsheet does not include a sheet named 'population'")
   }
 
+  nms <- c("PopulationName", "N", "Year")
   survey_pop <- googlesheets4::read_sheet(survey_url, pop_sh,
-                                          na = "NA")
-  pop_nms <- purrr::map_lgl(list("PopulationName", "N", "Year"),
+                                          na = "NA") %>%
+    select(any_of(nms))
+  pop_nms <- purrr::map_lgl(nms,
                             \(x)stringr::str_detect(colnames(survey_pop), x) %>% any())
 
   if(!all(pop_nms)){

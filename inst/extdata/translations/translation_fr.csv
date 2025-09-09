@@ -94,7 +94,7 @@ The url provided is for a protected Google sheet.,L'URL fournie est celle d'une 
 Click the Authenticate button below and follow the instructions to give this app permission to access files in your Google drive.,Cliquez sur le bouton Authentifier ci-dessous et suivez les instructions pour autoriser cette application à accéder aux fichiers de votre Google Drive.
 "Alternatively, change the settings on the Google sheet so ""Anyone with the link can view""",Vous pouvez également modifier les paramètres de la feuille Google pour que « Toute personne disposant du lien puisse voir »
 Authenticate,Authentifier
-Downloading data from ,Téléchargement de données depuis
+Downloading data from ,"Téléchargement de données depuis "
 Additional model parameters for scenario,Paramètres de modèle supplémentaires pour le scénario
 Maximum recruitment multiplier,Multiplicateur de recrutement maximal
 Recruitment multiplier at carrying capacity,Multiplicateur de recrutement à capacité de charge
