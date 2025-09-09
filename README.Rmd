@@ -44,7 +44,7 @@ install.packages("pkgbuild")
 pkgbuild::check_build_tools()
 
 ```
-Wait for the tool to download and install, following the instructions that pop-up. When installation is complete close R or RStudio and open it again in a fresh session for the changes to take effect. 
+This will check if you already have Rtools installed and if not it will ask you if you would like to install it. Wait for the tool to download and install, following the instructions that pop-up. When installation is complete close R or RStudio and open it again in a fresh session for the changes to take effect. You can run `pkgbuild::check_build_tools()` again to confirm that the installation was successful. 
 
 You can install the CaribouDemographyBasicApp R package by running the following
 in the R console:
@@ -54,6 +54,7 @@ install.packages("remotes")
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
 
 ```
+Note this may take a long time the first time you install it since it will also install all the R packages that CaribouDemographyBasicApp depends on. 
 
 ## Launching the Shiny app
 

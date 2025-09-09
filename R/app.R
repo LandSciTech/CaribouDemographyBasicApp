@@ -3,16 +3,19 @@
 
 #' Run the Boreal Caribou Demographic Projection Explorer
 #'
-#' @param private If private then you will need to follow instructions in console to authenticate google drive
+#' @param private If private then you will need to follow instructions in console to authenticate google drive.
+#' @param lang Language to launch the app in. Options are "en" or "fr".
+#' @param allow_update_data Should the update data button be available?
+#' @param data_dir Directory where data can be stored on the users computer.
 #'
 #' @return launches the app in your default browser
 #' @export
 #'
-run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_data = TRUE){
+run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_data = TRUE,
+                                  data_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data")){
 # default data is stored in the package but if the user updates the data it is
 # stored in data_dir
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
-  data_dir <- tools::R_user_dir("CaribouDemographyBasicApp", "data")
   if(!dir.exists(data_dir)) dir.create(data_dir)
   if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
   if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
