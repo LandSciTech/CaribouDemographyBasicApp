@@ -1,6 +1,6 @@
 Package: CaribouDemographyBasicApp
 Title: Explore Demographic Projections for Boreal Caribou
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: 
    c(person(given = "Sarah",
            family = "Endicott", 
