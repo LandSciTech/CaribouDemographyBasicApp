@@ -26,7 +26,7 @@ test_that("App loads properly", {
   app$set_inputs(selected_language = lang)
 
   app$set_window_size(width = 1700, height = 1400)
-  Sys.sleep(2)
+  Sys.sleep(5)
   app$wait_for_idle()
   app$get_screenshot(file.path(vig_pics, paste0("welcome_", lang, ".png")))
 
@@ -118,7 +118,7 @@ test_that("App loads properly", {
 })
 
 test_that("Update data works properly", {
-  skip("Skipping takes too long")
+  # skip("Skipping takes too long")
   skip_on_ci()
   skip_on_covr()
   skip_if_not_installed("googlesheets4")
