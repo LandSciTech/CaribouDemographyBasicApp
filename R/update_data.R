@@ -3,6 +3,8 @@
 #' @param survey_url sheet url
 #' @param save_dir dir where results are saved
 #' @param shiny_progress Is this inside a shiny app and called with `shiny::withProgress`
+#' @param i18n shiny.i18n translator
+#' @param lang language to select in translator
 #'
 #' @returns A data frame with the population estimates.
 #' @export

@@ -132,10 +132,11 @@ test_that("Update data works properly", {
   app$wait_for_idle(timeout = 7*60*1000)
 
   app$click("run_model", wait_ = FALSE)
+  Sys.sleep(5)
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
     stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
     stringr::str_replace_all("\n;", "\n") %>%
-    {readr::read_delim(., delim = ";", skip_empty_rows = TRUE)}
+    {read.table(text = ., sep = ";", header = TRUE)}
 
   pop_nm <- app$get_text("#pop_name")
 

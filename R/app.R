@@ -188,7 +188,7 @@ $(window).resize(function(e) {
       input$selected_language
       # languages tbl
       lang_choice <- data.frame(
-        language = c("English", "Français"),
+        language = c("English", "Fran\u00E7ais"),
         code = c("en", "fr")
       )
       lang_choice <- lang_choice$code %>% set_names(lang_choice$language)
@@ -275,7 +275,7 @@ $(window).resize(function(e) {
     })
 
     # make reactive so it can be updated
-    pop_file <- reactiveVal(pop_file_temp %>% filter(pop_name == "Basse-Côte-Nord"))
+    pop_file <- reactiveVal(pop_file_temp %>% filter(pop_name == "Basse-C\u00F4te-Nord"))
     all_pops <- reactiveVal(pop_file_temp)
 
     # Current population --------------------------------

@@ -8,6 +8,7 @@
 #' @param i18n shiny.i18n object. Used of translation in Shiny app.
 #' @param ht numeric. Height in pixels
 #' @param wt numeric. Width in pixels
+#' @param show_interpolated should estimates be shown for years where there were no surveys?
 #'
 #' @return Nothing. Figures are saved to `fig_dir`.
 #' @export
