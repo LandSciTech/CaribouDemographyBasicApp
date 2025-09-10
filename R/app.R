@@ -16,7 +16,7 @@ run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_dat
 # default data is stored in the package but if the user updates the data it is
 # stored in data_dir
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
-  if(!dir.exists(data_dir)) dir.create(data_dir)
+  if(!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
   if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
   if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
 
