@@ -16,16 +16,19 @@ run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_dat
 # default data is stored in the package but if the user updates the data it is
 # stored in data_dir
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
-  if(!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
-  if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
-  if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
+  if(allow_update_data){
+    if(!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
+    if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
+    if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
 
-  if(!dir.exists(data_dir)){
-    warning(data_dir, "does not exist and was not sucessfully created.")
+    if(!dir.exists(data_dir)){
+      warning(data_dir, "does not exist and was not sucessfully created.")
+    }
+
   }
 
   # use data_dir version if it works and copy it into www so app can find images
-  if(file.exists(file.path(data_dir, "extdata/temp_pop_file_local.csv"))){
+  if(file.exists(file.path(data_dir, "extdata/temp_pop_file_local.csv")) && allow_update_data){
     pop_file_temp <- read.csv(file.path(data_dir, "extdata/temp_pop_file_local.csv"))
     file.copy(from = file.path(data_dir, "www"), to = inst_dir,
               recursive = TRUE)
@@ -290,7 +293,10 @@ $(window).resize(function(e) {
         select(contains("iv")) %>%
         rename_with(\(x)str_remove(x, "_iv") %>% str_to_upper())
 
-      iv_default$type <- "logistic"
+      if(nrow(iv_default) > 0){
+        iv_default$type <- "logistic"
+      }
+
       # } else {
       #   iv_default <- eval(formals(caribouPopGrowth)$interannualVar)
       #   iv_default$type <- "beta"
