@@ -20,6 +20,10 @@ run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_dat
   if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
   if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
 
+  if(!dir.exists(data_dir)){
+    warning(data_dir, "does not exist and was not sucessfully created.")
+  }
+
   # use data_dir version if it works and copy it into www so app can find images
   if(file.exists(file.path(data_dir, "extdata/temp_pop_file_local.csv"))){
     pop_file_temp <- read.csv(file.path(data_dir, "extdata/temp_pop_file_local.csv"))
