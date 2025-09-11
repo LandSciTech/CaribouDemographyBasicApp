@@ -16,7 +16,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
                         i18n = NULL, lang = "en",
                         shiny_progress = FALSE){
 
-  if(!dir.exists(save_dir)) dir.create(save_dir)
+  if(!dir.exists(save_dir)) dir.create(save_dir, recursive = TRUE)
   if(!dir.exists(file.path(save_dir, "www"))) dir.create(file.path(save_dir, "www"))
   if(!dir.exists(file.path(save_dir, "extdata"))) dir.create(file.path(save_dir, "extdata"))
 
