@@ -69,9 +69,11 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
     stop("The spreadsheet does not include a sheet named 'population'")
   }
 
+  nms <- c("PopulationName", "Year", "FemalePopulationLower", "FemalePopulationUpper")
+
   survey_pop <- googlesheets4::read_sheet(survey_url, pop_sh,
                                           na = "NA")
-  pop_nms <- purrr::map_lgl(list("PopulationName", "N", "Year"),
+  pop_nms <- purrr::map_lgl(nms,
                             \(x)stringr::str_detect(colnames(survey_pop), x) %>% any())
 
   if(!all(pop_nms)){
