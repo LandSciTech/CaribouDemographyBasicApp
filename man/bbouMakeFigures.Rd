@@ -26,6 +26,8 @@ bbouMakeFigures(
 \item{ht}{numeric. Height in pixels}
 
 \item{wt}{numeric. Width in pixels}
+
+\item{show_interpolated}{should estimates be shown for years where there were no surveys?}
 }
 \value{
 Nothing. Figures are saved to \code{fig_dir}.

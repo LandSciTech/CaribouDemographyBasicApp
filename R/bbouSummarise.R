@@ -8,15 +8,21 @@
 #' @param i18n shiny.i18n object. Used of translation in Shiny app.
 #' @param ht numeric. Height in pixels
 #' @param wt numeric. Width in pixels
+#' @param show_interpolated should estimates be shown for years where there were no surveys?
 #'
 #' @return Nothing. Figures are saved to `fig_dir`.
 #' @export
 #'
-bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 400, wt = 600,
+bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
+                            ht = 400, wt = 600,
                             show_interpolated = TRUE){
   # make figures
   if(is.null(i18n)){
-    i18n <- list(t = function(x)paste0(x))
+    i18n <- list(t = function(x)paste0(x),
+                 get_languages = function(x)"en")
+    lang <- "en"
+  } else {
+    lang <- i18n$get_translation_language()
   }
 
   ht <- ht*300/72
@@ -32,7 +38,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
 
   surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t("Deaths")
   surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t("Collared caribou")
-  png(file.path(fig_dir, "survivalSummary.png"),
+  png(file.path(fig_dir, paste0("survivalSummary", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300
   )
   base <- ggplot(surv_long, aes(x = as.integer(Year), y = NumAnimals, group = Category,
@@ -59,7 +65,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     pivot_longer(Cows:Calves, names_to = "Category", values_to = "NumAnimals") %>%
     mutate(Category = factor(Category, levels = rev(c("Cows", "Calves", "Bulls", "UnknownAdults"))))
 
-  png(file.path(fig_dir, "recruitmentSummary.png"),
+  png(file.path(fig_dir, paste0("recruitmentSummary", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300
   )
 
@@ -84,7 +90,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   print(base)
   dev.off()
 
-  png(file.path(fig_dir,"survBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
+  png(file.path(fig_dir, paste0("survBbouMulti", "_", lang, ".png")),
+                height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_survival(surv_fit)
 
   # colour points based on whether the population had data in that year or if it
@@ -121,7 +128,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   print(plt2)
   dev.off()
 
-  png(file.path(fig_dir,"recBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
+  png(file.path(fig_dir, paste0("recBbouMulti", "_", lang,".png")),
+      height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_calf_cow_ratio(recruit_fit)
 
   # colour points based on whether the population had data in that year or if it

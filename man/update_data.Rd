@@ -17,6 +17,10 @@ update_data(
 
 \item{save_dir}{dir where results are saved}
 
+\item{i18n}{shiny.i18n translator}
+
+\item{lang}{language to select in translator}
+
 \item{shiny_progress}{Is this inside a shiny app and called with \code{shiny::withProgress}}
 }
 \value{

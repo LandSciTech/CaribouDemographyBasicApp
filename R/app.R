@@ -16,12 +16,19 @@ run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_dat
 # default data is stored in the package but if the user updates the data it is
 # stored in data_dir
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
-  if(!dir.exists(data_dir)) dir.create(data_dir)
-  if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
-  if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
+  if(allow_update_data){
+    if(!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
+    if(!dir.exists(file.path(data_dir, "www"))) dir.create(file.path(data_dir, "www"))
+    if(!dir.exists(file.path(data_dir, "extdata"))) dir.create(file.path(data_dir, "extdata"))
+
+    if(!dir.exists(data_dir)){
+      warning(data_dir, "does not exist and was not sucessfully created.")
+    }
+
+  }
 
   # use data_dir version if it works and copy it into www so app can find images
-  if(file.exists(file.path(data_dir, "extdata/temp_pop_file_local.csv"))){
+  if(file.exists(file.path(data_dir, "extdata/temp_pop_file_local.csv")) && allow_update_data){
     pop_file_temp <- read.csv(file.path(data_dir, "extdata/temp_pop_file_local.csv"))
     file.copy(from = file.path(data_dir, "www"), to = inst_dir,
               recursive = TRUE)
@@ -181,7 +188,7 @@ $(window).resize(function(e) {
       input$selected_language
       # languages tbl
       lang_choice <- data.frame(
-        language = c("English", "Français"),
+        language = c("English", "Fran\u00E7ais"),
         code = c("en", "fr")
       )
       lang_choice <- lang_choice$code %>% set_names(lang_choice$language)
@@ -268,7 +275,7 @@ $(window).resize(function(e) {
     })
 
     # make reactive so it can be updated
-    pop_file <- reactiveVal(pop_file_temp %>% filter(pop_name == "Basse-Côte-Nord"))
+    pop_file <- reactiveVal(pop_file_temp %>% filter(pop_name == "Basse-C\u00F4te-Nord"))
     all_pops <- reactiveVal(pop_file_temp)
 
     # Current population --------------------------------
@@ -286,7 +293,10 @@ $(window).resize(function(e) {
         select(contains("iv")) %>%
         rename_with(\(x)str_remove(x, "_iv") %>% str_to_upper())
 
-      iv_default$type <- "logistic"
+      if(nrow(iv_default) > 0){
+        iv_default$type <- "logistic"
+      }
+
       # } else {
       #   iv_default <- eval(formals(caribouPopGrowth)$interannualVar)
       #   iv_default$type <- "beta"
@@ -723,6 +733,7 @@ $(window).resize(function(e) {
     })
     output$input_data <- renderUI({
       all_pops()
+
       page_fillable(
         layout_column_wrap(
           width = "600px",
@@ -730,7 +741,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
-            markdown(all_pops()$description[1]),
+            markdown(all_pops()[paste0("description", "_", input$selected_language)][1,1]),
             max_height = 300
           ),
           card(
@@ -742,13 +753,15 @@ $(window).resize(function(e) {
             title = h4(i18n$t("Survey data summary")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = file.path(inst_dir, "www", "survivalSummary.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("survivalSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = file.path(inst_dir, "www", "recruitmentSummary.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("recruitmentSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             )),
@@ -756,13 +769,15 @@ $(window).resize(function(e) {
             title = h4(i18n$t("Demographic rate estimates")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = file.path(inst_dir, "www", "survBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("survBbouMulti", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = file.path(inst_dir, "www", "recBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("recBbouMulti", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             )
@@ -822,12 +837,29 @@ $(window).resize(function(e) {
       ret
     })
     output$documentation <- renderUI({
-      withMathJax(
-        includeMarkdown(
-          #TODO
-          ".md File to be written"
-        )
+      file_name_lang <- paste0("use_app_", input$selected_language, ".html")
+      vig_file <- system.file(file.path("doc", file_name_lang),
+                                     package = "CaribouDemographyBasicApp")
+      if(vig_file == ""){
+        vig_file <- file.path("vignettes", file_name_lang)
+        if(!file.exists(vig_file))
+        rmarkdown::render(file.path("vignettes", paste0("use_app_", input$selected_language, ".Rmd")),
+                          output_file = here::here(vig_file),
+                          output_options = list(self_contained = TRUE, toc = TRUE))
+      }
+
+      # keep only body
+      vig_html_in <- readLines(vig_file)
+      start <- stringr::str_which(vig_html_in, "</head>") + 1
+      end <- stringr::str_which(vig_html_in, "</body>")
+      drop <- stringr::str_which(vig_html_in, "<h1 class=\"title toc-ignore\">.*</h1>")
+      use <- c(start:(drop-1), (drop+1):end)
+      writeLines(vig_html_in[use], con = file.path(inst_dir, "www", file_name_lang))
+      div(
+        includeHTML(file.path(inst_dir, "www", file_name_lang))
       )
+      # tags$iframe(readLines(file.path(inst_dir, "www", "use_app.html")), width = "100%")
+
     })
 
     output$data_summary <- renderTable({
@@ -939,6 +971,7 @@ $(window).resize(function(e) {
         withProgress({pop_file_in <- update_data(input$survey_url,
                                                  lang = input$selected_language,
                                                  shiny_progress = TRUE,
+                                                 i18n = i18n,
                                                  save_dir = data_dir)})
 
         # update the reactive value

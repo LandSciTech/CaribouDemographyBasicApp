@@ -1,6 +1,6 @@
 Package: CaribouDemographyBasicApp
 Title: Explore Demographic Projections for Boreal Caribou
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: 
    c(person(given = "Sarah",
            family = "Endicott", 
@@ -26,14 +26,12 @@ RoxygenNote: 7.3.2
 Remotes: 
     LandSciTech/bboudata,
     LandSciTech/bboutoolsMultiPop,
-    LandSciTech/caribouMetrics@BbouIntegration
+    LandSciTech/caribouMetrics@BbouIntegrationStable
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues
 Suggests: 
     beepr,
-    here,
     knitr,
-    rmarkdown,
     shinytest2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
@@ -62,5 +60,8 @@ Imports:
     waiter,
     bboutools,
     markdown,
-    tools
+    tools,
+    rmarkdown,
+    bookdown,
+    here
 VignetteBuilder: knitr

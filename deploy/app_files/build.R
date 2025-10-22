@@ -2,7 +2,8 @@ rd <- file.path(getwd(), "app_files") # Root repo directory
 message(rd)
 
 # Rtools is needed for nimble to work
-Sys.setenv("RTOOLS42_HOME" = file.path(rd, "/rtools/rtools42"))
+Sys.setenv("RTOOLS42_HOME" = file.path(rd, "/rtools/rtools42"),
+           RSTUDIO_PANDOC = file.path(file.path(rd, "pandoc-3.8")))
 
 r = getOption("repos")
 r["CRAN"] = "https://cran.rstudio.com/"
@@ -23,9 +24,10 @@ unlink(file.path(lib_use, "00LOCK"), recursive = TRUE)
 if(!requireNamespace("remotes", quietly = TRUE)){
   install.packages("remotes", type = "binary", )
 }
+
 # installs the app and all it's dependencies
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp@dev",
-                        type = "binary", upgrade = "always")
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
+                        type = "binary", upgrade = "always", build_vignettes = TRUE)
 
 # Update the data
 library(CaribouDemographyBasicApp)

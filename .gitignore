@@ -4,7 +4,6 @@
 .httr-oauth
 .DS_Store
 .quarto
-inst/www/*.png
 deploy/*.tar
 deploy/log.out
 deploy/caribou_demography_app

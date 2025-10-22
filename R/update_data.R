@@ -3,6 +3,8 @@
 #' @param survey_url sheet url
 #' @param save_dir dir where results are saved
 #' @param shiny_progress Is this inside a shiny app and called with `shiny::withProgress`
+#' @param i18n shiny.i18n translator
+#' @param lang language to select in translator
 #'
 #' @returns A data frame with the population estimates.
 #' @export
@@ -14,7 +16,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
                         i18n = NULL, lang = "en",
                         shiny_progress = FALSE){
 
-  if(!dir.exists(save_dir)) dir.create(save_dir)
+  if(!dir.exists(save_dir)) dir.create(save_dir, recursive = TRUE)
   if(!dir.exists(file.path(save_dir, "www"))) dir.create(file.path(save_dir, "www"))
   if(!dir.exists(file.path(save_dir, "extdata"))) dir.create(file.path(save_dir, "extdata"))
 
@@ -26,7 +28,8 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   )
 
   if(is.null(i18n)){
-    i18n <- list(t = function(x)paste0(x))
+    i18n <- list(t = function(x)paste0(x),
+                 get_languages = function(x)"en")
   }
 
   start <- Sys.time()
@@ -44,8 +47,11 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   if(length(recruit_sh)<1){
     stop("The spreadsheet does not include a sheet named recruit")
   }
+  nms <- c("PopulationName", "Year", "Month", "Day", "Cows",
+           "Bulls", "UnknownAdults", "Yearlings", "Calves")
   survey_recruit <- googlesheets4::read_sheet(survey_url, recruit_sh,
                                               na = "NA") %>%
+    select(any_of(nms)) %>%
     filter(if_all(everything(), \(x)!is.na(x))) %>%
     bboudata::bbd_chk_data_recruitment(multi_pops = TRUE)
 
@@ -72,7 +78,9 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   nms <- c("PopulationName", "Year", "FemalePopulationLower", "FemalePopulationUpper")
 
   survey_pop <- googlesheets4::read_sheet(survey_url, pop_sh,
-                                          na = "NA")
+                                          na = "NA") %>%
+    select(any_of(nms))
+
   pop_nms <- purrr::map_lgl(nms,
                             \(x)stringr::str_detect(colnames(survey_pop), x) %>% any())
 
@@ -106,10 +114,17 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   pop_file_in <- subset(pop_file_in, is.element(pop_name,pops_run))
 
-  bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
-                  fig_dir = file.path(save_dir, "www"),
-                  i18n = i18n,
-                  show_interpolated = FALSE)
+  inlang <- i18n$get_translation_language()
+
+  purrr::walk(i18n$get_languages(), \(x){
+    i18n$set_translation_language(x)
+    bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
+                    fig_dir = file.path(save_dir, "www"),
+                    i18n = i18n,
+                    show_interpolated = FALSE)
+  })
+
+  i18n$set_translation_language(inlang)
 
   # Add description
   desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
@@ -120,13 +135,14 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
 
   desc_nms <- colnames(dat_desc)
+
   if(length(desc_nms) > 1){
-    desc_nms <- stringr::str_subset(desc_nms,
-                                    paste0("_", lang,"$"))
+    dat_desc <- dat_desc %>% rename_with(\(x)stringr::str_replace(x, ".*(?=_..)", "description"))
+  } else {
+    names(dat_desc) <- paste0("description_", lang)
   }
 
-  pop_file_in$description <- NA_character_
-  pop_file_in$description[1] <- dat_desc[,desc_nms][[1]][1]
+  pop_file_in <- bind_cols(pop_file_in, dat_desc)
 
   end <- Sys.time()
   print(end - start)
