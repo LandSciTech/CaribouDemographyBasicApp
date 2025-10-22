@@ -28,7 +28,8 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   )
 
   if(is.null(i18n)){
-    i18n <- list(t = function(x)paste0(x))
+    i18n <- list(t = function(x)paste0(x),
+                 get_languages = function(x)"en")
   }
 
   start <- Sys.time()
@@ -111,10 +112,17 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   pop_file_in <- subset(pop_file_in, is.element(pop_name,pops_run))
 
-  bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
-                  fig_dir = file.path(save_dir, "www"),
-                  i18n = i18n,
-                  show_interpolated = FALSE)
+  inlang <- i18n$get_translation_language()
+
+  purrr::walk(i18n$get_languages(), \(x){
+    i18n$set_translation_language(x)
+    bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
+                    fig_dir = file.path(save_dir, "www"),
+                    i18n = i18n,
+                    show_interpolated = FALSE)
+  })
+
+  i18n$set_translation_language(inlang)
 
   # Add description
   desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
@@ -125,13 +133,14 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
 
   desc_nms <- colnames(dat_desc)
+
   if(length(desc_nms) > 1){
-    desc_nms <- stringr::str_subset(desc_nms,
-                                    paste0("_", lang,"$"))
+    dat_desc <- dat_desc %>% rename_with(\(x)stringr::str_replace(x, ".*(?=_..)", "description"))
+  } else {
+    names(dat_desc) <- paste0("description_", lang)
   }
 
-  pop_file_in$description <- NA_character_
-  pop_file_in$description[1] <- dat_desc[,desc_nms][[1]][1]
+  pop_file_in <- bind_cols(pop_file_in, dat_desc)
 
   end <- Sys.time()
   print(end - start)

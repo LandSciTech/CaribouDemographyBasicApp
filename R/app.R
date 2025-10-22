@@ -733,6 +733,7 @@ $(window).resize(function(e) {
     })
     output$input_data <- renderUI({
       all_pops()
+
       page_fillable(
         layout_column_wrap(
           width = "600px",
@@ -740,7 +741,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
-            markdown(all_pops()$description[1]),
+            markdown(all_pops()[paste0("description", "_", input$selected_language)][1,1]),
             max_height = 300
           ),
           card(
@@ -752,13 +753,15 @@ $(window).resize(function(e) {
             title = h4(i18n$t("Survey data summary")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = file.path(inst_dir, "www", "survivalSummary.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("survivalSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = file.path(inst_dir, "www", "recruitmentSummary.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("recruitmentSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             )),
@@ -766,13 +769,15 @@ $(window).resize(function(e) {
             title = h4(i18n$t("Demographic rate estimates")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = file.path(inst_dir, "www", "survBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("survBbouMulti", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = file.path(inst_dir, "www", "recBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("recBbouMulti", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             )
