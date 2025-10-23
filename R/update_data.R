@@ -89,8 +89,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
          paste0(colnames(survey_pop)[!pop_nms], collapse = ", "))
   }
 
-  N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year)) %>%
-    rename(N0 = N)
+  N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year))
 
   pops_run <- intersect(survey_recruit$PopulationName,
                         survey_surv$PopulationName) %>%

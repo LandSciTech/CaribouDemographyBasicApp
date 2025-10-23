@@ -5,6 +5,35 @@ library(CaribouDemographyBasicApp)
 
 # shinytest2::record_test(run_caribou_demog_app())
 
+
+test_that("Update data works properly", {
+  # skip("Skipping takes too long")
+  skip_on_ci()
+  skip_on_covr()
+  skip_if_not_installed("googlesheets4")
+
+  shiny_app <- run_caribou_demog_app()
+  app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
+  app$set_window_size(width = 1619, height = 1065, wait = FALSE)
+  app$click("update_data")
+  app$set_inputs(survey_url = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", wait_ = FALSE)
+  app$click("update_data_submit", wait_ = FALSE)
+  app$wait_for_idle(timeout = 8*60*1000)
+
+  app$click("run_model", wait_ = FALSE)
+  Sys.sleep(5)
+  pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
+    stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
+    stringr::str_replace_all("\n;", "\n") %>%
+    {read.table(text = ., sep = ";", header = TRUE)}
+
+  pop_nm <- app$get_text("#pop_name")
+
+  expect_equal(pop_nm, "\nA")
+  app$stop()
+})
+
+# Check app works and take snapshots to use in vignettes
 vig_pics <- here::here("vignettes/snapshots")
 
 # delete because can't overwrite
@@ -122,31 +151,4 @@ purrr::pmap(to_test, \(lang, altname){
     app$stop()
 
   })
-})
-
-test_that("Update data works properly", {
-  # skip("Skipping takes too long")
-  skip_on_ci()
-  skip_on_covr()
-  skip_if_not_installed("googlesheets4")
-
-  shiny_app <- run_caribou_demog_app()
-  app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
-  app$set_window_size(width = 1619, height = 1065)
-  app$click("update_data")
-  app$set_inputs(survey_url = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", wait_ = FALSE)
-  app$click("update_data_submit", wait_ = FALSE)
-  app$wait_for_idle(timeout = 7*60*1000)
-
-  app$click("run_model", wait_ = FALSE)
-  Sys.sleep(5)
-  pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
-    stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
-    stringr::str_replace_all("\n;", "\n") %>%
-    {read.table(text = ., sep = ";", header = TRUE)}
-
-  pop_nm <- app$get_text("#pop_name")
-
-  expect_equal(pop_nm, "\nA")
-  app$stop()
 })

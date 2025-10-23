@@ -322,9 +322,11 @@ $(window).resize(function(e) {
                                     "logistic"),
                         selected = iv_default$type
             ),
-            numericInput("N0",
-                         label = i18n$t("Initial number of adult females"),
-                         value = pop_default$N0, min = 0
+            sliderInput("N0",
+                        label = i18n$t("Initial number of adult females"),
+                        value = c(pop_default$FemalePopulationLower,
+                                  pop_default$FemalePopulationUpper),
+                        min = 0, max = pop_default$FemalePopulationUpper + 1000
             ),
             sliderInput("S_bar",
                         label = i18n$t("Average % female survival"),
@@ -472,7 +474,8 @@ $(window).resize(function(e) {
       # update pop_file when model re-runs
       pop_file(pop_file_temp %>% filter(pop_name == input$pop_name))
 
-      cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
+      cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops,
+                                        N0 = input$N0,
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
                                         R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
@@ -525,7 +528,7 @@ $(window).resize(function(e) {
 
       plt <- pop_plt %>%
         bind_rows(
-          distinct(pop_mod(), type, scn, id, time = 0, N = isolate(input$N0))
+          distinct(pop_mod() %>% filter(time == 1), type, scn, id, time = 0, N = N0)
         ) %>%
         mutate(type = factor(type, levels = c("samp", "mean")),
                time = as.factor(time)
@@ -864,6 +867,7 @@ $(window).resize(function(e) {
 
     output$data_summary <- renderTable({
       all_pops() %>%
+        mutate(N0 = paste0(FemalePopulationLower, " - ", FemalePopulationUpper)) %>%
         select(pop_name, N0, Year,
                # nCollarYears,
                nSurvYears,
