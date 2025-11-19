@@ -115,11 +115,14 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   inlang <- i18n$get_translation_language()
 
+  sess <- shiny::getDefaultReactiveDomain()
+  sess$userData$shiny.i18n$lang <- NULL
+
   purrr::walk(i18n$get_languages(), \(x){
     i18n$set_translation_language(x)
     bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
                     fig_dir = file.path(save_dir, "www"),
-                    i18n = i18n,
+                    i18n = i18n, sess = sess,
                     show_interpolated = FALSE)
   })
 

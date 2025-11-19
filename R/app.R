@@ -235,14 +235,6 @@ $(window).resize(function(e) {
         pull(pop_name)
 
       tagList(
-        # selectInput(
-        #   "param_source",
-        #   label = i18n$t("Create population parameters from..."),
-        #   choices = c("file","man") %>%
-        #     set_names(c(i18n$t("Existing data"),
-        #                 i18n$t("Manual parameter entry"))),
-        #   selected = "file"
-        # ),
         div(
           id = "from_file",
           selectInput("pop_name", label = i18n$t("Population name"),
@@ -736,7 +728,6 @@ $(window).resize(function(e) {
     })
     output$input_data <- renderUI({
       all_pops()
-
       page_fillable(
         layout_column_wrap(
           width = "600px",

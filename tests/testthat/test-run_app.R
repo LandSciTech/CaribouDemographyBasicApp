@@ -17,6 +17,7 @@ test_that("Update data works properly", {
   app$set_window_size(width = 1619, height = 1065, wait = FALSE)
   app$click("update_data")
   app$set_inputs(survey_url = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", wait_ = FALSE)
+  Sys.sleep(2)
   app$click("update_data_submit", wait_ = FALSE)
   app$wait_for_idle(timeout = 8*60*1000)
 
@@ -42,8 +43,9 @@ dir.create(vig_pics)
 
 inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 i18n <- shiny.i18n::Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
-
-to_test <- data.frame(lang = i18n$get_languages(),
+# langs <- i18n$get_languages()
+langs <- c("en", "fr")
+to_test <- data.frame(lang = langs,
                       altname = c("Increase recruitment", "Augmentation le recrutement"))
 
 # do for both languages

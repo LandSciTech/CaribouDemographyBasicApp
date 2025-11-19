@@ -14,6 +14,7 @@
 #' @export
 #'
 bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
+                            sess = shiny::getDefaultReactiveDomain(),
                             ht = 400, wt = 600,
                             show_interpolated = TRUE){
   # make figures
@@ -36,8 +37,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
     pivot_longer(c(StartTotal, MortalitiesCertain), names_to = "Category",
                  values_to = "NumAnimals")
 
-  surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t("Deaths")
-  surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t("Collared caribou")
+  surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t(session = sess,"Deaths")
+  surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t(session = sess,"Collared caribou")
   png(file.path(fig_dir, paste0("survivalSummary", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300
   )
@@ -51,8 +52,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
     scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
                        breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
                        guide = guide_axis(minor.ticks = TRUE))+
-    labs(x = i18n$t("Year"), y = i18n$t("Number of collared caribou"), colour = i18n$t("Category"),
-         shape = i18n$t("Category")) +
+    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Number of collared caribou"), colour = i18n$t(session = sess,"Category"),
+         shape = i18n$t(session = sess,"Category")) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "top")+
     coord_cartesian(clip = 'off')
   print(base)
@@ -80,11 +81,11 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
     #                    breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
     #                    guide = guide_axis(minor.ticks = TRUE))+
     scale_fill_brewer(palette = "Set2",
-                      labels = rev(c(i18n$t('Adult females'), i18n$t('Calves'), i18n$t('Adult males'),
-                                       i18n$t('Adults unknown sex'))) %>% stringr::str_wrap(width = 10),
+                      labels = rev(c(i18n$t(session = sess,'Adult females'), i18n$t(session = sess,'Calves'), i18n$t(session = sess,'Adult males'),
+                                       i18n$t(session = sess,'Adults unknown sex'))) %>% stringr::str_wrap(width = 10),
                         aesthetic = c("fill", "colour"))+
-    labs(x = i18n$t("Year"), y = i18n$t("Number of caribou counted"),
-         fill = i18n$t("Category"), colour = i18n$t("Category")) +
+    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Number of caribou counted"),
+         fill = i18n$t(session = sess,"Category"), colour = i18n$t(session = sess,"Category")) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
   print(base)
@@ -115,14 +116,14 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
 
     plt <- plt +
       scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
-                            name = i18n$t("Data from survey"),
-                            label = c(i18n$t("No"), i18n$t("Yes")))
+                            name = i18n$t(session = sess,"Data from survey"),
+                            label = c(i18n$t(session = sess,"No"), i18n$t(session = sess,"Yes")))
   }
 
   plt2 <- plt +
-    labs(x = i18n$t("Year"))+
+    labs(x = i18n$t(session = sess,"Year"))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    scale_y_continuous(i18n$t("Annual female survival"), labels = scales::percent)+
+    scale_y_continuous(i18n$t(session = sess,"Annual female survival"), labels = scales::percent)+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
   print(plt2)
@@ -153,8 +154,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
 
     plt <- plt +
       scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
-                            name = i18n$t("Data from survey"),
-                            label = c(i18n$t("No"), i18n$t("Yes")))
+                            name = i18n$t(session = sess,"Data from survey"),
+                            label = c(i18n$t(session = sess,"No"), i18n$t(session = sess,"Yes")))
   }
 
   plt2 <- plt +
@@ -163,7 +164,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
       format = scales::label_number(scale = 100)
     ))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 females"))+
+    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Calves per 100 females"))+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
   print(plt2)
@@ -175,7 +176,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
   #     height = ht, width = wt, units = "px",res=600)
   # plt <- bb_plot_year_growth(predict_lambda) +
   #   scale_y_continuous(labels = scales::percent)+
-  #   labs(x = i18n$t("Year"), y = i18n$t("Population growth (lambda)"))
+  #   labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Population growth (lambda)"))
   # print(plt)
   # dev.off()
 
