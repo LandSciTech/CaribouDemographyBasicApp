@@ -874,7 +874,7 @@ $(window).resize(function(e) {
                # nCowsAllYears,
                nRecruitYears) %>%
         set_names(c(i18n$t("Population name"),
-                    i18n$t("Initial population"),
+                    i18n$t("Initial female population"),
                     i18n$t("Initial population year"),
                     # i18n$t("Total number of collars by year"),
                     i18n$t("Years of survival data"),
