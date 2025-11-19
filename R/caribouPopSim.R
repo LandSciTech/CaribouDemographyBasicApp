@@ -1,4 +1,4 @@
-caribouPopSim <- function(N0, numSteps, R_samp, S_samp, interannualVar, ...) {
+simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, ...) {
   for (ts in 1:numSteps) {
     if (ts == 1) {
       out <- caribouPopGrowth(rep(N0, length(R_samp)),

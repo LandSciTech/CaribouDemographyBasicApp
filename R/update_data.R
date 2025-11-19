@@ -95,7 +95,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
                         survey_surv$PopulationName) %>%
     intersect(N0$PopulationName)
 
-  pop_file_in <- bbouMakeSummaryTable(
+  pop_file_in <- estimateBayesianRates(
     survey_surv %>% filter(PopulationName %in% pops_run),
     survey_recruit %>% filter(PopulationName %in% pops_run),
     N0 = N0 %>% filter(PopulationName %in% pops_run),

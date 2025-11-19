@@ -303,8 +303,8 @@ $(window).resize(function(e) {
       #   iv_default$R_shape <- 0
       #   iv_default$S_shape <- 0
       #
-      #   pop_default <- demographicRates(data.frame(fire = 0, Anthro = 0, fire_excl_anthro = 0),
-      #                                   demographicCoefficients(100)) %>%
+      #   pop_default <- estimateNationalRates(data.frame(fire = 0, Anthro = 0, fire_excl_anthro = 0),
+      #                                   getNationalCoefficients(100)) %>%
       #     mutate(across(everything(), \(x)round(x, 2)),
       #            N0 = 1000) %>%
       #     rename_with(\(x)str_replace(x, "stdErr", "sd"))
@@ -474,7 +474,7 @@ $(window).resize(function(e) {
       # update pop_file when model re-runs
       pop_file(pop_file_temp %>% filter(pop_name == input$pop_name))
 
-      cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops,
+      cur_res <- suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops,
                                         N0 = input$N0,
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
@@ -490,7 +490,7 @@ $(window).resize(function(e) {
 
         scn_res <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
                             \(x, y, z, nm){
-                              suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
+                              suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
