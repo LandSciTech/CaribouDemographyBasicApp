@@ -43,12 +43,11 @@ dir.create(vig_pics)
 
 inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 i18n <- shiny.i18n::Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
-# langs <- i18n$get_languages()
-langs <- c("en", "fr")
+langs <- i18n$get_languages()
 to_test <- data.frame(lang = langs,
-                      altname = c("Increase recruitment", "Augmentation le recrutement"))
+                      altname = c("Increase recruitment", "Augmentation le recrutement", "Plus de faons"))
 
-# do for both languages
+# do for all languages
 purrr::pmap(to_test, \(lang, altname){
   test_that("App loads properly", {
     skip_on_ci()
