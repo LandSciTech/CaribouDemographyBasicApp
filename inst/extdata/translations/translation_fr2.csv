@@ -1,0 +1,134 @@
+en,fr2
+Boreal Caribou Demographic Projection Explorer,Explorateur des changements dans la population de caribou boréal
+Define simulation inputs,Configurer les valeurs d'entrées du modèle
+Number of years,Nombre d'années
+Run model,Exécuter le modèle
+Add alternative scenario,Ajouter un scénario alternatif
+Update data,Mettre à jour les données
+Welcome,Accueil
+Survey data,Données d'inventaires
+Projections,Résultats
+Documentation,Information générale
+English,Anglais
+French,Français
+Change language,Changer de langue
+Create population parameters from...,"Créer des paramètres de population à partir de..."
+Existing data,Données existantes
+Manual parameter entry,"Manual parameter entry,Saisie manuelle des paramètres"
+Population name,Nom de la population
+Other model parameters,Autres valeurs d'entrée du modèle
+Advanced users can adjust these parameters to explore sensitivity to various demographic model assumptions.,Les utilisateurs avancés peuvent  modifier ces valeurs d'entrées  pour voir comment différentes hypothèsur la population influencent les résultats du modèles .
+Detailed descriptions will be provided in the app documentation (not yet written).,Des descriptions détaillées seront fournies dans la documentation de l'application (pas encore disponible).
+"In the meantime, see the","En attendant, voir la documentation du package"
+package documentation to learn about some of the parameters.,documentation du package pour en savoir plus sur certaines valeurs d'entrées.
+Number of example trajectories,Nombre d'exemples de résultats
+Estimated demographic parameters,Paramètres démographiques estimés
+Type of interannual variation,"Type of interannual variation,Type de variation interannuelle"
+Initial number of adult females,Nombre initial de femelles
+Average % female survival,Taux moyen de survie des femelles
+Average calves per 100 females,Taux moyen de faons pour 100 femelles
+Standard deviation of survival rate,Écart type du taux de survie
+Standard deviation of calves per 100 females,Écart type des faons pour 100 femelles
+Interannual variation of survival rate,Variation interannuelle du taux de survie
+Interannual variation of calves per 100 females,Variation interannuelle du nombre de faons pour 100 femelles
+Uncertainty about interannual variation of survival rate,Incertitude sur la variation interannuelle du taux de survie
+Uncertainty about interannual variation of calves per 100 females,Incertitude sur la variation interannuelle du nombre de faons pour 100 femelles
+Current,Actuel
+Alternative scenario,Scénario alternatif
+Alternative scenario name,Nom du scénario alternatif
+Remove scenario,Supprimer le scénario
+Scenario,Scénario
+Possible,"Possible,Possible"
+Plausible,Résultats possibles
+Mean,Moyenne
+Female population size                     ,Taille de la population femelle
+Years in the future,Années dans le futur
+Trajectory,Résultat possible
+Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,"Taille prévue de la population femelle adulte au fil du temps. La ligne épaisse montre le résultat sans tenir compte d'aucune incertitude. Les lignes plus claires montrent divers résultats qui incluent l'incertitude concernant les taux de survie des femelles, le nombre de faons pour 100 femelles et les variations au fil des années.   Seule la population femelle est représentée car c'est le nombre de femelles qui limite la croissance de la population. La population est considérée comme stable si la ligne est plate ou ascendante, et en déclin si la ligne est descendante."
+Deaths,Caribous morts
+Recruits,Recrues
+Number of females,Nombre de femelles
+Calves per 100 females,Faons pour 100 femelles
+% Female survival,% de survie des femelles
+Years to < 10 females,Années à < 10 femelles
+Female replacement rate,Taux de remplacement des femelles
+% Female mortality,% Mortalité des femelles
+The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.,Le taux moyen de mortalité des femelles en % et le taux de remplacement des femelles dans chaque scénario. Les barres d'erreur montrent les valeurs minimales et maximales compte tenu de l'incertitude dans les données. Une population est stable ou en augmentation lorsque le taux de remplacement des femelles est égal ou supérieur au taux de mortalité des femelles.
+Data description,Description des données
+Disclaimer,Clause de non-responsabilité
+"Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.",Veuillez noter que les données résumées et décrites ici sont fournies par les utilisateurs de l'application et peuvent différer selon les projets. Les créateurs de l'application ne sont pas responsables de la qualité des données. Cliquez sur le bouton â€œMettre Ã jour les donnéesâ€ dans le menu de gauche et suivez les instructions pour modifier les données ou leur description.
+Survey data summary,Résumé des données d’inventaires
+Survival,Survie
+Recruitment,Recrutement
+Demographic rate estimates,Estimés du modèle
+Data summary,Résumé des données
+Note that results will not be shown for populations with only one year of recruitment or survival data because one year of data is insufficient for making reliable predictions.,"Si une population ne dispose que d'une seule année de données sur la survie des femelles ou le nombre de faons et de femelles (recrutement), aucun  résultat ne sera affiché . Une seule année ne fournit pas suffisamment d'informations pour établir une prévision fiable.
+
+"
+Female population,Population des femelles
+Female population change,Évolution de la population des femelles
+Glossary,Glossaire
+Frequently asked questions,Questions fréquemment posées
+Initial female population,Population femelle initiale
+Initial population year,Année de la population  initiale
+Total number of collars by year,Nombre total de colliers par année pour toutes les années inventoriées
+Years of survival data,Années de données de survie
+Total number of females in aerial surveys,Nombre total de femelles dans les inventaires aériens pour toutes les années inventoriées
+Years of recruitment data,Années de données de recrutement
+Update survey data,Mettre à jour les données de l'inventaires
+Provide a URL linking to a Google Drive spreadsheet,Fournir une URL renvoyant vers une feuille de calcul Google Drive
+Google Drive spreadsheet URL:,URL de la feuille de calcul Google Drive :
+Instructions to create a new data sheet,Instructions pour créer une nouvelle fiche technique
+You can supply a URL for your own Google Sheet to use your own data in the app.,Vous pouvez fournir une URL pour votre propre feuille Google afin d'utiliser vos propres données dans l'application.
+In your Google Drive account click 'New' and select 'Google Sheets',"Dans votre compte Google Drive, cliquez sur « Nouveau » et sélectionnez « Google Sheets »"
+"Fill the spreadsheet with your data. It must have the same sheets, and column names as the",Remplissez la feuille de calcul avec vos données. Elle doit contenir les mÃªmes feuilles et les mÃªmes noms de colonnes que la
+example sheet.,exemple de feuille.
+See the,Voir le
+bboutools website,Site Web de bboutools
+for more information on how to format the data.,pour plus d'informations sur la façon de formater les données.
+"Note: The data must be in a Google Sheet not an Excel file stored on Google Drive. To use an uploaded Excel file click 'File', then 'Save as Google Sheets'.","Remarque : les données doivent se trouver dans une feuille Google Sheets et non dans un fichier Excel stocké sur Google Drive. Pour utiliser un fichier Excel téléchargé, cliquez sur « Fichier », puis sur « Enregistrer sous Google Sheets »."
+If access to the Google Sheet is restricted it will be necessary to grant access to the app.,"If access to the Google Sheet is restricted it will be necessary to grant access to the app.,""Si l'accès à la feuille Google est restreint, il sera nécessaire d'accorder l'accès à l'application."""
+The simpler option is to click 'Share' and under General Access select 'Anyone with the link` and choose the role 'Viewer'.,"L'option la plus simple est de cliquer sur « Partager » et sous Accès général, de sélectionner « Toute personne disposant du lien » et de choisir le rôle « Spectateur »."
+Then click 'Copy link'. Paste the link into the text box above and click `Update`,Cliquez ensuite sur « Copier le lien ». Collez le lien dans la zone de texte ci-dessus et cliquez sur « Mettre à jour ».
+Cancel,Annuler
+Update,Mise à jour
+The url provided is for a protected Google sheet.,L'URL fournie est celle d'une feuille Google protégée.
+Click the Authenticate button below and follow the instructions to give this app permission to access files in your Google drive.,Cliquez sur le bouton Authentifier ci-dessous et suivez les instructions pour autoriser cette application à accéder aux fichiers de votre Google Drive.
+"Alternatively, change the settings on the Google sheet so ""Anyone with the link can view""",Vous pouvez également modifier les paramètres de la feuille Google pour que « Toute personne disposant du lien puisse voir »
+Authenticate,Authentifier
+Downloading data from ,Téléchargement de données depuis
+Additional model parameters for scenario,Paramètres de modèle supplémentaires pour le scénario
+Maximum recruitment multiplier,Multiplicateur de recrutement maximal
+Recruitment multiplier at carrying capacity,Multiplicateur de recrutement à capacité de charge
+Density dependence shape parameter,"Density dependence shape parameter,Paramètre de forme de dépendance à la densité"
+Allee effect parameter,Paramètre d'effet Allee
+Carrying capacity,Capacité de charge
+Maximum population growth rate,Taux de croissance démographique maximal
+Sex ratio,Rapport des sexes
+Fitting survival,Survie adaptée
+Fitting recruitment,Recrutement adapté
+Predicting survival,Prédire la survie
+Predicting recruitment,Prédire le recrutement
+Collared caribou,Caribous avec collier
+Year,Année
+Number of collared caribou,Nombre de caribous muni d’un collier
+Category,Catégorie
+Adult females,Adultes femelle
+Calves,Faons
+Adult males,Adultes mâle
+Adults unknown sex,Adultes sexe inconnu
+Number of caribou counted,Nombre de caribous comptés
+Annual Survival (%),Survie annuelle (%)
+Annual female survival,Survie annuelle des femelles
+Calves per 100 cows,Faons pour 100 femelles
+Population growth (lambda),Croissance démographique (lambda)
+Difference,Différence
+Range,Écart
+Please wait while the data is processed. This may take several minutes.,Veuillez patienter pendant le traitement des données. Cela peut prendre plusieurs minutes.
+See the progress bar in the bottom right.,Voir la barre de progression en bas à droite.
+No,Non
+Yes,Oui
+Data from survey,Données provenant des inventaires
+Shape of the distribution of interannual variation of survival rate,Forme de la distribution de la variation interannuelle du taux de survie
+Shape of the distribution of interannual variation of calves per 100 females,Forme de la distribution de la variation interannuelle du nombre de faons pour 100 femelles
+"Note, this graph displays the number of animals counted in aerial surveys in each year. The survey area or time spent surveying may differ from year to year so the numbers should not be directly compared from one year to the next. These values are used by the model to estimate the ratios of males to females and females to calves in the population.","Remarque : Ce graphique présente le nombre d’animaux comptés lors des relevés aériens chaque année. La zone de relevé ou le temps consacré Ã l’observation peut varier d’une année Ã l’autre, de sorte que les chiffres ne doivent pas être comparés directement d’une année Ã l’autre. Ces valeurs sont utilisées par le modèle pour estimer les ratios de mâles par rapport aux femelles et de femelles par rapport aux faons dans la population."
