@@ -14,7 +14,7 @@
 run_caribou_demog_app <- function(private = FALSE, lang = "en", allow_update_data = TRUE,
                                   data_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data")){
 # default data is stored in the package but if the user updates the data it is
-# stored in data_dir
+# stored in data_dir.
   inst_dir <- system.file(package = "CaribouDemographyBasicApp")
   if(allow_update_data){
     if(!dir.exists(data_dir)) dir.create(data_dir, recursive = TRUE)
