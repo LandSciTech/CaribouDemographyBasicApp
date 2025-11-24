@@ -29,7 +29,8 @@ lang <- "fr"
 
 ```{=html}
 <!---
-NOTE this needs to be updated with new changes made in the english version
+NOTE!! This is currently the fr version not the fr2 as that translation has not been done. 
+
 
 A vignette to outline the uses of the app including: General description of the interface Uncertainty
 How to update data

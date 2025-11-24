@@ -188,8 +188,8 @@ $(window).resize(function(e) {
       input$selected_language
       # languages tbl
       lang_choice <- data.frame(
-        language = c("English", "Fran\u00E7ais"),
-        code = c("en", "fr")
+        language = c("English", "Fran\u00E7ais", "Fran\u00E7ais simple"),
+        code = c("en", "fr", "fr2")
       )
       lang_choice <- lang_choice$code %>% set_names(lang_choice$language)
 
@@ -235,14 +235,6 @@ $(window).resize(function(e) {
         pull(pop_name)
 
       tagList(
-        # selectInput(
-        #   "param_source",
-        #   label = i18n$t("Create population parameters from..."),
-        #   choices = c("file","man") %>%
-        #     set_names(c(i18n$t("Existing data"),
-        #                 i18n$t("Manual parameter entry"))),
-        #   selected = "file"
-        # ),
         div(
           id = "from_file",
           selectInput("pop_name", label = i18n$t("Population name"),
@@ -303,8 +295,8 @@ $(window).resize(function(e) {
       #   iv_default$R_shape <- 0
       #   iv_default$S_shape <- 0
       #
-      #   pop_default <- demographicRates(data.frame(fire = 0, Anthro = 0, fire_excl_anthro = 0),
-      #                                   demographicCoefficients(100)) %>%
+      #   pop_default <- estimateNationalRates(data.frame(fire = 0, Anthro = 0, fire_excl_anthro = 0),
+      #                                   getNationalCoefficients(100)) %>%
       #     mutate(across(everything(), \(x)round(x, 2)),
       #            N0 = 1000) %>%
       #     rename_with(\(x)str_replace(x, "stdErr", "sd"))
@@ -322,9 +314,11 @@ $(window).resize(function(e) {
                                     "logistic"),
                         selected = iv_default$type
             ),
-            numericInput("N0",
-                         label = i18n$t("Initial number of adult females"),
-                         value = pop_default$N0, min = 0
+            sliderInput("N0",
+                        label = i18n$t("Initial number of adult females"),
+                        value = c(pop_default$FemalePopulationLower,
+                                  pop_default$FemalePopulationUpper),
+                        min = 0, max = pop_default$FemalePopulationUpper + 1000
             ),
             sliderInput("S_bar",
                         label = i18n$t("Average % female survival"),
@@ -472,7 +466,8 @@ $(window).resize(function(e) {
       # update pop_file when model re-runs
       pop_file(pop_file_temp %>% filter(pop_name == input$pop_name))
 
-      cur_res <- suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
+      cur_res <- suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops,
+                                        N0 = unique(input$N0),
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
                                         R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
@@ -487,7 +482,7 @@ $(window).resize(function(e) {
 
         scn_res <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
                             \(x, y, z, nm){
-                              suppressMessages(doSim(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
+                              suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops, N0 = unique(input$N0),
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
@@ -519,13 +514,14 @@ $(window).resize(function(e) {
     # Population plot #--------------------------------------------------------------
     output$pop_plot <- renderPlot({
       req(pop_mod())
+      input$selected_language
 
       pop_plt <- pop_mod() %>%
         filter(time <= isolate(input$numSteps))
 
       plt <- pop_plt %>%
         bind_rows(
-          distinct(pop_mod(), type, scn, id, time = 0, N = isolate(input$N0))
+          distinct(pop_mod() %>% filter(time == 1), type, scn, id, time = 0, N = N0)
         ) %>%
         mutate(type = factor(type, levels = c("samp", "mean")),
                time = as.factor(time)
@@ -534,7 +530,7 @@ $(window).resize(function(e) {
           aes(x = time, y = N, group = interaction(id, scn, type),
               linewidth = type, colour = scn, alpha = type))+
         geom_line(na.rm = TRUE)+
-        scale_y_continuous(limits = c(0, min(isolate(input$N0)*3, max(pop_plt$N))), expand = expansion())+
+        scale_y_continuous(limits = c(0, min(isolate(max(input$N0))*3, max(pop_plt$N))), expand = expansion())+
         scale_x_discrete(expand = expansion())+
         scale_linewidth_discrete(range = c(1, 2),
                                  breaks = c("samp", "mean"),
@@ -740,7 +736,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
-            markdown(all_pops()$description[1]),
+            markdown(all_pops()[paste0("description", "_", input$selected_language)][1,1]),
             max_height = 300
           ),
           card(
@@ -752,13 +748,16 @@ $(window).resize(function(e) {
             title = h4(i18n$t("Survey data summary")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = file.path(inst_dir, "www", "survivalSummary.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("survivalSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
+              p(em(i18n$t("Note, this graph displays the number of animals counted in aerial surveys in each year. The survey area or time spent surveying may differ from year to year so the numbers should not be directly compared from one year to the next. These values are used by the model to estimate the ratios of males to females and females to calves in the population."))),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = file.path(inst_dir, "www", "recruitmentSummary.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("recruitmentSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             )),
@@ -766,13 +765,15 @@ $(window).resize(function(e) {
             title = h4(i18n$t("Demographic rate estimates")),
             nav_panel(
               i18n$t("Survival"),
-              card_image(file = file.path(inst_dir, "www", "survBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("survBbouMulti", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             ),
             nav_panel(
               i18n$t("Recruitment"),
-              card_image(file = file.path(inst_dir, "www", "recBbouMulti.png"),
+              card_image(file = file.path(inst_dir, "www",
+                                          paste0("recBbouMulti", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
               height = 400
             )
@@ -859,13 +860,14 @@ $(window).resize(function(e) {
 
     output$data_summary <- renderTable({
       all_pops() %>%
+        mutate(N0 = paste0(FemalePopulationLower, " - ", FemalePopulationUpper)) %>%
         select(pop_name, N0, Year,
                # nCollarYears,
                nSurvYears,
                # nCowsAllYears,
                nRecruitYears) %>%
         set_names(c(i18n$t("Population name"),
-                    i18n$t("Initial population"),
+                    i18n$t("Initial female population"),
                     i18n$t("Initial population year"),
                     # i18n$t("Total number of collars by year"),
                     i18n$t("Years of survival data"),

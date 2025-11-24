@@ -28,7 +28,8 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   )
 
   if(is.null(i18n)){
-    i18n <- list(t = function(x)paste0(x))
+    i18n <- list(t = function(x)paste0(x),
+                 get_languages = function(x)"en")
   }
 
   start <- Sys.time()
@@ -42,9 +43,9 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   if(shiny_progress) shiny::setProgress(0.1, message = paste0(i18n$t("Downloading data from "), sh_name))
   survey_sh_names <- googlesheets4::sheet_names(survey_url)
 
-  recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit")
+  recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit_data")
   if(length(recruit_sh)<1){
-    stop("The spreadsheet does not include a sheet named recruit")
+    stop("The spreadsheet does not include a sheet named 'recruit_data'")
   }
   nms <- c("PopulationName", "Year", "Month", "Day", "Cows",
            "Bulls", "UnknownAdults", "Yearlings", "Calves")
@@ -58,9 +59,9 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   #survey_recruit <- survey_recruit %>% group_by(PopulationName) %>%
   #  filter(n_distinct(Year) > 1)
 
-  surv_sh <- stringr::str_subset(survey_sh_names, "[S,s]urv")
+  surv_sh <- stringr::str_subset(survey_sh_names, "[S,s]urv_data")
   if(length(surv_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'surv'")
+    stop("The spreadsheet does not include a sheet named 'surv_data'")
   }
   survey_surv <- googlesheets4::read_sheet(survey_url, surv_sh,
                                            na = "NA") %>%
@@ -74,10 +75,12 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
     stop("The spreadsheet does not include a sheet named 'population'")
   }
 
-  nms <- c("PopulationName", "N", "Year")
+  nms <- c("PopulationName", "Year", "FemalePopulationLower", "FemalePopulationUpper")
+
   survey_pop <- googlesheets4::read_sheet(survey_url, pop_sh,
                                           na = "NA") %>%
     select(any_of(nms))
+
   pop_nms <- purrr::map_lgl(nms,
                             \(x)stringr::str_detect(colnames(survey_pop), x) %>% any())
 
@@ -86,14 +89,13 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
          paste0(colnames(survey_pop)[!pop_nms], collapse = ", "))
   }
 
-  N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year)) %>%
-    rename(N0 = N)
+  N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year))
 
   pops_run <- intersect(survey_recruit$PopulationName,
                         survey_surv$PopulationName) %>%
     intersect(N0$PopulationName)
 
-  pop_file_in <- bbouMakeSummaryTable(
+  pop_file_in <- estimateBayesianRates(
     survey_surv %>% filter(PopulationName %in% pops_run),
     survey_recruit %>% filter(PopulationName %in% pops_run),
     N0 = N0 %>% filter(PopulationName %in% pops_run),
@@ -111,10 +113,20 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   pop_file_in <- subset(pop_file_in, is.element(pop_name,pops_run))
 
-  bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
-                  fig_dir = file.path(save_dir, "www"),
-                  i18n = i18n,
-                  show_interpolated = FALSE)
+  inlang <- i18n$get_translation_language()
+
+  sess <- shiny::getDefaultReactiveDomain()
+  sess$userData$shiny.i18n$lang <- NULL
+
+  purrr::walk(i18n$get_languages(), \(x){
+    i18n$set_translation_language(x)
+    bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
+                    fig_dir = file.path(save_dir, "www"),
+                    i18n = i18n, sess = sess,
+                    show_interpolated = FALSE)
+  })
+
+  i18n$set_translation_language(inlang)
 
   # Add description
   desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
@@ -125,13 +137,14 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
 
   desc_nms <- colnames(dat_desc)
+
   if(length(desc_nms) > 1){
-    desc_nms <- stringr::str_subset(desc_nms,
-                                    paste0("_", lang,"$"))
+    dat_desc <- dat_desc %>% rename_with(\(x)stringr::str_replace(x, ".*(?=_..)", "description"))
+  } else {
+    names(dat_desc) <- paste0("description_", lang)
   }
 
-  pop_file_in$description <- NA_character_
-  pop_file_in$description[1] <- dat_desc[,desc_nms][[1]][1]
+  pop_file_in <- bind_cols(pop_file_in, dat_desc)
 
   end <- Sys.time()
   print(end - start)

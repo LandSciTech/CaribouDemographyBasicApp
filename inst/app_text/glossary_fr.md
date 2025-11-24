@@ -14,4 +14,4 @@
 
 - **Nombre d'années jusqu'à < 10 femelles:** Nombre d'années jusqu'à ce que la population atteigne la quasi-extinction.
   10 femelles a été choisi comme seuil de quasi-extinction selon [ECCC
-  2011](https://publications.gc.ca/collections/collection_2011/ec/CW66-296-2011-eng.pdf).
+  2011](https://publications.gc.ca/collections/collection_2011/ec/CW66-296-2011-fra.pdf).

@@ -13,11 +13,17 @@
 #' @return Nothing. Figures are saved to `fig_dir`.
 #' @export
 #'
-bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 400, wt = 600,
+bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
+                            sess = shiny::getDefaultReactiveDomain(),
+                            ht = 400, wt = 600,
                             show_interpolated = TRUE){
   # make figures
   if(is.null(i18n)){
-    i18n <- list(t = function(x)paste0(x))
+    i18n <- list(t = function(x)paste0(x),
+                 get_languages = function(x)"en")
+    lang <- "en"
+  } else {
+    lang <- i18n$get_translation_language()
   }
 
   ht <- ht*300/72
@@ -31,9 +37,9 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     pivot_longer(c(StartTotal, MortalitiesCertain), names_to = "Category",
                  values_to = "NumAnimals")
 
-  surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t("Deaths")
-  surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t("Collared caribou")
-  png(file.path(fig_dir, "survivalSummary.png"),
+  surv_long$Category[surv_long$Category == "MortalitiesCertain"] <- i18n$t(session = sess,"Deaths")
+  surv_long$Category[surv_long$Category == "StartTotal"] <- i18n$t(session = sess,"Collared caribou")
+  png(file.path(fig_dir, paste0("survivalSummary", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300
   )
   base <- ggplot(surv_long, aes(x = as.integer(Year), y = NumAnimals, group = Category,
@@ -46,8 +52,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     scale_x_continuous(minor_breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
                        breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)),
                        guide = guide_axis(minor.ticks = TRUE))+
-    labs(x = i18n$t("Year"), y = i18n$t("Number of collared caribou"), colour = i18n$t("Category"),
-         shape = i18n$t("Category")) +
+    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Number of collared caribou"), colour = i18n$t(session = sess,"Category"),
+         shape = i18n$t(session = sess,"Category")) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.position = "top")+
     coord_cartesian(clip = 'off')
   print(base)
@@ -60,7 +66,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     pivot_longer(Cows:Calves, names_to = "Category", values_to = "NumAnimals") %>%
     mutate(Category = factor(Category, levels = rev(c("Cows", "Calves", "Bulls", "UnknownAdults"))))
 
-  png(file.path(fig_dir, "recruitmentSummary.png"),
+  png(file.path(fig_dir, paste0("recruitmentSummary", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300
   )
 
@@ -75,17 +81,18 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
     #                    breaks = function(lims){ceiling(lims[1]):floor(lims[2])},
     #                    guide = guide_axis(minor.ticks = TRUE))+
     scale_fill_brewer(palette = "Set2",
-                      labels = rev(c(i18n$t('Adult females'), i18n$t('Calves'), i18n$t('Adult males'),
-                                       i18n$t('Adults unknown sex'))) %>% stringr::str_wrap(width = 10),
+                      labels = rev(c(i18n$t(session = sess,'Adult females'), i18n$t(session = sess,'Calves'), i18n$t(session = sess,'Adult males'),
+                                       i18n$t(session = sess,'Adults unknown sex'))) %>% stringr::str_wrap(width = 10),
                         aesthetic = c("fill", "colour"))+
-    labs(x = i18n$t("Year"), y = i18n$t("Number of caribou counted"),
-         fill = i18n$t("Category"), colour = i18n$t("Category")) +
+    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Number of caribou counted"),
+         fill = i18n$t(session = sess,"Category"), colour = i18n$t(session = sess,"Category")) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
   print(base)
   dev.off()
 
-  png(file.path(fig_dir,"survBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
+  png(file.path(fig_dir, paste0("survBbouMulti", "_", lang, ".png")),
+                height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_survival(surv_fit)
 
   # colour points based on whether the population had data in that year or if it
@@ -109,20 +116,21 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
 
     plt <- plt +
       scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
-                            name = i18n$t("Data from survey"),
-                            label = c(i18n$t("No"), i18n$t("Yes")))
+                            name = i18n$t(session = sess,"Data from survey"),
+                            label = c(i18n$t(session = sess,"No"), i18n$t(session = sess,"Yes")))
   }
 
   plt2 <- plt +
-    labs(x = i18n$t("Year"))+
+    labs(x = i18n$t(session = sess,"Year"))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    scale_y_continuous(i18n$t("Annual female survival"), labels = scales::percent)+
+    scale_y_continuous(i18n$t(session = sess,"Annual female survival"), labels = scales::percent)+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
   print(plt2)
   dev.off()
 
-  png(file.path(fig_dir,"recBbouMulti.png"), height = ht, width = wt, units = "px", res = 300)
+  png(file.path(fig_dir, paste0("recBbouMulti", "_", lang,".png")),
+      height = ht, width = wt, units = "px", res = 300)
   plt <- bb_plot_year_calf_cow_ratio(recruit_fit)
 
   # colour points based on whether the population had data in that year or if it
@@ -146,8 +154,8 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
 
     plt <- plt +
       scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
-                            name = i18n$t("Data from survey"),
-                            label = c(i18n$t("No"), i18n$t("Yes")))
+                            name = i18n$t(session = sess,"Data from survey"),
+                            label = c(i18n$t(session = sess,"No"), i18n$t(session = sess,"Yes")))
   }
 
   plt2 <- plt +
@@ -156,7 +164,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
       format = scales::label_number(scale = 100)
     ))+
     scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    labs(x = i18n$t("Year"), y = i18n$t("Calves per 100 females"))+
+    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Calves per 100 females"))+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "top")
   print(plt2)
@@ -168,7 +176,7 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL, ht = 40
   #     height = ht, width = wt, units = "px",res=600)
   # plt <- bb_plot_year_growth(predict_lambda) +
   #   scale_y_continuous(labels = scales::percent)+
-  #   labs(x = i18n$t("Year"), y = i18n$t("Population growth (lambda)"))
+  #   labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Population growth (lambda)"))
   # print(plt)
   # dev.off()
 

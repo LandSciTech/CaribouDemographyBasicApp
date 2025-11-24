@@ -12,7 +12,7 @@ test_that("Can make figures", {
     dplyr::filter(Year %in% c(2012:2016)) %>%
     dplyr::slice_sample(n = 30)
   N0 <- 500
-  pop_file_in <- caribouMetrics::bbouMakeSummaryTable(
+  pop_file_in <- caribouMetrics::estimateBayesianRates(
     surv_data,
     recruit_data,
     N0 = N0,
