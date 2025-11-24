@@ -467,7 +467,7 @@ $(window).resize(function(e) {
       pop_file(pop_file_temp %>% filter(pop_name == input$pop_name))
 
       cur_res <- suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops,
-                                        N0 = input$N0,
+                                        N0 = unique(input$N0),
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
                                         R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
@@ -482,7 +482,7 @@ $(window).resize(function(e) {
 
         scn_res <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
                             \(x, y, z, nm){
-                              suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops, N0 = input$N0,
+                              suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops, N0 = unique(input$N0),
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
@@ -514,6 +514,7 @@ $(window).resize(function(e) {
     # Population plot #--------------------------------------------------------------
     output$pop_plot <- renderPlot({
       req(pop_mod())
+      input$selected_language
 
       pop_plt <- pop_mod() %>%
         filter(time <= isolate(input$numSteps))
@@ -529,7 +530,7 @@ $(window).resize(function(e) {
           aes(x = time, y = N, group = interaction(id, scn, type),
               linewidth = type, colour = scn, alpha = type))+
         geom_line(na.rm = TRUE)+
-        scale_y_continuous(limits = c(0, min(isolate(input$N0)*3, max(pop_plt$N))), expand = expansion())+
+        scale_y_continuous(limits = c(0, min(isolate(max(input$N0))*3, max(pop_plt$N))), expand = expansion())+
         scale_x_discrete(expand = expansion())+
         scale_linewidth_discrete(range = c(1, 2),
                                  breaks = c("samp", "mean"),

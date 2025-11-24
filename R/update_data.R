@@ -43,9 +43,9 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   if(shiny_progress) shiny::setProgress(0.1, message = paste0(i18n$t("Downloading data from "), sh_name))
   survey_sh_names <- googlesheets4::sheet_names(survey_url)
 
-  recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit")
+  recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit_data")
   if(length(recruit_sh)<1){
-    stop("The spreadsheet does not include a sheet named recruit")
+    stop("The spreadsheet does not include a sheet named 'recruit_data'")
   }
   nms <- c("PopulationName", "Year", "Month", "Day", "Cows",
            "Bulls", "UnknownAdults", "Yearlings", "Calves")
@@ -59,9 +59,9 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   #survey_recruit <- survey_recruit %>% group_by(PopulationName) %>%
   #  filter(n_distinct(Year) > 1)
 
-  surv_sh <- stringr::str_subset(survey_sh_names, "[S,s]urv")
+  surv_sh <- stringr::str_subset(survey_sh_names, "[S,s]urv_data")
   if(length(surv_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'surv'")
+    stop("The spreadsheet does not include a sheet named 'surv_data'")
   }
   survey_surv <- googlesheets4::read_sheet(survey_url, surv_sh,
                                            na = "NA") %>%

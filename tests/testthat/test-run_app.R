@@ -16,6 +16,7 @@ test_that("Update data works properly", {
   app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
   app$set_window_size(width = 1619, height = 1065, wait = FALSE)
   app$click("update_data")
+  Sys.sleep(2)
   app$set_inputs(survey_url = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", wait_ = FALSE)
   Sys.sleep(2)
   app$click("update_data_submit", wait_ = FALSE)
