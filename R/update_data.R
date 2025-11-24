@@ -11,7 +11,8 @@
 #'
 #' @examples
 #' googlesheets4::gs4_deauth()
-#' update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
+#' update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing",
+#'             save_dir = temp_dir())
 update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data"),
                         i18n = NULL, lang = "en",
                         shiny_progress = FALSE){
@@ -28,7 +29,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   )
 
   if(is.null(i18n)){
-    i18n <- list(t = function(x)paste0(x),
+    i18n <- list(t = function(x, session = NULL)paste0(x),
                  get_languages = function(x)"en",
                  get_translation_language = function(x)"en",
                  set_translation_language = function(x)"en")
