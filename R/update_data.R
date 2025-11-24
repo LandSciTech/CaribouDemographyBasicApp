@@ -12,7 +12,7 @@
 #' @examples
 #' googlesheets4::gs4_deauth()
 #' update_data("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing",
-#'             save_dir = temp_dir())
+#'             save_dir = tempdir())
 update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemographyBasicApp", "data"),
                         i18n = NULL, lang = "en",
                         shiny_progress = FALSE){

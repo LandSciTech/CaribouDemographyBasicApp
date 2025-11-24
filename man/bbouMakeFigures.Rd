@@ -9,6 +9,7 @@ bbouMakeFigures(
   recruit_fit,
   fig_dir,
   i18n = NULL,
+  sess = shiny::getDefaultReactiveDomain(),
   ht = 400,
   wt = 600,
   show_interpolated = TRUE
