@@ -9,6 +9,7 @@
 #' @param ht numeric. Height in pixels
 #' @param wt numeric. Width in pixels
 #' @param show_interpolated should estimates be shown for years where there were no surveys?
+#' @param sess Shiny session
 #'
 #' @return Nothing. Figures are saved to `fig_dir`.
 #' @export

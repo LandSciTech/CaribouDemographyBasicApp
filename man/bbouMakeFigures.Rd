@@ -24,6 +24,8 @@ bbouMakeFigures(
 
 \item{i18n}{shiny.i18n object. Used of translation in Shiny app.}
 
+\item{sess}{Shiny session}
+
 \item{ht}{numeric. Height in pixels}
 
 \item{wt}{numeric. Width in pixels}
