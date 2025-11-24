@@ -29,7 +29,8 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x),
-                 get_languages = function(x)"en")
+                 get_languages = function(x)"en",
+                 get_translation_language = function(x)"en")
   }
 
   start <- Sys.time()
