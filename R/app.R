@@ -188,8 +188,9 @@ $(window).resize(function(e) {
       input$selected_language
       # languages tbl
       lang_choice <- data.frame(
-        language = c("English", "Fran\u00E7ais", "Fran\u00E7ais simple"),
-        code = c("en", "fr", "fr2")
+        language = c("English", "Fran\u00E7ais",
+                     "Plain English", "Fran\u00E7ais simple"),
+        code = c("en", "fr", "en2", "fr2")
       )
       lang_choice <- lang_choice$code %>% set_names(lang_choice$language)
 
@@ -751,7 +752,6 @@ $(window).resize(function(e) {
               card_image(file = file.path(inst_dir, "www",
                                           paste0("survivalSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
-              p(em(i18n$t("Note, this graph displays the number of animals counted in aerial surveys in each year. The survey area or time spent surveying may differ from year to year so the numbers should not be directly compared from one year to the next. These values are used by the model to estimate the ratios of males to females and females to calves in the population."))),
               height = 400
             ),
             nav_panel(
@@ -759,6 +759,7 @@ $(window).resize(function(e) {
               card_image(file = file.path(inst_dir, "www",
                                           paste0("recruitmentSummary", "_", input$selected_language,".png")),
                          fill = FALSE, width = 600),
+              p(em(i18n$t("Note, this graph displays the number of animals counted in aerial surveys in each year. The survey area or time spent surveying may differ from year to year so the numbers should not be directly compared from one year to the next. These values are used by the model to estimate the ratios of males to females and females to calves in the population."))),
               height = 400
             )),
           navset_card_tab(

@@ -1,0 +1,129 @@
+en,en2
+Boreal Caribou Demographic Projection Explorer,Boreal Caribou Population Change Explorer
+Define simulation inputs,Set up model input values
+Number of years,Number of years
+Run model,Run model
+Add alternative scenario,Add alternative scenario
+Update data,Update data
+Welcome,Welcome
+Survey data,Survey data
+Projections,Results
+Documentation,Background information
+English,English
+French,French
+Change language,Change language
+Existing data,Existing data
+Population name,Population name
+Other model parameters,Other model input values
+Advanced users can adjust these parameters to explore sensitivity to various demographic model assumptions.,Advanced users can change these input values to see how different assumptions about the population affect the model's results.
+Detailed descriptions will be provided in the app documentation (not yet written).,Detailed descriptions will be provided in the app documentation (not yet written).
+"In the meantime, see the","In the meantime, see the"
+package documentation to learn about some of the parameters.,package documentation to learn about some of the input values.
+Number of example trajectories,Number of example outcomes
+Estimated demographic parameters,Estimated demographic parameters
+Type of interannual variation,Type of interannual variation
+Initial number of adult females,Initial number of adult females
+Average % female survival,Average % female survival
+Average calves per 100 females,Average calves per 100 females
+Standard deviation of survival rate,Standard deviation of survival rate
+Standard deviation of calves per 100 females,Standard deviation of calves per 100 females
+Interannual variation of survival rate,Interannual variation of survival rate
+Interannual variation of calves per 100 females,Interannual variation of calves per 100 females
+Uncertainty about interannual variation of survival rate,Uncertainty about interannual variation of survival rate
+Uncertainty about interannual variation of calves per 100 females,Uncertainty about interannual variation of calves per 100 females
+Current,Current
+Alternative scenario,Alternative scenario
+Alternative scenario name,Alternative scenario name
+Remove scenario,Remove scenario
+Scenario,Scenario
+Plausible,Possible outcomes
+Mean,Average
+Female population size                     ,Female population size
+Years in the future,Years in the future
+Trajectory,Possible outcome
+Projected adult female population size over time. The darker line shows the outcome if we ignore uncertainty about demographic rates and variation among years. The paler lines show a variety of plausible outcomes given uncertainty about demographic rates and variation among years. Only the female population is shown because it is assumed that the number of females is what limits population growth. The population is considered stable if the line is flat or sloped upwards and is declining if the line slopes downward.,"Projected adult female population size over time. The thicker line shows the outcome without considering any uncertainty. The paler lines show a variety of outcomes that include uncertainty about female survival rates, number of calves per 100 cows, and yearly variation.   Only the female population is shown since the number of females is what limits population growth. The population is considered stable if the line is flat or sloped up and is shrinking if the line slopes down."
+Deaths,Deaths
+Recruits,Recruits
+Number of females,Number of females
+Calves per 100 females,Calves per 100 females
+% Female survival,% Female survival
+Years to < 10 females,Years to < 10 females
+Female replacement rate,Female replacement rate
+% Female mortality,% Female mortality
+The mean % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum expected values given the uncertainty in the population parameters. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.,The average % female mortality and female replacement rate in each scenario. The error bars show the minimum and maximum considering uncertainty in the data. A population is stable or increasing when the female replacement rate is equal to or greater than % female mortality.
+Data description,Data description
+Disclaimer,Disclaimer
+"Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description.","Note that the data summarized and described here is provided by app users, and will differ among projects. The creators of the app do not take responsibility for the quality of the data. Click the “update data” button on the menu to the left and follow instructions to modify the data or data description."
+Survey data summary,Survey data summary
+Survival,Survival
+Recruitment,Recruitment
+Demographic rate estimates,Model estimates
+Data summary,Data summary
+Note that results will not be shown for populations with only one year of recruitment or survival data because one year of data is insufficient for making reliable predictions.,"If a popoulation has only one year of data for either survival of females or calf and female counts, no results will be shown. One year is not enough information to make a reliable prediction."
+Female population,Female population
+Female population change,Female population change
+Glossary,Glossary
+Frequently asked questions,Frequently asked questions
+Initial female population,Starting female population
+Initial population year,Starting population year
+Total number of collars by year,Total number of collars by year
+Years of survival data,Years of survival data
+Total number of females in aerial surveys,Total number of females in aerial surveys
+Years of recruitment data,Years of recruitment data
+Update survey data,Update survey data
+Provide a URL linking to a Google Drive spreadsheet,Provide a URL linking to a Google Drive spreadsheet
+Google Drive spreadsheet URL:,Google Drive spreadsheet URL:
+Instructions to create a new data sheet,Instructions to create a new data sheet
+You can supply a URL for your own Google Sheet to use your own data in the app.,You can supply a URL for your own Google Sheet to use your own data in the app.
+In your Google Drive account click 'New' and select 'Google Sheets',In your Google Drive account click 'New' and select 'Google Sheets'
+"Fill the spreadsheet with your data. It must have the same sheets, and column names as the","Fill the spreadsheet with your data. It must have the same sheets, and column names as the"
+example sheet.,example sheet.
+See the,See the
+bboutools website,bboutools website
+for more information on how to format the data.,for more information on how to format the data.
+"Note: The data must be in a Google Sheet not an Excel file stored on Google Drive. To use an uploaded Excel file click 'File', then 'Save as Google Sheets'.","Note: The data must be in a Google Sheet not an Excel file stored on Google Drive. To use an uploaded Excel file click 'File', then 'Save as Google Sheets'."
+If access to the Google Sheet is restricted it will be necessary to grant access to the app.,If access to the Google Sheet is restricted it will be necessary to grant access to the app.
+The simpler option is to click 'Share' and under General Access select 'Anyone with the link` and choose the role 'Viewer'.,The simpler option is to click 'Share' and under General Access select 'Anyone with the link` and choose the role 'Viewer'.
+Then click 'Copy link'. Paste the link into the text box above and click `Update`,Then click 'Copy link'. Paste the link into the text box above and click `Update`
+Cancel,Cancel
+Update,Update
+The url provided is for a protected Google sheet.,The url provided is for a protected Google sheet.
+Click the Authenticate button below and follow the instructions to give this app permission to access files in your Google drive.,Click the Authenticate button below and follow the instructions to give this app permission to access files in your Google drive.
+"Alternatively, change the settings on the Google sheet so ""Anyone with the link can view""","Alternatively, change the settings on the Google sheet so ""Anyone with the link can view"""
+Authenticate,Authenticate
+Downloading data from ,Downloading data from
+Additional model parameters for scenario,Additional model parameters for scenario
+Maximum recruitment multiplier,Maximum recruitment multiplier
+Recruitment multiplier at carrying capacity,Recruitment multiplier at carrying capacity
+Density dependence shape parameter,Density dependence shape parameter
+Allee effect parameter,Allee effect parameter
+Carrying capacity,Carrying capacity
+Maximum population growth rate,Maximum population growth rate
+Sex ratio,Sex ratio
+Fitting survival,Fitting survival
+Fitting recruitment,Fitting recruitment
+Predicting survival,Predicting survival
+Predicting recruitment,Predicting recruitment
+Collared caribou,Collared caribou
+Year,Year
+Number of collared caribou,Number of collared caribou
+Category,Category
+Adult females,Adult females
+Calves,Calves
+Adult males,Adult males
+Adults unknown sex,Adults unknown sex
+Number of caribou counted,Number of caribou counted
+Annual Survival (%),Annual Survival (%)
+Annual female survival,Annual female survival
+Calves per 100 cows,Calves per 100 cows
+Population growth (lambda),Population growth (lambda)
+Difference,Difference
+Range,Range
+Please wait while the data is processed. This may take several minutes.,Please wait while the data is processed. This may take several minutes.
+See the progress bar in the bottom right.,See the progress bar in the bottom right.
+No,No
+Yes,Yes
+Data from survey,Data from survey
+Shape of the distribution of interannual variation of survival rate,Shape of the distribution of interannual variation of survival rate
+Shape of the distribution of interannual variation of calves per 100 females,Shape of the distribution of interannual variation of calves per 100 females
+"Note, this graph displays the number of animals counted in aerial surveys in each year. The survey area or time spent surveying may differ from year to year so the numbers should not be directly compared from one year to the next. These values are used by the model to estimate the ratios of males to females and females to calves in the population.","Note, this graph displays the number of animals counted in aerial surveys in each year. The survey area or time spent surveying may differ from year to year so the numbers should not be directly compared from one year to the next. These values are used by the model to estimate the ratios of males to females and females to calves in the population."

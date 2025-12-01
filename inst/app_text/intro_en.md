@@ -39,7 +39,7 @@ This app was created by Sarah Endicott and Josie Hughes (Wildlife and Landscape
 Science Division, Environment and Climate Change Canada), and Danielle Cantin
 (Canadian Wildlife Service, Environment and Climate Change Canada).
 
-##### **Acknowlegments**
+##### **Acknowledgments**
 Guy Larocque and Rebecca Viejou (Canadian Forest Service, Natural Resources Canada)  
 participated in conceptualizing the app and compiling available data.
 

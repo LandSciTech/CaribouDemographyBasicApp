@@ -46,7 +46,8 @@ inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 i18n <- shiny.i18n::Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
 langs <- i18n$get_languages()
 to_test <- data.frame(lang = langs,
-                      altname = c("Increase recruitment", "Augmentation le recrutement", "Plus de faons"))
+                      altname = c("Increase recruitment", "More calves",
+                                  "Augmentation le recrutement", "Plus de faons"))
 
 # do for all languages
 purrr::pmap(to_test, \(lang, altname){
