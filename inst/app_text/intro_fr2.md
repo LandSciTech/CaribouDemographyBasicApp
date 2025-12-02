@@ -1,3 +1,4 @@
+<img align="right" src="www/Female_caribou_and_calves.jpg" width="500">
 **Cette application aide les gens à explorer ce qui pourrait arriver aux populations de caribou boréal au fil du temps.** Elle montre les tendances futures possibles – si le nombre de caribous pourrait augmenter, diminuer ou rester à peu près le même – en fonction des informations dont nous disposons actuellement.
 
 L’application utilise des données que les scientifiques ont déjà recueillies et publiées, telles que :
