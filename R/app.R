@@ -966,11 +966,28 @@ $(window).resize(function(e) {
           footer = NULL,
           size = "m"))
 
-        withProgress({pop_file_in <- update_data(input$survey_url,
-                                                 lang = input$selected_language,
-                                                 shiny_progress = TRUE,
-                                                 i18n = i18n,
-                                                 save_dir = data_dir)})
+        withProgress({
+          tryCatch(
+            expr = {
+              pop_file_in <- update_data(input$survey_url,
+                                         lang = input$selected_language,
+                                         shiny_progress = TRUE,
+                                         i18n = i18n,
+                                         save_dir = data_dir)
+            },
+            error = function(e) {
+              showNotification(
+                paste0("The following error occurred while updating the data: ",
+                       conditionMessage(e)),
+                duration = NULL, type = "error"
+              )
+              shiny::removeModal()
+              # fail without turning off the app
+              req(FALSE)
+            }
+          )
+
+          })
 
         # update the reactive value
         all_pops(pop_file_in)
