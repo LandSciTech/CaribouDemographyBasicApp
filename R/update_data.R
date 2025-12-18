@@ -37,66 +37,11 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   start <- Sys.time()
 
-  sh_name <- googlesheets4::gs4_get(survey_url)$name
-  if(shiny_progress && !rlang::is_installed("shiny")){
-    warning("Package shiny is not installed. Setting shiny_progress to FALSE")
-    shiny_progress <- FALSE
-  }
+  data_in <- dataFromSheets(survey_url = survey_url, shiny_progress = shiny_progress,
+                            i18n = i18n)
 
-  if(shiny_progress) shiny::setProgress(0.1, message = paste0(i18n$t("Downloading data from "), sh_name))
-  survey_sh_names <- googlesheets4::sheet_names(survey_url)
-
-  recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit_data")
-  if(length(recruit_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'recruit_data'")
-  }
-  nms <- c("PopulationName", "Year", "Month", "Day", "Cows",
-           "Bulls", "UnknownAdults", "Yearlings", "Calves")
-  survey_recruit <- googlesheets4::read_sheet(survey_url, recruit_sh,
-                                              na = "NA") %>%
-    select(any_of(nms)) %>%
-    filter(if_all(everything(), \(x)!is.na(x))) %>%
-    bboudata::bbd_chk_data_recruitment(multi_pops = TRUE)
-
-  # Error in make bbouSummary table if only 1 year
-  #survey_recruit <- survey_recruit %>% group_by(PopulationName) %>%
-  #  filter(n_distinct(Year) > 1)
-
-  surv_sh <- stringr::str_subset(survey_sh_names, "[S,s]urv_data")
-  if(length(surv_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'surv_data'")
-  }
-  survey_surv <- googlesheets4::read_sheet(survey_url, surv_sh,
-                                           na = "NA") %>%
-    bboudata::bbd_chk_data_survival(multi_pops = TRUE, allow_missing = TRUE)
-
-  #survey_surv <- survey_surv %>% group_by(PopulationName) %>%
-  #  filter(n_distinct(Year) > 1)
-
-  pop_sh <- stringr::str_subset(survey_sh_names, "[P,p]opulation")
-  if(length(pop_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'population'")
-  }
-
-  nms <- c("PopulationName", "Year", "FemalePopulationLower", "FemalePopulationUpper")
-
-  survey_pop <- googlesheets4::read_sheet(survey_url, pop_sh,
-                                          na = "NA") %>%
-    select(any_of(nms))
-
-  pop_nms <- purrr::map_lgl(nms,
-                            \(x)stringr::str_detect(colnames(survey_pop), x) %>% any())
-
-  if(!all(pop_nms)){
-    stop("The population estimates sheet is missing the expected column names:",
-         paste0(colnames(survey_pop)[!pop_nms], collapse = ", "))
-  }
-
-  N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year))
-
-  pops_run <- intersect(survey_recruit$PopulationName,
-                        survey_surv$PopulationName) %>%
-    intersect(N0$PopulationName)
+  # assigns each element of the list to the current env
+  list2env(data_in, envir = environment())
 
   pop_file_in <- estimateBayesianRates(
     survey_surv %>% filter(PopulationName %in% pops_run),
@@ -130,22 +75,6 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   })
 
   i18n$set_translation_language(inlang)
-
-  # Add description
-  desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
-  if(length(desc_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'description'")
-  }
-
-  dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
-
-  desc_nms <- colnames(dat_desc)
-
-  if(length(desc_nms) > 1){
-    dat_desc <- dat_desc %>% rename_with(\(x)stringr::str_replace(x, ".*(?=_..)", "description"))
-  } else {
-    names(dat_desc) <- paste0("description_", lang)
-  }
 
   pop_file_in <- bind_cols(pop_file_in, dat_desc)
 

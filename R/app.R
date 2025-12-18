@@ -737,7 +737,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
-            markdown(all_pops()[paste0("description", "_", input$selected_language)][1,1]),
+            markdown(all_pops()[paste0("Description", "_", input$selected_language)][1,1]),
             max_height = 300
           ),
           card(
@@ -988,7 +988,7 @@ $(window).resize(function(e) {
           )
 
           })
-
+browser()
         # update the reactive value
         all_pops(pop_file_in)
 
