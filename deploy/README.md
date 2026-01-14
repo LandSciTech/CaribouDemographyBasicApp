@@ -19,14 +19,16 @@ the deploy folder.
 2) in the GitHub repo go to [Releases](https://github.com/LandSciTech/CaribouDemographyBasicApp/releases)
 and click "Draft a new release".
 
-3) Copy the text from README-USER.txt to the Release description.
+3) Choose a tag that matches the version number of the package
 
-4) Upload the caribou_demography_app.tar file in the area that says "Attach binaries ...".
+4) Copy the text from README-USER.txt to the Release description.
 
-5) Check the "Set as a pre-release" box to indicate that the app is still in development
+5) Upload the caribou_demography_app.tar file in the area that says "Attach binaries ...".
 
-6) Click publish release.
+6) Check the "Set as a pre-release" box to indicate that the app is still in development
 
-7) Send the link to the releases page to any users so that they will always see
+7) Click publish release.
+
+8) Send the link to the releases page to any users so that they will always see
 the most recent release.
 
