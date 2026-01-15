@@ -46,6 +46,18 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   if(shiny_progress) shiny::setProgress(0.1, message = paste0(i18n$t("Downloading data from "), sh_name))
   survey_sh_names <- googlesheets4::sheet_names(survey_url)
 
+  # check description
+  desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
+  if(length(desc_sh)<1){
+    stop("The spreadsheet does not include a sheet named 'description'")
+  }
+
+  dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
+
+  if(nrow(dat_desc) > 1){
+    stop(i18n$t("There is more than one row in the data description sheet. Please modify the sheet to have only one row."))
+  }
+
   recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit_data")
   if(length(recruit_sh)<1){
     stop("The spreadsheet does not include a sheet named 'recruit_data'")
@@ -131,14 +143,8 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   i18n$set_translation_language(inlang)
 
-  # Add description
-  desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
-  if(length(desc_sh)<1){
-    stop("The spreadsheet does not include a sheet named 'description'")
-  }
 
-  dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
-
+# add description to saved file
   desc_nms <- colnames(dat_desc)
 
   if(length(desc_nms) > 1){

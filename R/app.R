@@ -982,6 +982,7 @@ $(window).resize(function(e) {
                 duration = NULL, type = "error"
               )
               shiny::removeModal()
+              do_update(FALSE)
               # fail without turning off the app
               req(FALSE)
             }
