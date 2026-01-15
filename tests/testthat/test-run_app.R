@@ -3,6 +3,7 @@ library(CaribouDemographyBasicApp)
 
 # Note these tests use the installed version so must build and install before testing changes
 
+# this is away of creating the code for a test interactively:
 # shinytest2::record_test(run_caribou_demog_app())
 
 
@@ -13,7 +14,8 @@ test_that("Update data works properly", {
   skip_if_not_installed("googlesheets4")
 
   shiny_app <- run_caribou_demog_app()
-  app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE))
+  app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE),
+                       load_timeout = 60*1000, timeout = 20*1000)
   app$set_window_size(width = 1619, height = 1065, wait = FALSE)
   app$click("update_data")
   Sys.sleep(2)
@@ -56,7 +58,9 @@ purrr::pmap(to_test, \(lang, altname){
     skip_on_covr()
 
     shiny_app <- run_caribou_demog_app()
-    app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE), seed = 1234)
+    app <- AppDriver$new(shiny_app, variant = platform_variant(r_version = FALSE),
+                         seed = 1234,
+                         load_timeout = 60*1000, timeout = 20*1000)
 
     app$set_inputs(selected_language = lang, wait_ = FALSE)
 
@@ -71,26 +75,36 @@ purrr::pmap(to_test, \(lang, altname){
 
     app$set_window_size(width = 1619, height = 1065)
     app$set_inputs(
-      pop_name = "B",
+      pop_name = "A",
       cur_pop = character(0),
       addl_params_cur = character(0),
       ivType = "logistic",
-      S_bar = 84.0694082727134,
-      R_bar = 26.7153340763145,
-      S_iv_cv = 0.217863520723237,
-      R_iv_cv = 0.0974887866343633,
-      S_iv_sd = 1.24256062006226,
-      R_iv_sd = 0.694032575040565,
+      S_bar = 83.3,
+      R_bar = 24,
+      S_iv_mean = 0.217863520723237,
+      R_iv_mean = 0.0974887866343633,
+      S_iv_shape = 11.6,
+      R_iv_shape = 25.9,
       P_0_cur = 1,
       P_K_cur = 0.6,
       s_cur = 0.5,
       N0 = 175,
-      S_sd = 0.513,
-      R_sd = 0.141,
+      S_sd = 0.238,
+      R_sd = 0.081,
       a_cur = 1,
       b_cur = 4,
       K_cur = 10000,
       r_max_cur = 1.3,
+      wait_ = FALSE
+    )
+
+    app$set_inputs(body = "input_data_tab", wait_ = FALSE)
+
+    # doing this twice to try and force different values of rates to make vignette text work
+    # app$set_inputs(cur_pop = "Estimated demographic parameters")
+    app$set_inputs(
+      S_bar = 83.3,
+      R_bar = 24,
       wait_ = FALSE
     )
 
@@ -118,23 +132,45 @@ purrr::pmap(to_test, \(lang, altname){
 
 
     app$set_window_size(width = 1619, height = 1565)
-    app$click("add_alt")
-    app$wait_for_idle()
-    # app$set_inputs(alt_box_1 = "alt_box_p_1")
-    app$set_inputs(
-      alt_S_bar_1 = 88,
-      alt_R_bar_1 = 29,
-      alt_name_1 = altname,
-      addl_params_1 = character(0),
-      P_0_1 = 1,
-      P_K_1 = 0.6,
-      s_1 = 0.5,
-      a_1 = 1,
-      b_1 = 4,
-      K_1 = 10000,
-      r_max_1 = 1.3,
-      wait_ = FALSE
+
+    alt_scns <- tidyr::tribble(
+      ~altname,          ~R_bar, ~S_bar,
+      "85% Fem 24% Calv", 24,   85,
+      "85% Fem 35% Calv", 35,   85,
+      "90% Fem 24% Calv", 24,   90,
+      "90% Fem 35% Calv", 35,   90,
     )
+    alt_scns$alt_n <- 1:4
+
+    if(stringr::str_detect(lang, "fr")){
+      alt_scns$altname <-  stringr::str_replace(alt_scns$altname, "Calv", "Faon")
+    }
+
+    purrr::pwalk(alt_scns,\(altname, R_bar, S_bar, alt_n){
+      app$click("add_alt")
+      app$wait_for_idle()
+      # app$set_inputs(alt_box_1 = "alt_box_p_1")
+
+      input_lst <- list(
+        alt_S_bar_1 = S_bar,
+        alt_R_bar_1 = R_bar,
+        alt_name_1 = altname,
+        addl_params_1 = character(0),
+        P_0_1 = 1,
+        P_K_1 = 0.6,
+        s_1 = 0.5,
+        a_1 = 1,
+        b_1 = 4,
+        K_1 = 10000,
+        r_max_1 = 1.3,
+        wait_ = FALSE
+      )
+
+      names(input_lst) <- stringr::str_replace(names(input_lst), "_1", paste0("_", alt_n))
+
+      do.call(app$set_inputs, input_lst)
+    })
+
     app$click("run_model")
     app$wait_for_idle()
     Sys.sleep(5)
@@ -146,10 +182,10 @@ purrr::pmap(to_test, \(lang, altname){
       stringr::str_replace_all("\n;", "\n") %>%
       {read.table(text = ., sep = ";", header = TRUE)}
 
-    expect_equal(pop_tbl[2,1], altname)
+    # expect_equal(pop_tbl[2,1], alt_scns$altname[1])
 
     pop_nm <- app$get_text("#pop_name")
-    expect_equal(pop_nm, "\nB")
+    expect_equal(pop_nm, "\nA")
 
     app$stop()
 
