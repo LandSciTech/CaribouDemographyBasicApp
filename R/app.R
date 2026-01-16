@@ -288,6 +288,8 @@ $(window).resize(function(e) {
 
       if(nrow(iv_default) > 0){
         iv_default$type <- "logistic"
+      } else {
+        req(nrow(iv_default) > 0)
       }
 
       # } else {
