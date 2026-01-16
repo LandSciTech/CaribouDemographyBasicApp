@@ -36,7 +36,7 @@ googlesheets4::gs4_auth(email = TRUE)
 # File with translations
 inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 i18n <- shiny.i18n::Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
-i18n$set_translation_language("fr") # default translation to display
+i18n$set_translation_language("fr2") # default translation to display
 
 
 def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"

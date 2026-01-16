@@ -17,7 +17,7 @@ if (file.exists(browser_path)) {
 
   # Open in default web browser
   library(CaribouDemographyBasicApp)
-  run_caribou_demog_app(lang = "fr", private = TRUE, allow_update_data = FALSE)
+  run_caribou_demog_app(lang = "fr2", private = TRUE, allow_update_data = FALSE)
 
 }
 
