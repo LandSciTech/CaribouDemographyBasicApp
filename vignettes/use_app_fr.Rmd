@@ -1,10 +1,10 @@
 ---
-title: "Utilisation de l’application "
+title: "Utilisation de l’application v1"
 output: 
   bookdown::html_document2:
       base_format: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Utilisation de l’application }
+  %\VignetteIndexEntry{Utilisation de l’application v1}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
