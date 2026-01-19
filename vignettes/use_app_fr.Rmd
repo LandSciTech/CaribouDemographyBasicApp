@@ -1,5 +1,5 @@
 ---
-title: "Utilisation de l’application"
+title: "Utilisation de l’application "
 output: 
   bookdown::html_document2:
       base_format: rmarkdown::html_vignette
