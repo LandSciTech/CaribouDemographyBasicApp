@@ -4,7 +4,7 @@ output:
   bookdown::html_document2:
       base_format: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Utilisation de l’application}
+  %\VignetteIndexEntry{Utilisation de l’application }
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

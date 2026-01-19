@@ -5,14 +5,16 @@ message(rd)
 Sys.setenv("RTOOLS42_HOME" = file.path(rd, "/rtools/rtools42"),
            RSTUDIO_PANDOC = file.path(file.path(rd, "pandoc-3.8")))
 
+#NOTE: if trouble, try reinstalling Rtools and pandoc.
+#install.packages("pandoc")
+#pandoc::pandoc_locate()
+
 r = getOption("repos")
 r["CRAN"] = "https://cran.rstudio.com/"
 options(repos = r)
 
 # install.packages("pkgbuild", type = "binary")
 # pkgbuild::check_build_tools(debug = TRUE)
-
-
 
 # remove installed packages to get a clean slate
 lib_use <- file.path(rd, "R/library")
@@ -25,9 +27,15 @@ if(!requireNamespace("remotes", quietly = TRUE)){
   install.packages("remotes", type = "binary", )
 }
 
+remotes::install_github("LandSciTech/bboutoolsMultiPop",
+                        type = "binary", upgrade = "always", build_vignettes = F)
+
+remotes::install_github("LandSciTech/caribouMetrics",ref="BbouIntegrationStable",
+                        type = "binary", upgrade = "always", build_vignettes = F)
+
 # installs the app and all it's dependencies
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
-                        type = "binary", upgrade = "always", build_vignettes = TRUE)
+                        type = "binary", upgrade = "always", build_vignettes = TRUE,force=T)
 
 # Update the data
 library(CaribouDemographyBasicApp)
