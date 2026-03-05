@@ -11,6 +11,10 @@ Authors@R:
            family = "Hughes",
            role = c("aut"),
            email = "josie.hughes@ec.gc.ca"),
+    person(given = "Danielle",
+           family = "Cantin",
+           role = c("aut"),
+           email = "danielle.cantin@ec.gc.ca"),
     person(given="His Majesty the King in Right of Canada as represented by the Minister of the Environment",
            role = c("cph")))  
 Description: Explore projections of boreal caribou population growth overtime based on 
