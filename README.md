@@ -83,7 +83,7 @@ following in the R console:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp", build_vignettes = TRUE)
 ```
 
 Note this may take a long time the first time you install it since it
@@ -112,7 +112,7 @@ re-install the package from GitHub. Run the code below in the R console:
 
 ``` r
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
-                        type = "binary", upgrade = "always")
+                        type = "binary", upgrade = "always", build_vignettes = TRUE)
 ```
 
 This will install the most recent version of the app, upgrade any
