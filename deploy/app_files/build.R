@@ -35,7 +35,9 @@ remotes::install_github("LandSciTech/caribouMetrics",ref="BbouIntegrationStable"
 
 # installs the app and all it's dependencies
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
-                        type = "binary", upgrade = "always", build_vignettes = TRUE,force=T)
+                        type = "binary", upgrade = "always",
+                        build_vignettes = TRUE, force = TRUE)
+
 
 # Update the data
 library(CaribouDemographyBasicApp)

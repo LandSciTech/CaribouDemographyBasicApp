@@ -9,12 +9,28 @@ requirement of nimble, so in this version users can not update the data from
 google sheets or re-run the bboutools models. It is possible to create a bundle
 with rtools but it is very large.
 
+## Prerequisites
+
+The following software should be installed in the corresponding folders in deploy/app_files
+
+-  Portable version of R: Install [R Portable](https://sourceforge.net/projects/rportable/), 
+then copy the contents of **R-Portable\App\R-Portable\\** into the **R** folder.
+
+-  Pandoc: Install version 3.8 of pandoc such that the path matches **app_files/pandoc-3.8/pandoc.exe**
+
+-  rtools: Install Rtools version 4.2 from 
+[CRAN](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html) 
+but change the installation location to **app_files/rtools/**
+
+## Create a new release
+
 0) It is a good idea to increment the version number of the package before
 deploying so that the version is clear. Run `usethis::use_version()`
 
-1) in the depoly folder double click build.bat. This will take ~10 minutes to
+1) in the deploy folder double click build.bat. This will take ~10 minutes to
 run and should result in a caribou_demography_app.tar folder being created in
-the deploy folder.
+the deploy folder. The data within the app is updated in this process and is set 
+up to use the Quebec data and set the default language to plain French.
 
 2) in the GitHub repo go to [Releases](https://github.com/LandSciTech/CaribouDemographyBasicApp/releases)
 and click "Draft a new release".

@@ -1,5 +1,8 @@
 rd <- getwd() # Root repo directory
 
+Sys.setenv("RTOOLS42_HOME" = file.path(rd, "/rtools/rtools42"),
+           RSTUDIO_PANDOC = file.path(file.path(rd, "pandoc-3.8")))
+
 # Run app
 browser_path <- file.path(rd, "chrome", "chrome.exe")
 if (file.exists(browser_path)) {
