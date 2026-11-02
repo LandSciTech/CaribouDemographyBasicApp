@@ -43,10 +43,31 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   # assigns each element of the list to the current env
   list2env(data_in, envir = environment())
 
+  #TODO add fillDisturbance here
+
+  survey_surv <- survey_surv %>% filter(PopulationName %in% pops_run)
+  survey_recruit <- survey_recruit %>% filter(PopulationName %in% pops_run)
+  if(max(dist$Year) <= max(survey_surv$Year)){
+    year_add <- max(survey_recruit$Year) + 1
+    survey_surv <- addMissingYears(survey_surv, year_add)
+    survey_recruit <- addMissingYears(survey_recruit, year_add)
+    dist <- dist %>% ungroup() %>%
+      bind_rows(
+        dist %>% ungroup() %>%
+          summarise(.by = PopulationName,
+                    Year = year_add,
+                    Anthro = max(Anthro),
+                    Fire_excl_anthro = mean(Fire_excl_anthro))
+      )
+  }
+  # set future disturbance to most recent and project to a year with no observations
+  # add a missing year of data so we have a projection in a future year
+
   pop_file_in <- estimateBayesianRates(
-    survey_surv %>% filter(PopulationName %in% pops_run),
-    survey_recruit %>% filter(PopulationName %in% pops_run),
-    N0 = N0 %>% filter(PopulationName %in% pops_run),
+    survey_surv, survey_recruit,
+    disturbance = dist,
+    N0 = N0 %>% filter(PopulationName %in% pops_run) %>%
+      rename(N.lower = FemalePopulationLower, N.upper = FemalePopulationUpper),
     shiny_progress = shiny_progress, i18n = i18n, return_mcmc = TRUE)
 
   pop_fits <- pop_file_in
@@ -58,8 +79,6 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
     (survey_recruit %>% group_by(PopulationName) %>%  filter(n_distinct(Year) == 1))$PopulationName))
 
   pops_run <- setdiff(pops_run,rmPops)
-
-  pop_file_in <- subset(pop_file_in, is.element(pop_name,pops_run))
 
   inlang <- i18n$get_translation_language()
 
@@ -76,7 +95,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   i18n$set_translation_language(inlang)
 
-  pop_file_in <- bind_cols(pop_file_in, dat_desc)
+  pop_file_in <- bind_cols(pop_file_in, dat_desc) %>% left_join(N0, by = "PopulationName")
 
   end <- Sys.time()
   print(end - start)

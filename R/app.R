@@ -223,7 +223,7 @@ $(window).resize(function(e) {
       req(pop_file())
       req(input$S_bar)
       req(input$pop_name)
-      pop_file(pop_file() %>% filter(pop_name == input$pop_name))
+      pop_file(pop_file() %>% filter(PopulationName == input$pop_name))
       shinyjs::click("run_model")
       nav_select(id = "body", selected = "welcome_tab")
       o$destroy() # destroy observer as it has no use after initial button click
@@ -233,7 +233,7 @@ $(window).resize(function(e) {
       input$selected_language
 
       pops_use <- all_pops() %>% filter(nSurvYears > 1, nRecruitYears > 1) %>%
-        pull(pop_name)
+        pull(PopulationName)
 
       tagList(
         div(
@@ -268,7 +268,7 @@ $(window).resize(function(e) {
     })
 
     # make reactive so it can be updated
-    pop_file <- reactiveVal(pop_file_temp %>% filter(pop_name == "Basse-C\u00F4te-Nord"))
+    pop_file <- reactiveVal(pop_file_temp %>% filter(PopulationName == "Basse-C\u00F4te-Nord"))
     all_pops <- reactiveVal(pop_file_temp)
 
     # Current population --------------------------------
@@ -279,10 +279,10 @@ $(window).resize(function(e) {
       input$selected_language
       req(input$pop_name)
 
-      pop_default <- all_pops() %>% filter(pop_name == input$pop_name) %>%
-        select(-pop_name, -contains("iv"))
+      pop_default <- all_pops() %>% filter(PopulationName == input$pop_name) %>%
+        select(-PopulationName, -contains("iv"))
 
-      iv_default <- all_pops() %>% filter(pop_name == input$pop_name) %>%
+      iv_default <- all_pops() %>% filter(PopulationName == input$pop_name) %>%
         select(contains("iv")) %>%
         rename_with(\(x)str_remove(x, "_iv") %>% str_to_upper())
 
@@ -467,9 +467,9 @@ $(window).resize(function(e) {
 
     pop_mod <- eventReactive(input$run_model, {
       # update pop_file when model re-runs
-      pop_file(pop_file_temp %>% filter(pop_name == input$pop_name))
+      pop_file(pop_file_temp %>% filter(PopulationName == input$pop_name))
 
-      cur_res <- suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops,
+      cur_res <- suppressMessages(trajectoriesFromSummaryForApp(max(c(input$numSteps, 100)), input$numPops,
                                         N0 = unique(input$N0),
                                         R_bar = input$R_bar/100, S_bar = input$S_bar/100,
                                         R_sd = input$R_sd, S_sd = input$S_sd,
@@ -485,7 +485,7 @@ $(window).resize(function(e) {
 
         scn_res <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
                             \(x, y, z, nm){
-                              suppressMessages(trajectoriesFromSummary(max(c(input$numSteps, 100)), input$numPops, N0 = unique(input$N0),
+                              suppressMessages(trajectoriesFromSummaryForApp(max(c(input$numSteps, 100)), input$numPops, N0 = unique(input$N0),
                                     R_bar = x/100,
                                     S_bar = y/100,
                                     R_sd = input$R_sd, S_sd = input$S_sd,
@@ -731,6 +731,14 @@ $(window).resize(function(e) {
       ret
     })
     output$input_data <- renderUI({
+      desc_nm <- paste0("[d,D]escription_", input$selected_language, "$")
+      if(!any(stringr::str_detect(colnames(all_pops()), desc_nm))){
+        desc_txt <- paste0("Description could not be loaded because there was ",
+                           "no column matching: ", desc_nm)
+      } else {
+        desc_text <- all_pops() %>% select(matches(paste0("[d,D]escription_", input$selected_language, "$"))) %>%
+          slice(1) %>% pull()
+      }
       all_pops()
       page_fillable(
         layout_column_wrap(
@@ -739,7 +747,7 @@ $(window).resize(function(e) {
           card(
             full_screen = TRUE,
             h4(i18n$t("Data description"), id = "intro-data-descrip"),
-            markdown(all_pops()[paste0("Description", "_", input$selected_language)][1,1]),
+            markdown(desc_text),
             max_height = 300
           ),
           card(
@@ -864,7 +872,7 @@ $(window).resize(function(e) {
     output$data_summary <- renderTable({
       all_pops() %>%
         mutate(N0 = paste0(FemalePopulationLower, " - ", FemalePopulationUpper)) %>%
-        select(pop_name, N0, Year,
+        select(PopulationName, N0, Year,
                # nCollarYears,
                nSurvYears,
                # nCowsAllYears,
@@ -991,7 +999,7 @@ $(window).resize(function(e) {
           )
 
           })
-browser()
+
         # update the reactive value
         all_pops(pop_file_in)
 

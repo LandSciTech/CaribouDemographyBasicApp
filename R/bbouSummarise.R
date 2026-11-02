@@ -70,7 +70,9 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
   png(file.path(fig_dir, paste0("recruitmentSummary", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300
   )
-
+  if (!"Year" %in% names(rec_long)) {
+    rec_long <- rec_long %>% mutate(Year = CaribouYear)
+  }
   base <- ggplot(rec_long, aes(x = as.factor(Year), y = NumAnimals, group = Category,
                                fill = Category, colour = Category)) +
     geom_bar(position = "stack", stat = "identity") +
