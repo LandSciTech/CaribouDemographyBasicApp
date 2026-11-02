@@ -115,7 +115,7 @@ L’application utilise des données de survie et de recrutement du caribou sauv
 
 **Pour modifier les données utilisées dans l’application, suivez ces étapes :**
 
-1.  **Créez une feuille de calcul Google pour vos données d’inventaire.** La feuille doit respecter le format utilisé par [bboutools](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data). Vous pouvez copier ce modèle de feuille Google [template Google Sheet]( https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing )  et le remplir avec vos propres données. Par la suite, la sauvegarder (« Make a copy ») sur un Google drive.  
+1.  **Créez une feuille de calcul Google pour vos données d’inventaire.** La feuille doit respecter le format utilisé par [bboutools](https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data). Vous pouvez copier ce modèle de feuille Google [template Google Sheet]( https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing )  et le remplir avec vos propres données. Par la suite, la sauvegarder (« Make a copy ») sur un Google drive.  
     En ce qui concerne l'onglet « recruit_data », si vous n'avez pas de dates spécifiques à déclarer, vous pouvez définir n'importe quelle date arbitraire avant le 1er avril. Les onglets « recruit_data » et « surv_data » sont utilisés par bboutools pour estimer les taux de survie et de recrutement. Pour projeter l'évolution de la taille de la population au fil du temps, ces taux sont combinés à une estimation de la taille initiale de la population de femelles fournie dans l'onglet « population_estimates ».  
     Pour chaque population, indiquez une borne inférieure et supérieure de l’estimation. Si plusieurs années d’estimations sont fournies, seule la plus récente sera utilisée.  
     L’onglet « data_description » permet de décrire les données des autres feuilles dans plusieurs langues. Vous pouvez formater le texte avec le langage Markdown (voir le (Guide de Syntaxe Markdown | Doc Projet) pour un aide-mémoire).
@@ -128,7 +128,7 @@ L’application utilise des données de survie et de recrutement du caribou sauv
 
 ## Détails techniques de l’ajustement du modèle {#technical-details}
 
-L’application utilise le package [bboutools](https://poissonconsulting.github.io/bboutools/articles/bboutools.html) pour estimer les taux de survie et de recrutement à partir des données démographiques sur les caribous [@dalgarno2025]. 
+L’application utilise le package [bboutools](https://LandSciTech.github.io/bboutools/articles/bboutools.html) pour estimer les taux de survie et de recrutement à partir des données démographiques sur les caribous [@dalgarno2025]. 
 
 bboutools ajuste des modèles bayésiens de recrutement et de survie annuels en utilisant des modèles linéaires mixtes généralisés où l’année est considérée comme un effet aléatoire si les données couvrent plus de 5 ans. 
 

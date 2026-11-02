@@ -9,7 +9,7 @@
 <!-- badges: end -->
 
 <h5 id="intro-purpose"><strong>Purpose</strong></h5>
-<img align="right" src="C:/Users/EndicottS/AppData/Local/Temp/RtmpILMaDs/temp_libpath5c407035630/CaribouDemographyBasicApp/www/Female_caribou_and_calves.jpg" width="500">
+<img align="right" src="C:/Users/EndicottS/AppData/Local/Programs/R/R-4.4.1/library/CaribouDemographyBasicApp/www/Female_caribou_and_calves.jpg" width="500">
 The purpose of this application is to allow users to explore projections of the
 population dynamics of boreal caribou. 
 <p>Projections include uncertainty about the
@@ -17,8 +17,8 @@ current state of boreal caribou populations, and how those populations will
 change in the future.</p>
 <p>Caribou demographic model parameters, and uncertainty
 about those parameter values, are estimated from available data on the survival
-of collared caribou and the numbers of calves observed per cow in aerial surveys
-using a modified version of the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a>
+of collared caribou and the numbers of calves observed per cow in aerial surveys using the
+<a href="https://LandSciTech.github.io/bboutools/" target="_blank">bboutools</a>
 R package.</p>
 <p>These parameter estimates are used to project the <strong>likely changes in the population
 over time if there are no future changes in average survival and recruitment</strong>.</p>
@@ -39,7 +39,7 @@ expected outcomes for caribou</strong>.</p>
 <p>This app was created by Sarah Endicott and Josie Hughes (Wildlife and Landscape
 Science Division, Environment and Climate Change Canada), and Danielle Cantin
 (Canadian Wildlife Service, Environment and Climate Change Canada).</p>
-<h5 id="acknowlegments"><strong>Acknowlegments</strong></h5>
+<h5 id="acknowledgments"><strong>Acknowledgments</strong></h5>
 <p>Guy Larocque and Rebecca Viejou (Canadian Forest Service, Natural Resources Canada)<br />
 participated in conceptualizing the app and compiling available data.</p>
 
@@ -58,7 +58,7 @@ the app can follow the instructions below to install the R package.
 
 To run the app you will need to install R and we recommend RStudio as
 well. Follow the instructions
-[here](https://posit.co/download/rstudio-desktop/) to install both.
+[here](https://docs.posit.co/ide/user/download.html) to install both.
 
 In addition, you will need to install the Rtools application. You can do
 this by selecting the version corresponding to your version of R
@@ -83,7 +83,7 @@ following in the R console:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp", build_vignettes = TRUE)
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
 ```
 
 Note this may take a long time the first time you install it since it
@@ -112,7 +112,7 @@ re-install the package from GitHub. Run the code below in the R console:
 
 ``` r
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
-                        type = "binary", upgrade = "always", build_vignettes = TRUE)
+                        type = "binary", upgrade = "always")
 ```
 
 This will install the most recent version of the app, upgrade any

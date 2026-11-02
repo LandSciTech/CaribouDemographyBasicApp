@@ -5,7 +5,7 @@ L’objectif de cette application est de permettre aux utilisateurs d’explorer
 
 Ces projections tiennent compte de l’incertitude concernant l’état actuel des populations de caribou boréal et leur évolution future.
 
-Les paramètres du modèle démographique des caribous, ainsi que l’incertitude associée à ces paramètres, sont estimés à partir des données disponibles sur la survie des caribous munis de colliers et sur le nombre de faons observés par femelle lors des relevés aériens, en utilisant une version modifiée du package R <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a>. 
+Les paramètres du modèle démographique des caribous, ainsi que l’incertitude associée à ces paramètres, sont estimés à partir des données disponibles sur la survie des caribous munis de colliers et sur le nombre de faons observés par femelle lors des relevés aériens, en utilisant le package R <a href="https://LandSciTech.github.io/bboutools/" target="_blank">bboutools</a>. 
 
 Ces estimations de paramètres servent à **projeter les changements probables de la population au fil du temps, en supposant qu’il n’y ait pas de modifications futures des taux moyens de survie et de recrutement**.
 

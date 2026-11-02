@@ -10,8 +10,8 @@ change in the future.
 
 Caribou demographic model parameters, and uncertainty
 about those parameter values, are estimated from available data on the survival
-of collared caribou and the numbers of calves observed per cow in aerial surveys
-using a modified version of the <a href="https://poissonconsulting.github.io/bboutools/" target="_blank">bboutools</a>
+of collared caribou and the numbers of calves observed per cow in aerial surveys using the
+<a href="https://LandSciTech.github.io/bboutools/" target="_blank">bboutools</a>
 R package. 
 
 These parameter estimates are used to project the **likely changes in the population
