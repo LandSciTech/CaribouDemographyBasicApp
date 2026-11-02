@@ -1,6 +1,6 @@
 Package: CaribouDemographyBasicApp
 Title: Explore Demographic Projections for Boreal Caribou
-Version: 0.0.0.9006
+Version: 0.0.0.9007
 Authors@R: 
    c(person(given = "Sarah",
            family = "Endicott", 
@@ -11,6 +11,10 @@ Authors@R:
            family = "Hughes",
            role = c("aut"),
            email = "josie.hughes@ec.gc.ca"),
+    person(given = "Danielle",
+           family = "Cantin",
+           role = c("aut"),
+           email = "danielle.cantin@ec.gc.ca"),
     person(given="His Majesty the King in Right of Canada as represented by the Minister of the Environment",
            role = c("cph")))  
 Description: Explore projections of boreal caribou population growth overtime based on 
@@ -25,7 +29,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Remotes: 
     LandSciTech/bboudata,
-    LandSciTech/bboutoolsMultiPop,
+    LandSciTech/bboutools,
     LandSciTech/caribouMetrics@BbouIntegrationStable
 URL: https://github.com/LandSciTech/CaribouDemographyBasicApp
 BugReports: https://github.com/LandSciTech/CaribouDemographyBasicApp/issues

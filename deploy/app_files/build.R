@@ -5,14 +5,16 @@ message(rd)
 Sys.setenv("RTOOLS42_HOME" = file.path(rd, "/rtools/rtools42"),
            RSTUDIO_PANDOC = file.path(file.path(rd, "pandoc-3.8")))
 
+#NOTE: if trouble, try reinstalling Rtools and pandoc.
+#install.packages("pandoc")
+#pandoc::pandoc_locate()
+
 r = getOption("repos")
 r["CRAN"] = "https://cran.rstudio.com/"
 options(repos = r)
 
 # install.packages("pkgbuild", type = "binary")
 # pkgbuild::check_build_tools(debug = TRUE)
-
-
 
 # remove installed packages to get a clean slate
 lib_use <- file.path(rd, "R/library")
@@ -25,9 +27,17 @@ if(!requireNamespace("remotes", quietly = TRUE)){
   install.packages("remotes", type = "binary", )
 }
 
+remotes::install_github("LandSciTech/bboutoolsMultiPop",
+                        type = "binary", upgrade = "always", build_vignettes = F)
+
+remotes::install_github("LandSciTech/caribouMetrics",ref="BbouIntegrationStable",
+                        type = "binary", upgrade = "always", build_vignettes = F)
+
 # installs the app and all it's dependencies
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
-                        type = "binary", upgrade = "always", build_vignettes = TRUE)
+                        type = "binary", upgrade = "always",
+                        build_vignettes = TRUE, force = TRUE)
+
 
 # Update the data
 library(CaribouDemographyBasicApp)
@@ -36,7 +46,7 @@ googlesheets4::gs4_auth(email = TRUE)
 # File with translations
 inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 i18n <- shiny.i18n::Translator$new(translation_csvs_path = file.path(inst_dir, "extdata/translations"))
-i18n$set_translation_language("fr") # default translation to display
+i18n$set_translation_language("fr2") # default translation to display
 
 
 def_survey_url <- "https://docs.google.com/spreadsheets/d/1FJZ06dc1-oKUEsNrrjSfqlEn3MGsXODQhJ3gmbqmp-s/edit?usp=sharing"

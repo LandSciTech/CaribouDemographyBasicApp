@@ -6,6 +6,7 @@ set "RPathFound=false"
 
 echo "Updating the app, this will take > 5 mins"
 echo "If you encounter an error send the contents of log.out to the app developers for assistance"
+echo "%RootDir%"
 
 :: First, try to find R in the portable directory
 if exist "%RootDir%R\bin\x64\R.exe" (

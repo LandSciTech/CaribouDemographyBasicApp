@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 ```{r, echo=FALSE, results='asis'}
+# Note the package needs to be installed for changes in these files to be 
+# reflected in the output
 inst_dir <- system.file(package = "CaribouDemographyBasicApp")
 htmltools::includeMarkdown(file.path(inst_dir, "app_text", "intro_en.md")) |>
   stringr::str_replace("www/Female_caribou_and_calves.jpg",
@@ -35,7 +37,7 @@ There are two options available for installing the app. Users who do not have R 
 R users or those who wish to update the caribou demographic data used in the app can follow the instructions below to install the R package.  
 
 To run the app you will need to install R and we recommend RStudio as well.
-Follow the instructions [here](https://posit.co/download/rstudio-desktop/) to
+Follow the instructions [here](https://docs.posit.co/ide/user/download.html) to
 install both.
 
 In addition, you will need to install the Rtools application. You can do this by selecting the version corresponding to your version of R [here](https://cran.r-project.org/bin/windows/Rtools/). Or you can run the following code in the R console which should prompt Rtools to be installed. 

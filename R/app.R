@@ -288,6 +288,8 @@ $(window).resize(function(e) {
 
       if(nrow(iv_default) > 0){
         iv_default$type <- "logistic"
+      } else {
+        req(nrow(iv_default) > 0)
       }
 
       # } else {
@@ -899,7 +901,7 @@ $(window).resize(function(e) {
                   tags$li(i18n$t("Fill the spreadsheet with your data. It must have the same sheets, and column names as the")," ",
                           a(i18n$t("example sheet."), href = "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing", target="_blank"), " ",
                           i18n$t("See the")," ",
-                          a(i18n$t("bboutools website"), href = "https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data", target="_blank"), " ",
+                          a(i18n$t("bboutools website"), href = "https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data", target="_blank"), " ",
                           i18n$t("for more information on how to format the data.")),
                   tags$li(i18n$t("Note: The data must be in a Google Sheet not an Excel file stored on Google Drive. To use an uploaded Excel file click 'File', then 'Save as Google Sheets'.")),
                   tags$li(i18n$t("If access to the Google Sheet is restricted it will be necessary to grant access to the app.")),

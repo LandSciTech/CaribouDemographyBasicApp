@@ -22,6 +22,7 @@ Useful links:
 Authors:
 \itemize{
   \item Josie Hughes \email{josie.hughes@ec.gc.ca}
+  \item Danielle Cantin \email{danielle.cantin@ec.gc.ca}
 }
 
 Other contributors:

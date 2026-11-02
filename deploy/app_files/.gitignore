@@ -1,7 +1,6 @@
-chrome/*
-!chrome/.gitkeep
 R/*
 !R/.gitkeep
 rtools/*
 !rtools/.gitkeep
 pandoc-3.8/*
+!"pandoc-3.8/.gitkeep"
