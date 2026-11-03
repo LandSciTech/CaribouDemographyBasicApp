@@ -43,12 +43,19 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   # assigns each element of the list to the current env
   list2env(data_in, envir = environment())
 
-  #TODO add fillDisturbance here
+  # Make sure there is disturbance for each year
+  all_years <- union(survey_surv$Year, survey_recruit$Year)
+  dist <- fillDisturbance(dist,
+                          expand.grid(Year = all_years,
+                                      PopulationName = unique(dist$PopulationName)))
 
   survey_surv <- survey_surv %>% filter(PopulationName %in% pops_run)
   survey_recruit <- survey_recruit %>% filter(PopulationName %in% pops_run)
+
   if(max(dist$Year) <= max(survey_surv$Year)){
-    year_add <- max(survey_recruit$Year) + 1
+    # set future disturbance to most recent and project to a year with no observations
+    # add a missing year of data so we have a projection in a future year
+    year_add <- max(survey_surv$Year) + 1
     survey_surv <- addMissingYears(survey_surv, year_add)
     survey_recruit <- addMissingYears(survey_recruit, year_add)
     dist <- dist %>% ungroup() %>%
@@ -60,8 +67,6 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
                     Fire_excl_anthro = mean(Fire_excl_anthro))
       )
   }
-  # set future disturbance to most recent and project to a year with no observations
-  # add a missing year of data so we have a projection in a future year
 
   pop_file_in <- estimateBayesianRates(
     survey_surv, survey_recruit,
@@ -71,7 +76,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
     shiny_progress = shiny_progress, i18n = i18n, return_mcmc = TRUE)
 
   pop_fits <- pop_file_in
-  pop_file_in <- pop_file_in$parTab
+  res_list <- pop_file_in$parList
 
   #filter out populations with only one year of data at this stage
   rmPops <- unique(c(
@@ -87,7 +92,7 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   purrr::walk(i18n$get_languages(), \(x){
     i18n$set_translation_language(x)
-    bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
+    bbouMakeFigures(bayesianResults = pop_fits,
                     fig_dir = file.path(save_dir, "www"),
                     i18n = i18n, sess = sess,
                     show_interpolated = FALSE)
@@ -95,7 +100,62 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   i18n$set_translation_language(inlang)
 
-  pop_file_in <- bind_cols(pop_file_in, dat_desc) %>% left_join(N0, by = "PopulationName")
+  # Get data into long format for saving
+
+  # Get the estimate in the future year that was added to be used as expected
+  # future rates for all years in the app
+  res_list$Rbar <- filter(res_list$Rbar, Annual == year_add)
+  res_list$Sbar <- filter(res_list$Sbar, Annual == year_add)
+
+  res_tbl <- res_list %>% purrr::keep_at(c("Recruitment", "Survival", "Sbar", "Rbar")) %>%
+    bind_rows() %>%
+    # Remove monthly survival if all the same
+    distinct(mean, sd, lower, upper, PopulationName, Annual, MetricTypeID,
+             .keep_all = TRUE)
+
+  # add rows for interannual var. They are different for bbou vs beta models
+  if(pop_fits$parList$type == "beta"){
+    res_tbl <- res_tbl %>%
+      add_row(lower = pop_fits$parList$Siv$S_cv_min,
+              upper = pop_fits$parList$Siv$S_cv_max,
+              MetricTypeID = "S_cv") %>%
+      add_row(lower = pop_fits$parList$Riv$R_cv_min,
+              upper = pop_fits$parList$Riv$R_cv_max,
+              MetricTypeID = "R_cv")
+  } else if (pop_fits$parList$type == "bbou"){
+    res_tbl <- res_tbl %>%
+      add_row(mean = pop_fits$parList$Siv$S_iv_mean,
+              shape = pop_fits$parList$Siv$S_iv_shape,
+              MetricTypeID = "S_iv") %>%
+      add_row(mean = pop_fits$parList$Riv$R_iv_mean,
+              shape = pop_fits$parList$Riv$R_iv_shape,
+              MetricTypeID = "R_iv")
+  } else {
+    stop("model type not supported")
+  }
+
+  surv_data_amt <- pop_fits$surv_fit$data %>% filter(!is.na(MortalitiesCertain)) %>%
+    group_by(PopulationName, Year) %>%
+    summarise(nCollars = max(StartTotal)) %>%
+    summarise(nCollarYears = sum(nCollars),
+              nSurvYears = n_distinct(Year))
+
+  recruit_data_amt <- pop_fits$recruit_fit$data %>% filter(!is.na(Cows)) %>%
+    group_by(PopulationName, Year) %>%
+    summarise(nCows = sum(Cows)) %>%
+    summarise(nCowsAllYears = sum(nCows),
+              nRecruitYears = n_distinct(Year))
+
+  data_amt <- merge(surv_data_amt, recruit_data_amt) %>%
+    pivot_longer(-PopulationName, names_to = "MetricTypeID", values_to = "mean")
+
+  N0 <- N0 %>% rename(lower = FemalePopulationLower, upper = FemalePopulationUpper) %>%
+    mutate(MetricTypeID = "FemalePopulation")
+
+  dat_desc <- dat_desc %>% pivot_longer(everything(), names_to = "MetricTypeID",
+                            values_to = "PopulationName")
+
+  pop_file_in <- bind_rows(res_tbl, dat_desc, data_amt, N0)
 
   end <- Sys.time()
   print(end - start)

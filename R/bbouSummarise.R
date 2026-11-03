@@ -14,7 +14,7 @@
 #' @return Nothing. Figures are saved to `fig_dir`.
 #' @export
 #'
-bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
+bbouMakeFigures <- function(bayesianResults, fig_dir, i18n = NULL,
                             sess = shiny::getDefaultReactiveDomain(),
                             ht = 400, wt = 600,
                             show_interpolated = TRUE){
@@ -30,11 +30,15 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
   ht <- ht*300/72
   wt <- wt*300/72
 
+  surv_fit <- bayesianResults$surv_fit
+  recruit_fit <- bayesianResults$recruit_fit
+
   #view of the available survival data
   surv_long <- filter(surv_fit$data,!is.na(StartTotal)) %>%
     group_by(PopulationName, Year) %>%
     summarise(StartTotal = max(StartTotal),
               MortalitiesCertain = sum(MortalitiesCertain)) %>%
+    filter(!is.na(MortalitiesCertain)) %>%
     pivot_longer(c(StartTotal, MortalitiesCertain), names_to = "Category",
                  values_to = "NumAnimals")
 
@@ -96,81 +100,16 @@ bbouMakeFigures <- function(surv_fit, recruit_fit, fig_dir, i18n = NULL,
 
   png(file.path(fig_dir, paste0("survBbouMulti", "_", lang, ".png")),
                 height = ht, width = wt, units = "px", res = 300)
-  plt <- bb_plot_year_survival(surv_fit)
 
-  # colour points based on whether the population had data in that year or if it
-  # is borrowed from other populations/years
-  plt$data <- plt$data %>%
-    left_join(surv_fit$data %>%
-                mutate(PopulationName, Annual = as.character(Annual) %>%
-                         as.numeric(), has_data = 1, .keep = "used"),
-              by = c("PopulationName", CaribouYear = "Annual")) %>%
-    mutate(has_data = replace_na(has_data, 0) %>% as.character())
-
-  if(!show_interpolated){
-    plt$data <- plt$data %>%
-      filter(has_data == "1")
-  }else {
-
-    mapping <- plt$mapping
-    mapping[5][[1]] <- as.name("has_data")
-    names(mapping)[5] <- "colour"
-    plt$mapping <- mapping
-
-    plt <- plt +
-      scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
-                            name = i18n$t(session = sess,"Data from survey"),
-                            label = c(i18n$t(session = sess,"No"), i18n$t(session = sess,"Yes")))
-  }
-
-  plt2 <- plt +
-    labs(x = i18n$t(session = sess,"Year"))+
-    scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    scale_y_continuous(i18n$t(session = sess,"Annual female survival"), labels = scales::percent)+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-          legend.position = "top")
-  print(plt2)
+  print(plotMeans(bayesianResults, metrics = "Survival", y_labs = "Annual female survival",
+                  i18n = i18n, sess = sess))
   dev.off()
 
   png(file.path(fig_dir, paste0("recBbouMulti", "_", lang,".png")),
       height = ht, width = wt, units = "px", res = 300)
-  plt <- bb_plot_year_calf_cow_ratio(recruit_fit)
 
-  # colour points based on whether the population had data in that year or if it
-  # is borrowed from other populations/years
-  plt$data <- plt$data %>%
-    left_join(recruit_fit$data %>%
-                mutate(PopulationName, Annual = as.character(Annual) %>%
-                         as.numeric(), has_data = 1, .keep = "used"),
-              by = c("PopulationName", CaribouYear = "Annual")) %>%
-    mutate(has_data = replace_na(has_data, 0) %>% as.factor())
-
-  if(!show_interpolated){
-    plt$data <- plt$data %>%
-      filter(has_data == "1")
-  }else {
-
-    mapping <- plt$mapping
-    mapping[5][[1]] <- as.name("has_data")
-    names(mapping)[5] <- "colour"
-    plt$mapping <- mapping
-
-    plt <- plt +
-      scale_colour_discrete(type = c("0" = "grey70", "1" = "black"),
-                            name = i18n$t(session = sess,"Data from survey"),
-                            label = c(i18n$t(session = sess,"No"), i18n$t(session = sess,"Yes")))
-  }
-
-  plt2 <- plt +
-    scale_y_continuous(transform = scales::new_transform(
-      "hundred", transform = function(x){x*100}, inverse = function(x){x/100},
-      format = scales::label_number(scale = 100)
-    ))+
-    scale_x_continuous(breaks = scales::extended_breaks(5, Q = 1:5, w = c(0.25, 0.2, 0.1, 0.5)))+
-    labs(x = i18n$t(session = sess,"Year"), y = i18n$t(session = sess,"Calves per 100 females"))+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-          legend.position = "top")
-  print(plt2)
+  print(plotMeans(bayesianResults, metrics = "Recruitment", y_labs = "Calves per 100 females",
+                  i18n = i18n, sess = sess))
   dev.off()
 
   # Not sure if we should use these since haven't used the lambda concept in the app so far
