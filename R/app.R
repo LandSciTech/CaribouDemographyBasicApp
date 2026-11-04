@@ -221,9 +221,10 @@ $(window).resize(function(e) {
     # make model run on start up
     o <- observe({
       req(pop_file())
+      req(all_pops())
       req(input$S_bar)
       req(input$pop_name)
-      pop_file(pop_file() %>% filter(PopulationName == input$pop_name))
+      pop_file(all_pops() %>% filter(PopulationName == input$pop_name))
       shinyjs::click("run_model")
       nav_select(id = "body", selected = "welcome_tab")
       o$destroy() # destroy observer as it has no use after initial button click
@@ -268,9 +269,53 @@ $(window).resize(function(e) {
     })
 
     # make reactive so it can be updated
-    pop_file <- reactiveVal(pop_file_temp %>% filter(PopulationName == "Basse-C\u00F4te-Nord"))
-    all_pops <- reactiveVal(pop_file_temp)
+    all_pops_in <- reactiveVal(pop_file_temp)
+    pop_file <- reactiveVal()
 
+    # convert loaded data to format used in app
+    all_pops <- eventReactive(all_pops_in(), {
+      all_pops_in() %>%
+        filter(MetricTypeID %in% c("nSurvYears", "nRecruitYears")) %>%
+        pivot_wider(values_from = c(mean), names_from = MetricTypeID) %>%
+        select(PopulationName, nSurvYears, nRecruitYears) %>%
+        left_join(
+          all_pops_in() %>%
+            filter(MetricTypeID %in% c("FemalePopulation")) %>%
+            pivot_wider(values_from = c(upper, lower), names_from = MetricTypeID) %>%
+            mutate(N0 = paste0(lower_FemalePopulation, " - ", upper_FemalePopulation),
+                   PopulationName = PopulationName,
+                   Year = Year, .keep = "used"),
+          by = "PopulationName"
+        ) %>%
+        left_join(
+          all_pops_in() %>%  filter(stringr::str_detect(MetricTypeID, "bar")) %>%
+            pivot_wider(id_cols = PopulationName,
+                        values_from = c(mean, sd, lower, upper),
+                        names_from = MetricTypeID,
+                        names_glue = "{MetricTypeID}_{.value}") %>%
+            rename_with(\(x) {stringr::str_replace(x, "bar", "_bar") %>%
+                stringr::str_replace("_bar_sd", "_sd") %>%
+                stringr::str_remove("_mean")}),
+          by = "PopulationName"
+        ) %>%
+        left_join(
+          all_pops_in() %>%  filter(stringr::str_detect(MetricTypeID, "_iv|_cv"))%>%
+            pivot_wider(id_cols = PopulationName,
+                        values_from = c(lower, upper),
+                        names_from = MetricTypeID,
+                        names_glue = "{MetricTypeID}_{.value}") %>%
+            mutate(PopulationName = list(all_pops_in() %>%
+                                           filter(MetricTypeID == "Rbar") %>%
+                                           pull(PopulationName) %>%
+                                           unique())) %>%
+            tidyr::unnest(PopulationName),
+          by = "PopulationName"
+        )
+    })
+
+    observeEvent(all_pops(),{
+      pop_file(all_pops() %>% filter(PopulationName == "Basse-C\u00F4te-Nord"))
+    })
     # Current population --------------------------------
     output$cur_pop_ui <- renderUI({
       # req(input$param_source)
@@ -283,13 +328,45 @@ $(window).resize(function(e) {
         select(-PopulationName, -contains("iv"))
 
       iv_default <- all_pops() %>% filter(PopulationName == input$pop_name) %>%
-        select(contains("iv")) %>%
-        rename_with(\(x)str_remove(x, "_iv") %>% str_to_upper())
+        select(matches("_iv|_cv"))
 
-      if(nrow(iv_default) > 0){
+      req(nrow(iv_default) > 0)
+
+      if(any(stringr::str_detect(colnames(iv_default), "_iv"))){
         iv_default$type <- "logistic"
-      } else {
-        req(nrow(iv_default) > 0)
+        iv_div <- div(
+          sliderInput("S_iv_mean",
+                      label = i18n$t("Interannual variation of survival rate"),
+                      value = iv_default$S_iv_mean, min = 0.01, max = 2, step = 0.01
+          ),
+          sliderInput("R_iv_mean",
+                      label = i18n$t("Interannual variation of calves per 100 females"),
+                      value = iv_default$R_iv_mean, min = 0.01, max = 2, step = 0.01
+          ),
+          # note shape is stored under sd to have consistent column names
+          sliderInput("S_iv_shape",
+                      label = i18n$t("Shape of the distribution of interannual variation of survival rate"),
+                      value = iv_default$S_iv_sd, min = 0.01, max = 50, step=0.1
+          ),
+          sliderInput("R_iv_shape",
+                      label = i18n$t("Shape of the distribution of interannual variation of calves per 100 females"),
+                      value = iv_default$R_iv_sd, min = 0.01, max = 50, step=0.1
+          )
+        )
+      } else if(any(stringr::str_detect(colnames(iv_default), "_cv"))){
+        iv_default$type <- "beta"
+        iv_div <- div(
+          sliderInput("S_cv",
+                      label = i18n$t("Interannual variation of survival rate"),
+                      value = c(iv_default$S_cv_lower, iv_default$S_cv_upper),
+                      min = 0.01, max = 2, step = 0.01
+          ),
+          sliderInput("R_cv",
+                      label = i18n$t("Interannual variation of calves per 100 females"),
+                      value = c(iv_default$S_cv_lower, iv_default$S_cv_upper),
+                      min = 0.01, max = 2, step = 0.01
+          )
+        )
       }
 
       # } else {
@@ -319,9 +396,9 @@ $(window).resize(function(e) {
             ),
             sliderInput("N0",
                         label = i18n$t("Initial number of adult females"),
-                        value = c(pop_default$FemalePopulationLower,
-                                  pop_default$FemalePopulationUpper),
-                        min = 0, max = pop_default$FemalePopulationUpper + 1000
+                        value = c(pop_default$lower_FemalePopulation,
+                                  pop_default$upper_FemalePopulation),
+                        min = 0, max = pop_default$upper_FemalePopulation + 1000
             ),
             sliderInput("S_bar",
                         label = i18n$t("Average % female survival"),
@@ -339,22 +416,7 @@ $(window).resize(function(e) {
                          label = i18n$t("Standard deviation of calves per 100 females"),
                          value = round(pop_default$R_sd, 3)
             ),
-            sliderInput("S_iv_mean",
-                        label = i18n$t("Interannual variation of survival rate"),
-                        value = iv_default$S_MEAN, min = 0.01, max = 2, step = 0.01
-            ),
-            sliderInput("R_iv_mean",
-                        label = i18n$t("Interannual variation of calves per 100 females"),
-                        value = iv_default$R_MEAN, min = 0.01, max = 2, step = 0.01
-            ),
-            sliderInput("S_iv_shape",
-                        label = i18n$t("Shape of the distribution of interannual variation of survival rate"),
-                        value = iv_default$S_SHAPE, min = 0.01, max = 50, step=0.1
-            ),
-            sliderInput("R_iv_shape",
-                        label = i18n$t("Shape of the distribution of interannual variation of calves per 100 females"),
-                        value = iv_default$R_SHAPE, min = 0.01, max = 50, step=0.1
-            )
+            iv_div
           )
         ),
         addl_params_ui("cur", mod_defaults, i18n, i18n$t("Current"))
@@ -467,40 +529,92 @@ $(window).resize(function(e) {
 
     pop_mod <- eventReactive(input$run_model, {
       # update pop_file when model re-runs
-      pop_file(pop_file_temp %>% filter(PopulationName == input$pop_name))
+      pop_file(all_pops() %>% filter(PopulationName == input$pop_name))
 
-      cur_res <- suppressMessages(trajectoriesFromSummaryForApp(max(c(input$numSteps, 100)), input$numPops,
-                                        N0 = unique(input$N0),
-                                        R_bar = input$R_bar/100, S_bar = input$S_bar/100,
-                                        R_sd = input$R_sd, S_sd = input$S_sd,
-                                        R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
-                                        R_iv_shape = input$R_iv_shape, S_iv_shape = input$S_iv_shape,
-                                        scn_nm = "Current", type = input$ivType,
-                                        addl_params = get_addl_params("cur", input)))
+
+      n_steps <- max(c(input$numSteps, 100))
+      if(input$ivType == "beta"){
+        Riv_tbl <- data.frame(R_cv_min = input$R_cv[1],
+                              R_cv_max = input$R_cv[2])
+        Siv_tbl <- data.frame(S_cv_min = input$S_cv[1],
+                              S_cv_max = input$S_cv[2])
+      } else {
+        Riv_tbl <- data.frame(R_iv_mean = input$R_iv_mean,
+                              R_iv_shape = input$R_iv_shape)
+        Siv_tbl <- data.frame(S_iv_mean = input$S_iv_mean,
+                              S_iv_shape = input$S_iv_shape)
+      }
+
+      cur_res <- suppressMessages(
+        do.call(
+          trajectoriesFromSummary,
+          c(list(input$numPops,
+                 N0 = data.frame(PopulationName = input$pop_name,
+                                 N0 = mean(input$N0),
+                                 N.lower = input$N0[1],
+                                 N.upper = input$N0[2]),
+                 Rbar = data.frame(PopulationName = input$pop_name,
+                                    mean = input$R_bar/100,
+                                    sd = input$R_sd,
+                                    Year = 1:n_steps,
+                                    Annual = 1:n_steps),
+                 Sbar = data.frame(PopulationName = input$pop_name,
+                                    mean = input$S_bar/100,
+                                    sd = input$S_sd,
+                                    Year = 1:n_steps,
+                                    Annual = 1:n_steps),
+                 Riv = Riv_tbl,
+                 Siv = Siv_tbl,
+                 type = input$ivType,
+                 doSummary = TRUE,
+                 returnSamples = TRUE),
+             get_addl_params("cur", input)
+          )
+        )
+      )
+      cur_res$scn <- "Current"
 
       if(any(do_alt_scns())){
         R_lst <- get_not_null_input("alt_R_bar_", input)
         S_lst <- get_not_null_input("alt_S_bar_", input)
         scn_nms_lst <- get_not_null_input("alt_name_", input)
 
-        scn_res <- pmap_dfr(list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
-                            \(x, y, z, nm){
-                              suppressMessages(trajectoriesFromSummaryForApp(max(c(input$numSteps, 100)), input$numPops, N0 = unique(input$N0),
-                                    R_bar = x/100,
-                                    S_bar = y/100,
-                                    R_sd = input$R_sd, S_sd = input$S_sd,
-                                    R_iv_mean = input$R_iv_mean, S_iv_mean = input$S_iv_mean,
-                                    R_iv_shape = input$R_iv_shape, S_iv_shape = input$S_iv_shape,
-                                    scn_nm = ifelse(z == "", nm, z),
-                                    type = input$ivType,
-                                    addl_params = get_addl_params(str_remove(nm, "alt_name_"),
-                                                                  input)))
-                            })
+        scn_res <- purrr::pmap_dfr(
+          list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
+          \(x, y, z, nm){
+            alt_res <- do.call(
+              trajectoriesFromSummary,
+              c(list(input$numPops,
+                     N0 = data.frame(PopulationName = input$pop_name,
+                                     N0 = mean(input$N0),
+                                     N.lower = input$N0[1],
+                                     N.upper = input$N0[2]),
+                     Rbar = data.frame(PopulationName = input$pop_name,
+                                       mean = x/100,
+                                       sd = input$R_sd,
+                                       Year = 1:n_steps,
+                                       Annual = 1:n_steps),
+                     Sbar = data.frame(PopulationName = input$pop_name,
+                                       mean = y/100,
+                                       sd = input$S_sd,
+                                       Year = 1:n_steps,
+                                       Annual = 1:n_steps),
+                     Riv = Riv_tbl,
+                     Siv = Siv_tbl,
+                     type = input$ivType,
+                     doSummary = TRUE,
+                     returnSamples = TRUE),
+                     get_addl_params(str_remove(nm, "alt_name_"),
+                                     input))
+            )
+            alt_res$scn <- ifelse(z == "", nm, z)
+            return(alt_res)
+          })
       }else {
         scn_res <- NULL
       }
 
-
+      browser()
 
       out <- bind_rows(cur_res, scn_res)
 
@@ -552,34 +666,36 @@ $(window).resize(function(e) {
 
     # Population change plot #---------------------------------------------------
     output$pop_change <- renderPlot({
-      req(pop_mod())
-      pop_plt <- pop_mod() %>%
-        filter(time <= isolate(input$numSteps))
-
-      ddg <- position_dodge()
-
-      pop_plt %>%
-        mutate(deaths = N0 - surviving_adFemales,
-               fem_recruit = n_recruits/2,
-               time = as.factor(time)) %>%
-        pivot_longer(c(deaths, fem_recruit), names_to = "var", values_to = "num_animals") %>%
-        pivot_wider(names_from = type, values_from = num_animals) %>%
-        group_by(time, scn, var) %>%
-        summarise(num_animals = mean(mean, na.rm = TRUE),
-                  min_animals = min(samp, na.rm = TRUE),
-                  max_animals = max(samp, na.rm = TRUE),
-                  .groups = "drop") %>%
-        ggplot(aes(time, y = num_animals, ymax = max_animals, ymin = min_animals,
-                   fill = scn, alpha = var))+
-        geom_col(position = ddg)+
-        geom_errorbar(position = ddg)+
-        scale_fill_brewer(palette = "Dark2")+
-        scale_y_continuous(expand = expansion())+
-        scale_x_discrete(expand = expansion())+
-        scale_alpha_discrete(range = c(0.5, 1), labels = c(i18n$t("Deaths"), i18n$t("Recruits")))+
-        labs(fill = i18n$t("Scenario"), y = i18n$t("Number of females"),
-             x = i18n$t("Years in the future"), alpha = NULL)+
-        facet_wrap(~scn, ncol = 1)
+      # Note: not currently in use will need updating
+      req(FALSE)
+      # req(pop_mod())
+      # pop_plt <- pop_mod() %>%
+      #   filter(time <= isolate(input$numSteps))
+      #
+      # ddg <- position_dodge()
+      #
+      # pop_plt %>%
+      #   mutate(deaths = N0 - surviving_adFemales,
+      #          fem_recruit = n_recruits/2,
+      #          time = as.factor(time)) %>%
+      #   pivot_longer(c(deaths, fem_recruit), names_to = "var", values_to = "num_animals") %>%
+      #   pivot_wider(names_from = type, values_from = num_animals) %>%
+      #   group_by(time, scn, var) %>%
+      #   summarise(num_animals = mean(mean, na.rm = TRUE),
+      #             min_animals = min(samp, na.rm = TRUE),
+      #             max_animals = max(samp, na.rm = TRUE),
+      #             .groups = "drop") %>%
+      #   ggplot(aes(time, y = num_animals, ymax = max_animals, ymin = min_animals,
+      #              fill = scn, alpha = var))+
+      #   geom_col(position = ddg)+
+      #   geom_errorbar(position = ddg)+
+      #   scale_fill_brewer(palette = "Dark2")+
+      #   scale_y_continuous(expand = expansion())+
+      #   scale_x_discrete(expand = expansion())+
+      #   scale_alpha_discrete(range = c(0.5, 1), labels = c(i18n$t("Deaths"), i18n$t("Recruits")))+
+      #   labs(fill = i18n$t("Scenario"), y = i18n$t("Number of females"),
+      #        x = i18n$t("Years in the future"), alpha = NULL)+
+      #   facet_wrap(~scn, ncol = 1)
 
 
     })
@@ -732,14 +848,14 @@ $(window).resize(function(e) {
     })
     output$input_data <- renderUI({
       desc_nm <- paste0("[d,D]escription_", input$selected_language, "$")
-      if(!any(stringr::str_detect(colnames(all_pops()), desc_nm))){
+      desc_text <- all_pops_in() %>%
+        filter(stringr::str_detect(MetricTypeID, desc_nm))
+      if(nrow(desc_text)<1){
         desc_txt <- paste0("Description could not be loaded because there was ",
                            "no column matching: ", desc_nm)
       } else {
-        desc_text <- all_pops() %>% select(matches(paste0("[d,D]escription_", input$selected_language, "$"))) %>%
-          slice(1) %>% pull()
+        desc_text <- desc_text %>% pull(PopulationName)
       }
-      all_pops()
       page_fillable(
         layout_column_wrap(
           width = "600px",
@@ -870,13 +986,9 @@ $(window).resize(function(e) {
     })
 
     output$data_summary <- renderTable({
+
       all_pops() %>%
-        mutate(N0 = paste0(FemalePopulationLower, " - ", FemalePopulationUpper)) %>%
-        select(PopulationName, N0, Year,
-               # nCollarYears,
-               nSurvYears,
-               # nCowsAllYears,
-               nRecruitYears) %>%
+        select(PopulationName, N0, Year, nSurvYears, nRecruitYears) %>%
         set_names(c(i18n$t("Population name"),
                     i18n$t("Initial female population"),
                     i18n$t("Initial population year"),
@@ -1001,7 +1113,7 @@ $(window).resize(function(e) {
           })
 
         # update the reactive value
-        all_pops(pop_file_in)
+        all_pops_in(pop_file_in)
 
         # update the figures in www
         file.copy(from = file.path(data_dir, "www"), to = inst_dir,
