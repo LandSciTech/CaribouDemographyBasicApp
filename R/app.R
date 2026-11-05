@@ -146,9 +146,6 @@ $(window).resize(function(e) {
       tags$head(
         tags$script(add_id_to_section)
       ),
-      #waiter::useWaiter(),
-      #waiter::waiterPreloader(),
-      #waiter::autoWaiter(),
       navset_bar(
         id = "body",
         fillable = FALSE,
@@ -177,7 +174,6 @@ $(window).resize(function(e) {
 
   # Server #----------------------------------------------------------------------
   server <- function(input, output, session) {
-
     theme_set(
       theme_classic()+
         theme(text = element_text(size = 20),
@@ -218,16 +214,18 @@ $(window).resize(function(e) {
       shiny.i18n::update_lang(input$selected_language)
     })
 
-    # make model run on start up
-    o <- observe({
-      req(pop_file())
-      req(all_pops())
-      req(input$S_bar)
-      req(input$pop_name)
-      pop_file(all_pops() %>% filter(PopulationName == input$pop_name))
-      shinyjs::click("run_model")
-      nav_select(id = "body", selected = "welcome_tab")
-      o$destroy() # destroy observer as it has no use after initial button click
+    # make model run on tab Projections
+    observeEvent(input$body, {
+      if(input$body == "results_tab"){
+        req(pop_file())
+        req(all_pops())
+        req(input$S_bar)
+        req(input$pop_name)
+        pop_file(all_pops() %>% filter(PopulationName == input$pop_name))
+        shinyjs::click("run_model")
+        # nav_select(id = "body", selected = "welcome_tab")
+        # o$destroy() # destroy observer as it has no use after initial button click
+      }
     })
 
     output$param_source_ui <- renderUI({
@@ -526,13 +524,30 @@ $(window).resize(function(e) {
       unlist(out) > 0
     })
 
+    input_hash <- reactive({
+      digest::digest(list(
+        input$R_cv,
+        input$S_cv,
+        input$R_iv_mean,
+        input$R_iv_shape,
+        input$S_iv_mean,
+        input$S_iv_shape,
+        input$numSteps,
+        input$pop_name,
+        all_pops(),
+        input$N0,
+        input$R_bar,
+        input$R_sd,
+        input$S_bar,
+        input$S_sd,
+        input$ivType,
+        get_addl_params("cur", input)
+      ))
+    })
 
-    pop_mod <- eventReactive(input$run_model, {
-      # update pop_file when model re-runs
-      pop_file(all_pops() %>% filter(PopulationName == input$pop_name))
+    last_hash <- reactiveVal(NULL)
 
-
-      n_steps <- max(c(input$numSteps, 100))
+    iv_tbl <- reactive({
       if(input$ivType == "beta"){
         Riv_tbl <- data.frame(R_cv_min = input$R_cv[1],
                               R_cv_max = input$R_cv[2])
@@ -544,47 +559,77 @@ $(window).resize(function(e) {
         Siv_tbl <- data.frame(S_iv_mean = input$S_iv_mean,
                               S_iv_shape = input$S_iv_shape)
       }
+      list(S = Siv_tbl, R = Riv_tbl)
+    })
 
-      cur_res <- suppressMessages(
-        do.call(
-          trajectoriesFromSummary,
-          c(list(input$numPops,
-                 N0 = data.frame(PopulationName = input$pop_name,
-                                 N0 = mean(input$N0),
-                                 N.lower = input$N0[1],
-                                 N.upper = input$N0[2]),
-                 Rbar = data.frame(PopulationName = input$pop_name,
-                                    mean = input$R_bar/100,
-                                    sd = input$R_sd,
-                                    Year = 1:n_steps,
-                                    Annual = 1:n_steps),
-                 Sbar = data.frame(PopulationName = input$pop_name,
-                                    mean = input$S_bar/100,
-                                    sd = input$S_sd,
-                                    Year = 1:n_steps,
-                                    Annual = 1:n_steps),
-                 Riv = Riv_tbl,
-                 Siv = Siv_tbl,
-                 type = input$ivType,
-                 doSummary = TRUE,
-                 returnSamples = TRUE),
-             get_addl_params("cur", input)
+    last_cur_res <- reactiveVal(NULL)
+
+    cur_res <- eventReactive(input$run_model, {
+
+      # avoid re-running if it hasn't changed
+      hash <- input_hash()
+
+      if (identical(hash, isolate(last_hash()))) {
+        return(isolate(last_cur_res()))
+      }
+
+      withProgress(message = 'Calculating projections', {
+        incProgress(detail = "Current scenario")
+        last_hash(hash)
+
+        # update pop_file when model re-runs
+        pop_file(all_pops() %>% filter(PopulationName == input$pop_name))
+
+        n_steps <- max(c(input$numSteps, 100))
+
+
+        cur_res <- suppressMessages(
+          do.call(
+            trajectoriesFromSummary,
+            c(list(500, # setting high and filtering later so matches inputs directly
+                   N0 = data.frame(PopulationName = input$pop_name,
+                                   N0 = mean(input$N0),
+                                   N.lower = input$N0[1],
+                                   N.upper = input$N0[2]),
+                   Rbar = data.frame(PopulationName = input$pop_name,
+                                     mean = input$R_bar/100,
+                                     sd = input$R_sd,
+                                     Year = 1:n_steps,
+                                     Annual = 1:n_steps),
+                   Sbar = data.frame(PopulationName = input$pop_name,
+                                     mean = input$S_bar/100,
+                                     sd = input$S_sd,
+                                     Year = 1:n_steps,
+                                     Annual = 1:n_steps),
+                   Riv = iv_tbl()$R,
+                   Siv = iv_tbl()$S,
+                   type = input$ivType,
+                   doSummary = TRUE,
+                   returnSamples = TRUE),
+              get_addl_params("cur", input)
+            )
           )
         )
-      )
-      cur_res$scn <- "Current"
+      })
+      last_cur_res(cur_res)
+      cur_res
+    })
 
+    pop_mod_all <- eventReactive(input$run_model, {
+      n_steps <- max(c(input$numSteps, 100))
+      req(cur_res())
       if(any(do_alt_scns())){
         R_lst <- get_not_null_input("alt_R_bar_", input)
         S_lst <- get_not_null_input("alt_S_bar_", input)
         scn_nms_lst <- get_not_null_input("alt_name_", input)
-
-        scn_res <- purrr::pmap_dfr(
-          list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst)),
-          \(x, y, z, nm){
+        withProgress(message = 'Calculating projections', {
+        scn_res <- purrr::pmap(
+          list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst), scn_nms_lst),
+          \(x, y, z, nm, nm2){
+            incProgress(detail = paste0("Alternative scenario: ", nm2), amount = 0.2)
             alt_res <- do.call(
               trajectoriesFromSummary,
-              c(list(input$numPops,
+              c(list(500,
                      N0 = data.frame(PopulationName = input$pop_name,
                                      N0 = mean(input$N0),
                                      N.lower = input$N0[1],
@@ -599,68 +644,83 @@ $(window).resize(function(e) {
                                        sd = input$S_sd,
                                        Year = 1:n_steps,
                                        Annual = 1:n_steps),
-                     Riv = Riv_tbl,
-                     Siv = Siv_tbl,
+                     Riv = iv_tbl()$R,
+                     Siv = iv_tbl()$S,
                      type = input$ivType,
                      doSummary = TRUE,
                      returnSamples = TRUE),
                      get_addl_params(str_remove(nm, "alt_name_"),
                                      input))
             )
-            alt_res$scn <- ifelse(z == "", nm, z)
             return(alt_res)
-          })
+          }) %>%
+          purrr::set_names(scn_nms_lst)
+        })
       }else {
         scn_res <- NULL
       }
 
-      browser()
-
-      out <- bind_rows(cur_res, scn_res)
+      out <- c(list(Current = cur_res()), scn_res)
 
       # set factor levels so Current is always first
-      scn_levs <- c("Current", setdiff(unique(out$scn), "Current"))
-      scn_labs <- c("Current", setdiff(unique(out$scn), "Current"))
+      scn_levs <- c("Current", setdiff(unique(names(out)), "Current"))
 
-      out <- out %>%
-        mutate(scn = factor(scn, levels = scn_levs, labels = scn_labs))
+      # combine lists
+      out <- out |>
+        purrr::imap(
+          \(pop_list, pop_name) {
+            purrr::map_if(pop_list, is.data.frame,
+              \(x) {dplyr::mutate(x, PopulationName = pop_name)})
+          })
+      if(any(do_alt_scns())){
+        out <- out |> purrr::transpose() |>
+          purrr::map(
+            ~ purrr::keep(.x, is.data.frame) %>%
+              bind_rows() %>%
+              mutate(PopulationName = factor(PopulationName,
+                                             levels = scn_levs,
+                                             labels = scn_levs))
+          )
+      } else {
+        out <- out$Current
+      }
 
       return(out)
+    })
 
+    pop_mod <- eventReactive(pop_mod_all(), {
+      req(pop_mod_all())
+
+      # filter to number of steps
+      mod_lst <- pop_mod_all() %>%
+        purrr::map_at(.at = c("summary", "samples"), \(x){
+          x %>% filter(Timestep <= input$numSteps)
+        })
+
+      mod_lst$samples <- mod_lst$samples %>%
+        filter(Replicate %in% paste0("x", 1:input$numSteps))
+      mod_lst
     })
     # Population plot #--------------------------------------------------------------
     output$pop_plot <- renderPlot({
       req(pop_mod())
       input$selected_language
 
-      pop_plt <- pop_mod() %>%
-        filter(time <= isolate(input$numSteps))
+      maxN <- pop_mod()$samples %>% filter(MetricTypeID == "N") %>%
+        pull(Amount) %>% max()
 
-      plt <- pop_plt %>%
-        bind_rows(
-          distinct(pop_mod() %>% filter(time == 1), type, scn, id, time = 0, N = N0)
-        ) %>%
-        mutate(type = factor(type, levels = c("samp", "mean")),
-               time = as.factor(time)
-        ) %>%
-        ggplot(
-          aes(x = time, y = N, group = interaction(id, scn, type),
-              linewidth = type, colour = scn, alpha = type))+
-        geom_line(na.rm = TRUE)+
-        scale_y_continuous(limits = c(0, min(isolate(max(input$N0))*3, max(pop_plt$N))), expand = expansion())+
-        scale_x_discrete(expand = expansion())+
-        scale_linewidth_discrete(range = c(1, 2),
-                                 breaks = c("samp", "mean"),
-                                 labels = c(i18n$t("Plausible"), i18n$t("Mean")))+
-        scale_alpha_discrete(range = c(0.2, 1), guide = NULL)+
+      plt <- plotTrajectories(pop_mod(), metrics = "Female population size",
+                              multicolour_samples = FALSE, ribbon = FALSE,
+                              add_N0 = TRUE)+
+        ggplot2::labs(col = i18n$t("Scenario"), x = i18n$t("Years in the future"),
+                      y =  i18n$t("Female population size") %>% str_wrap(25),
+                      linewidth = i18n$t("Trajectory"))+
+        ggplot2::guides(linewidth = ggplot2::guide_legend(override.aes = list(linewidth = c(1,2))),
+                        color = ggplot2::guide_legend(override.aes = list(linewidth = c(2))))+
         scale_color_brewer(palette = "Dark2", labels = \(x)i18n$t(x))+
-        # scale_colour_identity(guide = guide_legend(), labels = c()) +
-        labs(col = i18n$t("Scenario"), y = i18n$t("Female population size") %>% str_wrap(25),
-             x = i18n$t("Years in the future"),
-             alpha = i18n$t("Trajectory"), linewidth = i18n$t("Trajectory"))+
-        guides(linewidth = guide_legend(override.aes = list(alpha = c(0.2, 1))),
-               colour = guide_legend(override.aes = list(linewidth = c(2))))
-
+        scale_y_continuous(limits = c(0, min(isolate(max(input$N0))*3, maxN+10)),
+                           expand = expansion())+
+        scale_x_continuous(expand = expansion())
       plt
     })
 
@@ -701,15 +761,18 @@ $(window).resize(function(e) {
     })
 
     observeEvent(input$run_model, {
-      if(input$run_model > 1){
+      # if(input$run_model > 1){
         nav_select(id = "body", selected = "results_tab")
-      }
+      # }
     })
 
 
     # Population stats table #---------------------------------------------------
     pop_table <- eventReactive(input$run_model,{
-
+      # R_t_mean came from the estimateBayesianRates estimate for the new year
+      # and was the input to trajFromSum while Mean_Rbar is the output from
+      # trajFromSum so they are slightly different but we should use R_t_mean
+      # since that will match the inputs
       cur_tab <- data.frame(Scenario = "Current",
                         R_t_mean = input$R_bar,
                         S_t_mean = input$S_bar)
@@ -731,26 +794,28 @@ $(window).resize(function(e) {
 
       in_tab <- bind_rows(cur_tab, alt_tab)
 
-      min_max_tab <- pop_mod() %>%
-        filter(type == "samp", time <= isolate(input$numSteps)) %>%
-        group_by(scn, id) %>%
-        summarise(across(matches("[R,S]_t"), mean), .groups = "drop_last") %>%
-        summarise(across(matches("[R,S]_t"), list(min = min, max = max)))
+      min_max_tab <- pop_mod()$summary %>%
+        filter(MetricTypeID %in% c("Rbar", "Sbar")) %>%
+        distinct(MetricTypeID, PopulationName, Mean, lower, upper, probViable) %>%
+        pivot_wider(names_from = MetricTypeID, names_prefix = "traj",
+                    values_from = c(Mean, lower, upper, probViable))
 
-      yr_min_pop <- pop_mod() %>% filter(type == "mean") %>% group_by(scn) %>%
+      yr_min_pop <- pop_mod_all()$summary %>% filter(MetricTypeID == "N") %>%
+        group_by(PopulationName) %>%
         summarise(
           `Time to < 10 females` =
-            ifelse(length(which(N < 10)) == 0, paste0(">", max(c(input$numSteps, 100))),
-                   as.character(time[min(which(N < 10))]))
+            ifelse(length(which(Mean < 10)) == 0, paste0(">", max(c(input$numSteps, 100))),
+                   as.character(min(Timestep[which(Mean < 10)])))
         )
 
-      left_join(in_tab, yr_min_pop, by = join_by(Scenario == scn)) %>%
-        left_join(min_max_tab, by = join_by(Scenario == scn))
+      left_join(in_tab, yr_min_pop, by = join_by(Scenario == PopulationName)) %>%
+        left_join(min_max_tab, by = join_by(Scenario == PopulationName))
     })
 
     output$pop_table <- renderTable({
+      # Get upper and lower bounds from input file
       bar_bounds <- pop_file() %>%
-        select(matches("upper|lower")) %>%
+        select(matches("bar_upper|bar_lower")) %>%
         mutate(across(everything(), \(x){round(x * 100)}))
 
       pct_change <- function(old, new, digits = 0){
@@ -761,23 +826,24 @@ $(window).resize(function(e) {
       }
 
       pop_table() %>%
+        rowwise() %>%
         mutate(
           `Calves per 100 females` = ifelse(
             Scenario == "Current",
-            paste0(round(isolate(input$R_bar), 0), "<br>", i18n$t("Range"), ": ",
+            paste0(round(R_t_mean, 0), "<br>", i18n$t("Range"), ": ",
                    bar_bounds$R_bar_lower, "-", bar_bounds$R_bar_upper),
             paste0(round(R_t_mean, 0),  "<br>% ",i18n$t("Difference"),": ",
                    pct_change(isolate(input$R_bar), R_t_mean))
           ),
           `Female survival` = ifelse(
             Scenario == "Current",
-            paste0(round(isolate(input$S_bar), 0), "% <br>", i18n$t("Range"), ": ",
+            paste0(round(S_t_mean, 0), "% <br>", i18n$t("Range"), ": ",
                    bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"),
             paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Difference"),": ",
                    pct_change(isolate(input$S_bar), S_t_mean))
           ), .before = `Time to < 10 females`
         ) %>%
-        select(-R_t_mean, -S_t_mean, -matches("._t_m")) %>%
+        select(-R_t_mean, -S_t_mean, -matches("_traj.bar")) %>%
         # rename_with(\(x){paste(ifelse(str_detect(x, "min"), "Minimum", "Maximum"),
         #                        "realized",
         #                        ifelse(str_detect(x, "^R"), "recruitment", "survival"))},
@@ -807,6 +873,9 @@ $(window).resize(function(e) {
     output$r_m_plot <- renderPlot({
       req(pop_table())
 
+      # Here we are using the results of the scenario which may differ slightly
+      # from the inputs but we don't have upper and lower bounds on the inputs
+      # for the alt scenario. Have set replicates high to make this better
       pop_table() %>%
         mutate(Scenario = factor(Scenario,
                                  levels = c("Current",
@@ -815,18 +884,18 @@ $(window).resize(function(e) {
                                  labels = c(i18n$t("Current"),
                                             setdiff(unique(pop_table()$Scenario),
                                                     "Current"))),
-               across(matches("min|max"), ~.x*100)) %>%
-        select(Scenario, matches("[R,S]_t_")) %>%
-        pivot_longer(matches("[R,S]_t_"), names_to = c(".value","var"),
-                     names_sep = "_t_") %>%
-        mutate(B = R*S/200,
-               M = (100 - S), .keep = "unused") %>%
+               across(matches("traj"), ~.x*100)) %>%
+        select(Scenario, matches("traj"), -matches("probViable")) %>%
+        pivot_longer(matches("_traj[R,S]"), names_to = c("var", ".value"),
+                     names_sep = "_traj") %>%
+        mutate(B = Rbar*Sbar/200,
+               M = (100 - Sbar), .keep = "unused") %>%
         pivot_wider(names_from = var, values_from = c(B, M)) %>%
         pivot_longer(-Scenario, names_to = c("var", ".value"), names_sep = "_") %>%
         mutate(var = ifelse(var == "B", i18n$t("Female replacement rate"),
                             i18n$t("% Female mortality")) %>% str_wrap(14)) %>%
 
-        ggplot(aes(var, y = mean, ymax = max, ymin = min, fill = Scenario))+
+        ggplot(aes(var, y = Mean, ymax = upper, ymin = lower, fill = Scenario))+
         geom_col()+
         geom_errorbar()+
         facet_wrap(~Scenario, nrow = 1)+
@@ -843,7 +912,6 @@ $(window).resize(function(e) {
         # this hidden input allows us to wait for this UI to render before adding to it
         div(style = "display:none", textInput(inputId = "hidden", label = "", value = "1"))
       )
-      #waiter::waiter_hide()
       ret
     })
     output$input_data <- renderUI({
@@ -915,8 +983,10 @@ $(window).resize(function(e) {
     })
 
     output$results <- renderUI({
-      r_m_plot_width <- min(100+(350*(n_distinct(pop_mod()$scn))), max(400, pop_cont_w()))
+      r_m_plot_width <- min(100+(350*(n_distinct(pop_mod()$summary$PopulationName))),
+                            max(400, pop_cont_w()))
       ret <- page_fillable(
+        id = "results_page",
         layout_columns(
           col_widths = c(12, 6, 3, 3, 12),
 
@@ -956,7 +1026,6 @@ $(window).resize(function(e) {
           )
         )
       )
-      #waiter::waiter_hide()
       ret
     })
     output$documentation <- renderUI({
@@ -999,8 +1068,8 @@ $(window).resize(function(e) {
 
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0)
 
-    outputOptions(output, "pop_plot", suspendWhenHidden = FALSE)
-    outputOptions(output, "r_m_plot", suspendWhenHidden = FALSE)
+    # outputOptions(output, "pop_plot", suspendWhenHidden = FALSE)
+    # outputOptions(output, "r_m_plot", suspendWhenHidden = FALSE)
     # Update data #---------------------------------------------------------------
     observeEvent(
       input$update_data,

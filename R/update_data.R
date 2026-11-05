@@ -45,27 +45,31 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
 
   # Make sure there is disturbance for each year
   all_years <- union(survey_surv$Year, survey_recruit$Year)
-  dist <- fillDisturbance(dist,
-                          expand.grid(Year = all_years,
-                                      PopulationName = unique(dist$PopulationName)))
+  if(!is.null(dist)){
+    dist <- fillDisturbance(dist,
+                            expand.grid(Year = all_years,
+                                        PopulationName = unique(dist$PopulationName)))
+  }
 
   survey_surv <- survey_surv %>% filter(PopulationName %in% pops_run)
   survey_recruit <- survey_recruit %>% filter(PopulationName %in% pops_run)
 
-  if(max(dist$Year) <= max(survey_surv$Year)){
+  if(is.null(dist) || max(dist$Year) <= max(survey_surv$Year)){
     # set future disturbance to most recent and project to a year with no observations
     # add a missing year of data so we have a projection in a future year
     year_add <- max(survey_surv$Year) + 1
     survey_surv <- addMissingYears(survey_surv, year_add)
     survey_recruit <- addMissingYears(survey_recruit, year_add)
-    dist <- dist %>% ungroup() %>%
-      bind_rows(
-        dist %>% ungroup() %>%
-          summarise(.by = PopulationName,
-                    Year = year_add,
-                    Anthro = max(Anthro),
-                    Fire_excl_anthro = mean(Fire_excl_anthro))
-      )
+    if(!is.null(dist)){
+      dist <- dist %>% ungroup() %>%
+        bind_rows(
+          dist %>% ungroup() %>%
+            summarise(.by = PopulationName,
+                      Year = year_add,
+                      Anthro = max(Anthro),
+                      Fire_excl_anthro = mean(Fire_excl_anthro))
+        )
+    }
   }
 
   pop_file_in <- estimateBayesianRates(
@@ -108,10 +112,10 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   res_list$Sbar <- filter(res_list$Sbar, Annual == year_add)
 
   res_tbl <- res_list %>% purrr::keep_at(c("Recruitment", "Survival", "Sbar", "Rbar")) %>%
+    purrr::imap(\(x, nm){mutate(x, MetricTypeID = nm)}) %>%
     bind_rows() %>%
     # Remove monthly survival if all the same
-    distinct(mean, sd, lower, upper, PopulationName, Annual, MetricTypeID,
-             .keep_all = TRUE)
+    distinct(mean, sd, lower, upper, PopulationName, Annual, MetricTypeID, .keep_all = TRUE)
 
   # add rows for interannual var. They are different for bbou vs beta models
   if(pop_fits$parList$type == "beta"){
@@ -125,10 +129,10 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   } else if (pop_fits$parList$type == "bbou"){
     res_tbl <- res_tbl %>%
       add_row(mean = pop_fits$parList$Siv$S_iv_mean,
-              shape = pop_fits$parList$Siv$S_iv_shape,
+              sd = pop_fits$parList$Siv$S_iv_shape,
               MetricTypeID = "S_iv") %>%
       add_row(mean = pop_fits$parList$Riv$R_iv_mean,
-              shape = pop_fits$parList$Riv$R_iv_shape,
+              sd = pop_fits$parList$Riv$R_iv_shape,
               MetricTypeID = "R_iv")
   } else {
     stop("model type not supported")
