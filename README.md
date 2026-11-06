@@ -82,13 +82,29 @@ You can install the CaribouDemographyBasicApp R package by running the
 following in the R console:
 
 ``` r
-install.packages("remotes")
-remotes::install_github("LandSciTech/CaribouDemographyBasicApp")
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
+  type = "binary", # on windows
+  upgrade = "always", 
+  build_vignettes = TRUE)
 ```
+
+This will install the most recent version of the app, build the help
+documentation, upgrade any dependencies that have updates available and
+it will only use binary package versions. This avoids the need for any
+user input during the installation.
 
 Note this may take a long time the first time you install it since it
 will also install all the R packages that CaribouDemographyBasicApp
 depends on.
+
+More experienced R users may prefer to use:
+
+``` r
+remotes::install_github("LandSciTech/CaribouDemographyBasicApp", 
+  build_vignettes = TRUE)
+```
+
+Which will ask before updating installed packages.
 
 ## Launching the Shiny app
 
@@ -102,7 +118,7 @@ run_caribou_demog_app()
 To launch the app in French include the lang = “fr” argument:
 
 ``` r
-run_caribou_demog_app(lang = "fr")
+run_caribou_demog_app(lang = "fr2")
 ```
 
 ## Updating the R package and app
@@ -112,10 +128,10 @@ re-install the package from GitHub. Run the code below in the R console:
 
 ``` r
 remotes::install_github("LandSciTech/CaribouDemographyBasicApp",
-                        type = "binary", upgrade = "always")
+                        type = "binary", upgrade = "always", build_vignettes = TRUE)
 ```
 
-This will install the most recent version of the app, upgrade any
-dependencies that have updates available and it will only use binary
-package versions. This avoids the need for any user input during the
-installation.
+This will install the most recent version of the app, build the help
+documentation, upgrade any dependencies that have updates available and
+it will only use binary package versions. This avoids the need for any
+user input during the installation.
