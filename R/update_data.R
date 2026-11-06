@@ -137,7 +137,8 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   } else {
     stop("model type not supported")
   }
-
+#TODO start here error that Year not found with bbou model
+  browser()
   surv_data_amt <- pop_fits$surv_fit$data %>% filter(!is.na(MortalitiesCertain)) %>%
     group_by(PopulationName, Year) %>%
     summarise(nCollars = max(StartTotal)) %>%
