@@ -272,10 +272,12 @@ $(window).resize(function(e) {
 
     # convert loaded data to format used in app
     all_pops <- eventReactive(all_pops_in(), {
+      dat_sum_cols <- c("nSurvYears", "nRecruitYears", "Anthro", "Fire_excl_anthro")
       all_pops_in() %>%
-        filter(MetricTypeID %in% c("nSurvYears", "nRecruitYears")) %>%
-        pivot_wider(values_from = c(mean), names_from = MetricTypeID) %>%
-        select(PopulationName, nSurvYears, nRecruitYears) %>%
+        filter(MetricTypeID %in% dat_sum_cols) %>%
+        pivot_wider(id_cols = PopulationName, values_from = c(mean),
+                    names_from = MetricTypeID) %>%
+        select(PopulationName, any_of(dat_sum_cols)) %>%
         left_join(
           all_pops_in() %>%
             filter(MetricTypeID %in% c("FemalePopulation")) %>%
@@ -299,14 +301,16 @@ $(window).resize(function(e) {
         left_join(
           all_pops_in() %>%  filter(stringr::str_detect(MetricTypeID, "_iv|_cv"))%>%
             pivot_wider(id_cols = PopulationName,
-                        values_from = c(lower, upper),
+                        values_from = c(lower, upper, mean, sd),
                         names_from = MetricTypeID,
-                        names_glue = "{MetricTypeID}_{.value}") %>%
+                        names_glue = "{MetricTypeID}_{.value}",
+                        values_fn = list) %>%
             mutate(PopulationName = list(all_pops_in() %>%
                                            filter(MetricTypeID == "Rbar") %>%
                                            pull(PopulationName) %>%
                                            unique())) %>%
-            tidyr::unnest(PopulationName),
+            tidyr::unnest(everything()) |>
+            select(where(\(x)!all(is.na(x)))),
           by = "PopulationName"
         )
     })
@@ -573,8 +577,8 @@ $(window).resize(function(e) {
         return(isolate(last_cur_res()))
       }
 
-      withProgress(message = 'Calculating projections', {
-        incProgress(detail = "Current scenario")
+      withProgress(message = i18n$t('Generating projections'), {
+        incProgress(detail = i18n$t("Current scenario"))
         last_hash(hash)
 
         # update pop_file when model re-runs
@@ -622,11 +626,11 @@ $(window).resize(function(e) {
         R_lst <- get_not_null_input("alt_R_bar_", input)
         S_lst <- get_not_null_input("alt_S_bar_", input)
         scn_nms_lst <- get_not_null_input("alt_name_", input)
-        withProgress(message = 'Calculating projections', {
+        withProgress(message = i18n$t('Generating projections'), {
         scn_res <- purrr::pmap(
           list(R_lst, S_lst, scn_nms_lst, names(scn_nms_lst), scn_nms_lst),
           \(x, y, z, nm, nm2){
-            incProgress(detail = paste0("Alternative scenario: ", nm2), amount = 0.2)
+            incProgress(detail = paste0(i18n$t("Alternative scenario: "), nm2), amount = 0.2)
             alt_res <- do.call(
               trajectoriesFromSummary,
               c(list(500,
@@ -1055,16 +1059,19 @@ $(window).resize(function(e) {
     })
 
     output$data_summary <- renderTable({
-
+      dat_sum_nms <- c(PopulationName = i18n$t("Population name"),
+                       N0 = i18n$t("Initial female population"),
+                       Year = i18n$t("Initial population year"),
+                       # i18n$t("Total number of collars by year"),
+                       nSurvYears = i18n$t("Years of survival data"),
+                       # i18n$t("Total number of females in aerial surveys"),
+                       nRecruitYears = i18n$t("Years of recruitment data"),
+                       Anthro = i18n$t("Anthropogenic disturbance"),
+                       Fire_excl_anthro = i18n$t("Fire disturbance"))
       all_pops() %>%
-        select(PopulationName, N0, Year, nSurvYears, nRecruitYears) %>%
-        set_names(c(i18n$t("Population name"),
-                    i18n$t("Initial female population"),
-                    i18n$t("Initial population year"),
-                    # i18n$t("Total number of collars by year"),
-                    i18n$t("Years of survival data"),
-                    # i18n$t("Total number of females in aerial surveys"),
-                    i18n$t("Years of recruitment data")))
+        select(any_of(names(dat_sum_nms))) %>%
+        set_names(dat_sum_nms[intersect(names(dat_sum_nms),
+                                        colnames(all_pops()))])
 
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0)
 
