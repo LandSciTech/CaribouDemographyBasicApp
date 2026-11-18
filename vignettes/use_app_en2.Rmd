@@ -73,6 +73,8 @@ In these charts, each point is the average value, and the lines extending from t
 
   -   The **Data Summary table** showing the size of the starting female population used to create the possible outcomes, the year that population size was recorded, how many years of survival and recruitment data are available, and the disturbance data if it was provided.
 
+-   The data estimated by the model can be downloaded by clicking the "Download data" button. This downloads a csv file which includes yearly estimated survival and recruitment for each population as well as the overall estimates for survival and recruitment which are labelled "Sbar" and "Rbar". 
+
 If only one year of survival or recruitment data is available, no results will be displayed because a single year does not provide enough information for a reliable forecast.
 ```{r out.width=600}
 # knitr::include_graphics(here::here("inst", "www", "survivalSummary.png" ))

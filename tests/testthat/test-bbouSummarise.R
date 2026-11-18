@@ -28,7 +28,7 @@ test_that("Can make figures", {
   tmp_fig_dir <- tempdir()
   unlink(file.path(tmp_fig_dir, "figures"), recursive = TRUE)
   dir.create(file.path(tmp_fig_dir, "figures"))
-  bbouMakeFigures(pop_fits$surv_fit, pop_fits$recruit_fit,
+  bbouMakeFigures(pop_fits,
                   fig_dir = file.path(tmp_fig_dir, "figures"),
                   i18n = i18n,
                   show_interpolated = FALSE)

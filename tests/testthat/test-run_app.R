@@ -25,7 +25,7 @@ test_that("Update data works properly", {
   app$wait_for_idle(timeout = 8*60*1000)
 
   app$click("run_model", wait_ = FALSE)
-  Sys.sleep(5)
+  app$wait_for_idle(timeout = 2*60*1000)
   pop_tbl <- app$get_text("#pop_table") %>% stringr::str_replace_all("    ", ";") %>%
     stringr::str_replace_all("   ", ";") %>% stringr::str_replace_all("  ", ";") %>%
     stringr::str_replace_all("\n;", "\n") %>%
@@ -111,7 +111,7 @@ purrr::pmap(to_test, \(lang, altname){
     app$set_window_size(width = 1000, height = 1000)
     app$set_inputs(dimension = c(10000,1000), allow_no_input_binding_ = TRUE)
     app$click("run_model")
-    app$wait_for_idle()
+    app$wait_for_idle(timeout = 2*60*1000)
     app$get_screenshot(file.path(vig_pics, paste0("pop_plot_", lang, ".png")), selector = "#pop_plot")
 
 
@@ -172,7 +172,7 @@ purrr::pmap(to_test, \(lang, altname){
     })
 
     app$click("run_model")
-    app$wait_for_idle()
+    app$wait_for_idle(timeout = 2*60*1000)
     Sys.sleep(5)
 
     app$get_screenshot(file.path(vig_pics, paste0("alt_results_", lang, ".png")))
@@ -186,9 +186,6 @@ purrr::pmap(to_test, \(lang, altname){
 
     pop_nm <- app$get_text("#pop_name")
     expect_equal(pop_nm, "\nA")
-
-    # ensure all vignettes have been rendered
-    app$set_inputs(body = "documentation")
 
     app$stop()
 

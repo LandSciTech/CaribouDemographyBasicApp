@@ -120,6 +120,7 @@ $(window).resize(function(e) {
         } else {
           NULL
         },
+        downloadButton("download_data", label = i18n$t("Download data")),
 
         uiOutput("adv_params_ui"),
         tags$footer(em(paste0("R package version: ",
@@ -1052,6 +1053,8 @@ $(window).resize(function(e) {
       drop <- stringr::str_which(vig_html_in, "<h1 class=\"title toc-ignore\">.*</h1>")
       use <- c(start:(drop-1), (drop+1):end)
       writeLines(vig_html_in[use], con = file.path(inst_dir, "www", file_name_lang))
+      # delete the file so it is remade next time with updates
+      file.remove(vig_file)
       div(
         includeHTML(file.path(inst_dir, "www", file_name_lang))
       )
@@ -1201,6 +1204,19 @@ $(window).resize(function(e) {
         do_update(FALSE)
       }
     )
+
+# Download data -----------------------------------------------------------
+
+    output$download_data <- downloadHandler(
+      filename = function() {
+        paste0("caribou-app-data-", Sys.Date(), ".csv")
+      },
+      content = function(file) {
+        all_pops_in() |> filter(!stringr::str_detect(MetricTypeID, "[d,D]escription")) |>
+          write.csv(file)
+      }
+    )
+
 
     session$onSessionEnded(function() {
       stopApp()

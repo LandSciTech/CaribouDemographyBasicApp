@@ -5,8 +5,7 @@
 \title{Make figures based on fitted survival and recruitment models}
 \usage{
 bbouMakeFigures(
-  surv_fit,
-  recruit_fit,
+  bayesianResults,
   fig_dir,
   i18n = NULL,
   sess = shiny::getDefaultReactiveDomain(),
@@ -16,10 +15,6 @@ bbouMakeFigures(
 )
 }
 \arguments{
-\item{surv_fit}{result of \code{bboutools::bb_fit_survival}}
-
-\item{recruit_fit}{result of \code{bboutools::bb_fit_recruitment}}
-
 \item{fig_dir}{file path. Directory where figures should be saved}
 
 \item{i18n}{shiny.i18n object. Used of translation in Shiny app.}
@@ -31,6 +26,10 @@ bbouMakeFigures(
 \item{wt}{numeric. Width in pixels}
 
 \item{show_interpolated}{should estimates be shown for years where there were no surveys?}
+
+\item{surv_fit}{result of \code{bboutools::bb_fit_survival}}
+
+\item{recruit_fit}{result of \code{bboutools::bb_fit_recruitment}}
 }
 \value{
 Nothing. Figures are saved to \code{fig_dir}.

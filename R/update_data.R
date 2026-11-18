@@ -107,7 +107,6 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
   i18n$set_translation_language(inlang)
 
   # Get data into long format for saving
-browser()
   # Get the estimate in the future year that was added to be used as expected
   # future rates for all years in the app
   res_list$Rbar <- filter(res_list$Rbar, Annual == year_add)
