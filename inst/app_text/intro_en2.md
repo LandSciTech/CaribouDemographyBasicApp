@@ -1,6 +1,7 @@
 ##### **Purpose** {#intro-purpose}
 
 <img align="right" src="www/Female_caribou_and_calves.jpg" width="500">
+
 This app helps people explore what might happen to boreal caribou populations 
 over time. It shows possible future trends – whether caribou numbers might go up, 
 down, or stay about the same – based on the information we have right now.
@@ -10,11 +11,16 @@ The app uses data that scientists have already collected and published – such 
 -  How many female caribou with tracking collars have survived each year
 -  How many calves (caribou less than one year old) have been seen with adult 
 females during winter aerial surveys (recruitment)
+-  Optionally, how much disturbance is present in the landscape
 
 Using this information, **the app estimates the “survival rate” and “recruitment rate”
 for the whole female population across all the years of data available. Then the
 app uses these rates to estimate what might happen to the female population
-in the future if survival and recruitment stay about the same.**
+in the future if survival and recruitment stay about the same.** If the level of
+disturbance in the landscape is provided then knowledge of relationships between 
+caribou survival and recruitment rates and the level of disturbance 
+in the landscape that have been observed among populations across the country is
+used to inform the model in addition to the local survey data
 
 The app also lets you test out different “what-if” scenarios – for example, what
 might happen if more adult females survive each year, or if more calves are born
@@ -35,9 +41,6 @@ same for caribou.
 The amount of uncertainty depends on how much information you give the model to 
 base the predictions on. When the model has less data, there’s more uncertainty.
 When it has more data, you can be more confident about the results.
-
-In the future, we plan to include tools that also use **knowledge about the 
-disturbance on the landscape** to further decrease this uncertainty.
 
 You can upload or add your own data for your area of interest. **This lets your 
 community or organization explore how changes in survival and recruitment rates

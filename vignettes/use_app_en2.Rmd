@@ -43,10 +43,11 @@ It shows possible future trends – whether caribou numbers might go up, down, o
 Among other things, this app lets you see how many caribou survive each year and how many calves (baby caribou) are born and survive to the winter survey.
 Note: This app is still in the prototype stage and will be improved in the coming months.
 
-The app uses methods from the “bboutools” and “caribouMetrics” R packages.
-These methods rely on data from field surveys.
+The app uses methods from the <a href="https://LandSciTech.github.io/bboutools/" target="_blank">"bboutools"</a> and <a href="https://landscitech.github.io/caribouMetrics/" target="_blank">"caribouMetrics"</a> R packages.
+These methods rely on data from field surveys, and optionally, habitat disturbance in the landscape.
 Female caribou (cows) are fitted with GPS collars to track their survival.
 Recruitment is measured by counting calves per 100 females about nine months after calving.
+Disturbance is measured as the percentage of the landscape impacted by anthropogenic and fire disturbance
 These pieces of information are combined to estimate how the population changes over time.
 
 ## Typical app usage
@@ -63,14 +64,14 @@ You can expand this section to full screen for easier reading by clicking on the
   -   A **Disclaimer** from the creators of the app.
   -   The **Survey Data Summary** section with graphs showing how many caribou were collared and of these, how many died (used to calculate female survival).
 And the number of caribou counted during the annual winter survey.
-These figures should not be compared directly from one year to the next because the survey area (within a population) is not the same.These values are used by the model to estimate the ratios of males to females and females to calves in the population (used to calculate recruitment).  
+These figures should not be compared directly from one year to the next because the survey area (within a population) is not the same. These values are used by the model to estimate the ratios of males to females and females to calves in the population (used to calculate recruitment).  
     You can switch between the survival and recruitment data graphs by clicking the button in the top right of the section.
 
   -   The **Demographic Rate Estimates** section showing the estimated female survival and calf recruitment for each year.
-Recruitment is measure in terms of the ration of the number of calves per 100 females.
+Recruitment is measured in terms of the ratio of the number of calves per 100 females.
 In these charts, each point is the average value, and the lines extending from the point show the range of possible values.
 
-  -   The **Data Summary table** showing the size of the starting female population used to create the possible outcomes, the year that population size was recorded, and how many years of survival and recruitment data are available.
+  -   The **Data Summary table** showing the size of the starting female population used to create the possible outcomes, the year that population size was recorded, how many years of survival and recruitment data are available, and the disturbance data if it was provided.
 
 If only one year of survival or recruitment data is available, no results will be displayed because a single year does not provide enough information for a reliable forecast.
 ```{r out.width=600}
@@ -119,27 +120,31 @@ First, you need to install the app. There are two ways to do so:
 
 Only users who installed the R package through the R console, rather than using the bundled version, can modify the data included in the app.
 
-The app uses caribou survival and recruitment data stored in a Google Sheet to calculate the demographic rates. This allows multiple users to collaborate on editing the data. This data is downloaded and used to fit the Bayesian models of survival and recruitment and the results are stored in the R package so that the models do not need to be re-fit every time the app is used.
+The app uses caribou survival and recruitment data, and optionally disturbance data stored in a Google Sheet to calculate the demographic rates. This allows multiple users to collaborate on editing the data. This data is downloaded and used to fit the Bayesian models of survival and recruitment and the results are stored in the R package so that the models do not need to be re-fit every time the app is used.
 
 **To change the data used in the app, follow these steps:**
 
-1.  **Create a Google spreadsheet for your survey data.** The spreadsheet must follow the format used by [bboutools](https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data). You can copy this [template Google Sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing) and fill it in with your own data and then save it (“make a copy”) on a Google drive. Regarding the “recruit_data” tab, if you don't have specific dates to report you can set any arbitrary date before April 1 The “recruit_data” and “surv_data” are used by bboutools to estimate survival and recruitment rates.   To project change in population size over time, these rates are combined with an estimate of initial female population size provided in the "population_estimates" tab. For each population provide a lower and upper bound of the estimated female population. If more than one year of population estimates is provided, only the most recent one will be used. The "data_description" tab provides a space to describe the data that is reported in the other sheets in multiple languages. You can format the text in the description using the Markdown language, see [here](https://www.markdownguide.org/cheat-sheet/) for a cheat-sheet about this format.
+1.  **Create a Google spreadsheet for your survey data.** The spreadsheet must follow the format used by this [example Google Sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing). You can copy it and fill it in with your own data. The "recruit_data" and "surv_data" tabs must follow the format used by [bboutools](https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data). The "population_estimates" tab provides an estimate of the female population size that will be used as a starting point for simulations. For each population provide a lower and upper bound of the estimated female population. If more than one year of population estimates is provided, only the most recent one will be used. The "disturbance" tab is optional and provides the disturbance information for each population. The "Anthro" and "Fire_excl_anthro" columns show the the percentage that is impacted by anthropogenic disturbances buffered by 500 meters and the percentage impacted by fire disturbance that does not overlap anthropogenic disturbance. The "data_description" tab provides a space to describe the data that is reported in the other sheets in multiple languages. You can format the text in the description using the Markdown language, see [here](https://www.markdownguide.org/cheat-sheet/) for a cheat-sheet about this format.
 
 2.  **Share your Google Sheet so that it can be accessed in the app.** Click the Share button in the top right of the Sheet. Then either give access to individual email accounts you want to be able to access the data or set the access to “Anyone with the link” can view the Sheet. Copy the link to share the Sheet.
-3.  In the app, **click on the "Update Data" button, paste your link in the URL text box, and click "Update".**
-4.  If necessary, you will be prompted to follow instructions to allow the app access to your Google Drive account. To avoid this you can change the settings on the Google Sheet to allow "Anyone with the link" to view your spreadsheet.
-5.  **Wait while the model is re-fit, this could take \~ 5 mins.**
-6.  The app will automatically update the demographic rates and projections based on the new data.
 
+3.  In the app, **click on the "Update Data" button, paste your link in the URL text box, and click "Update".**
+
+4.  If necessary, you will be prompted to follow instructions to allow the app access to your Google Drive account. To avoid this you can change the settings on the Google Sheet to allow "Anyone with the link" to view your spreadsheet.
+
+5.  **Wait while the model is re-fit, this could take \~ 5 mins.**
+
+6.  The app will automatically update the demographic rates and projections based on the new data.
 
 ## Technical Details of Model Fitting {#technical-details}
 
-The app uses the [`bboutools`](https://LandSciTech.github.io/bboutools/articles/bboutools.html) package to estimate survival and recruitment rates from caribou demographic data [@dalgarno2025]. `bboutools` fits Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect if there is data from more than 5 years. 
+The app utilizes the <a href="https://landscitech.github.io/caribouMetrics/" target="_blank">caribouMetrics</a> R package to fit Bayesian models to caribou demographic data.
+If disturbance data is not provided models are fit with the [`bboutools`](https://LandSciTech.github.io/bboutools/articles/bboutools.html) package. The `bboutools` model fits logistic Bayesian models of annual recruitment and survival using generalized linear mixed-effects models where year is treated as a random effect [@dalgarno2025]. If disturbance data is provided a Beta model is fitted with disturbance covariates and priors informed by national demographic-disturbance relationships [@hughes_integration_2025]. See the <a href="https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html" target = "_blank">caribouMetrics website</a> for a detailed comparison of the two models.
 
-The parameters needed to inform the demographic projections are extracted from these models. The parameters extracted include the mean, standard deviation and 95% credible interval and also the interannual variation in these parameters. It is necessary to extract the parameters from the model rather than using the model directly so that the parameters can be modified to reflect alternative scenarios. The Bayesian models are only re-estimated when the data is updated. 
+The parameters needed to inform the demographic projections are extracted from the Bayesian model. The parameters extracted include the mean, standard deviation and 95% credible interval and also the interannual variation in these parameters. It is necessary to extract the parameters from the model rather than using the model directly so that the parameters can be modified to reflect alternative scenarios. These models are only run when the data is updated and the resulting rates are stored in the app and used to make projections.
 
-The demographic rates for the population and the expected variation in them are then used to populate the app for the "Current" scenario and to project the expected female population over the next 20 years. The projected population growth is determined for 35 example trajectories with demographic rates sampled from the summarized Bayesian model. Then [`caribouMetrics::caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/reference/caribouPopGrowth.html) is used to run a  demographic model that projects the growth of the population over 20 years. 
+The demographic rates for the population and the expected variation in them are then used to populate the app for the "Current" scenario and to project the expected female population over the next 20 years.  [`caribouMetrics::trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromSummary.html) is used to get sample trajectories from a model defined by the saved parameters. Then [`caribouMetrics::caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/reference/caribouPopGrowth.html) is used to run a two-stage demographic model which projects the growth of the population over 20 years. In addition, a version of the demographic model is run based on the mean demographic rates, and ignoring interannual variation, to produce the mean estimate of the population trajectory over time.
 
-The demographic model is re-run anytime that "Run model" is clicked which will change the resulting graphs slightly since some parts of the model include random values. If an alternative scenario is added the same model is run with the provided demographic rates to project the population under that scenario.
+This demographic model is only re-run when "Run model" is clicked and one of the inputs has changed. If an alternative scenario is added the same model is run with the provided demographic rates to project the population under that scenario.
 
 # References
