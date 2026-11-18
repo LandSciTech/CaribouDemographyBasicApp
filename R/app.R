@@ -166,6 +166,7 @@ $(window).resize(function(e) {
         ),
         nav_panel(
           i18n$t("Documentation"),
+          value = "documentation",
           uiOutput("documentation")
         )
       )

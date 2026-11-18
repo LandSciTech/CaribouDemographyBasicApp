@@ -1,8 +1,3 @@
----
-output:
-  word_document: default
-  html_document: default
----
 ##### **Purpose** {#intro-purpose}
 
 <img align="right" src="www/Female_caribou_and_calves.jpg" width="500">

@@ -187,6 +187,9 @@ purrr::pmap(to_test, \(lang, altname){
     pop_nm <- app$get_text("#pop_name")
     expect_equal(pop_nm, "\nA")
 
+    # ensure all vignettes have been rendered
+    app$set_inputs(body = "documentation")
+
     app$stop()
 
   })
