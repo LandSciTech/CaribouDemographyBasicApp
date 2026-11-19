@@ -65,11 +65,11 @@ update_data <- function(survey_url, save_dir = tools::R_user_dir("CaribouDemogra
       dist <- dist %>% ungroup() %>%
         filter(PopulationName %in% pops_run) %>%
         bind_rows(
-          dist %>% ungroup() %>%
+          dist %>% ungroup() %>% arrange(Year) |>
             summarise(.by = PopulationName,
                       Year = year_add,
-                      Anthro = max(Anthro),
-                      Fire_excl_anthro = mean(Fire_excl_anthro) |> round(1))
+                      Anthro = last(Anthro),
+                      Fire_excl_anthro = last(Fire_excl_anthro))
         )
     }
   # }
