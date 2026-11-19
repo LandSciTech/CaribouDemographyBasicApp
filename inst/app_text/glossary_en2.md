@@ -1,3 +1,8 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
 - **% Female survival:** 
 The estimated percentage of adult female caribou (cows) that survive each year.
 For example, if survival is 85%, that means about 85 out of 100 adult females 
@@ -28,6 +33,9 @@ This number helps identify when a population could be at increased risk of
 extinction because of a small population size .
 The 10-female threshold follows a national guideline from
 [Environment and Climate Change Canada, 2011](https://publications.gc.ca/collections/collection_2011/ec/CW66-296-2011-eng.pdf).
+
+- **% Stable possible outcomes :** The percentage of the projected possible outcomes
+that had an increasing or stable female population over time.
 
 - **Recruitment rate:**
 How many young caribou survive to the winter survey, usually measured as the number

@@ -704,7 +704,7 @@ $(window).resize(function(e) {
         })
 
       mod_lst$samples <- mod_lst$samples %>%
-        filter(Replicate %in% paste0("x", 1:input$numSteps))
+        filter(Replicate %in% paste0("x", 1:input$numPops))
       mod_lst
     })
     # Population plot #--------------------------------------------------------------
@@ -801,10 +801,12 @@ $(window).resize(function(e) {
       in_tab <- bind_rows(cur_tab, alt_tab)
 
       min_max_tab <- pop_mod()$summary %>%
-        filter(MetricTypeID %in% c("Rbar", "Sbar")) %>%
+        filter(MetricTypeID %in% c("Rbar", "Sbar", "lambda_bar")) %>%
         distinct(MetricTypeID, PopulationName, Mean, lower, upper, probViable) %>%
         pivot_wider(names_from = MetricTypeID, names_prefix = "traj",
-                    values_from = c(Mean, lower, upper, probViable))
+                    values_from = c(Mean, lower, upper, probViable)) |>
+        select(-matches("probViable.*[R,S]bar"),
+               -matches("upper.*lambda|lower.*lambda|ean.*lambda"))
 
       yr_min_pop <- pop_mod_all()$summary %>% filter(MetricTypeID == "N") %>%
         group_by(PopulationName) %>%
@@ -847,16 +849,18 @@ $(window).resize(function(e) {
                    bar_bounds$S_bar_lower, "-", bar_bounds$S_bar_upper, "%"),
             paste0(round(S_t_mean, 0), "%<br>% ",i18n$t("Difference"),": ",
                    pct_change(isolate(input$S_bar), S_t_mean))
-          ), .before = `Time to < 10 females`
+          ),
+          probViable = round(probViable_trajlambda_bar * 100),
+          .before = `Time to < 10 females`
         ) %>%
-        select(-R_t_mean, -S_t_mean, -matches("_traj.bar")) %>%
+        select(-R_t_mean, -S_t_mean, -matches("_traj.*bar")) %>%
         # rename_with(\(x){paste(ifelse(str_detect(x, "min"), "Minimum", "Maximum"),
         #                        "realized",
         #                        ifelse(str_detect(x, "^R"), "recruitment", "survival"))},
         #             .cols = matches("._t_m"))%>%
         mutate(Scenario = ifelse(Scenario == "Current", i18n$t("Current"), Scenario)) %>%
         set_names(c(i18n$t("Scenario"), i18n$t("Calves per 100 females"), i18n$t("% Female survival"),
-                    i18n$t("Years to < 10 females")))
+                    i18n$t("% Viable trajectories"), i18n$t("Years to < 10 females")))
     }, striped = TRUE, hover = TRUE, bordered = TRUE, digits = 0,
     sanitize.text.function = identity)
 

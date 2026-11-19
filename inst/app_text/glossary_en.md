@@ -17,3 +17,6 @@
 - **Years to < 10 females:** Number of years until the population reaches quasi-extinction.
   10 females was chosen as the threshold for quasi-extinction to follow [ECCC
   2011](https://publications.gc.ca/collections/collection_2011/ec/CW66-296-2011-eng.pdf).
+  
+- **% Viable trajectories:** The percentage of the projected trajectories that
+  had an expected population growth rate of greater than 0.99.
